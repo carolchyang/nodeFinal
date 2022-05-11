@@ -1,0 +1,55 @@
+.asideLink {
+  display: flex;
+  align-items: center;
+  color: $dark;
+  &:hover {
+    color: $primary;
+    .asideLinkIcon {
+      background-color: $primary;
+      color: $white;
+    }
+  }
+}
+
+.asideLinkIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3.125rem;
+  height: 3.125rem;
+  background-color: $info;
+  text-align: center;
+  border-radius: 50%;
+  border: 2px solid $dark;
+  font-size: 1.25rem;
+}
+
+.asideContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.aside {
+  display: inline-block;
+  margin: 0.5rem;
+  padding: 0.5rem 2rem;
+  background: $secondary;
+  border: 2px solid $dark;
+  border-radius: 2rem;
+  z-index: 999;
+  .asideLink {
+    border-width: 3px;
+  }
+  .asideLinkIcon {
+    background-color: $white;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .aside {
+    display: none;
+  }
+}

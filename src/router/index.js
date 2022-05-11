@@ -1,20 +1,55 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    component: () => import("../views/LayoutView.vue"),
+    children: [
+      {
+        path: "/",
+        name: "DynamicWallView",
+        component: () => import("../views/front/DynamicWallView.vue"),
+      },
+      {
+        path: "/personalwall",
+        name: "PersonalWallView",
+        component: () => import("../views/front/PersonalWallView.vue"),
+      },
+      {
+        path: "/likepost",
+        name: "LikePostView",
+        component: () => import("../views/front/LikePostView.vue"),
+      },
+      {
+        path: "/track",
+        name: "TrackView",
+        component: () => import("../views/front/TrackView.vue"),
+      },
+      {
+        path: "/profile",
+        name: "ProfileView",
+        component: () => import("../views/front/ProfileView.vue"),
+      },
+      {
+        path: "/createpost",
+        name: "CreatePostView",
+        component: () => import("../views/front/CreatePostView.vue"),
+      },
+    ],
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/login",
+    name: "LoginView",
+    component: () => import("../views/LoginView.vue"),
+  },
+  {
+    path: "/register",
+    name: "RegisterView",
+    component: () => import("../views/RegisterView.vue"),
+  },
+  {
+    path: "/:pathMath(.*)*",
+    component: () => import("../views/NotFound.vue"),
   },
 ];
 

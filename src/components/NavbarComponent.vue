@@ -1,0 +1,44 @@
+<template>
+  <header class="py-3 bg-white border-bottom border-3">
+    <div class="container d-flex justify-content-between align-items-center">
+      <router-link to="/" class="logo text-dark h2 lh-sm">MetaWall</router-link>
+      <div class="d-flex align-items-center">
+        <img src="../assets/images/user.png" class="thumbnail thumbnail-sm" />
+        <div class="dropdown">
+          <a
+            class="dropdown-toggle ms-3 border-bottom border-2 text-dark fw-bolder"
+            href="#"
+            role="button"
+            id="dropdownMenuLink"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Member
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end customShadow customShadow-end text-center"
+            aria-labelledby="dropdownMenuLink"
+          >
+            <li class="bg-white border border-2 border-bottom-0">
+              <router-link to="/" class="dropdown-item">我的貼文牆</router-link>
+            </li>
+            <li class="bg-white border border-2 border-bottom-0">
+              <router-link to="/profile" class="dropdown-item"
+                >修改個人資料</router-link
+              >
+            </li>
+            <li class="bg-white border border-2">
+              <router-link to="/login" class="dropdown-item">登出</router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+</template>
+
+<script>
+export default {
+  name: "NavbarComponent",
+};
+</script>
