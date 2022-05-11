@@ -1,0 +1,8 @@
+.hoverLink {
+  color: $dark;
+  &:hover,
+  &:focus {
+    color: $primary;
+    text-decoration: underline $primary;
+  }
+}

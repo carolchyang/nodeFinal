@@ -1,0 +1,18 @@
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: $secondary;
+  border: $dark 2px solid;
+  box-shadow: $box-shadow-lg;
+}
+
+@include media-breakpoint-up(md) {
+  .login {
+    padding: 3rem;
+  }
+  .loginForm {
+    min-width: 23.5rem;
+  }
+}

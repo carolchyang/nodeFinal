@@ -1,0 +1,17 @@
+body {
+  position: relative;
+  background: -webkit-linear-gradient(top, transparent 68px, #00040029 70px),
+    -webkit-linear-gradient(left, transparent 68px, #00040029 70px);
+  background-size: 4.375rem 4.375rem;
+  background-color: $secondary;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  display: block;
+}

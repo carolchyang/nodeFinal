@@ -1,0 +1,23 @@
+.customTabNav {
+  .nav {
+    margin-left: 1rem;
+  }
+  .nav-link {
+    background-color: $white;
+    border: 2px solid $dark;
+    border-bottom: 0;
+    &:hover:not(.active) {
+      background-color: $secondary;
+    }
+  }
+}
+
+.customTabContent {
+  background-color: $white;
+  border: 2px solid $dark;
+  .tab-pane {
+    max-width: 31.25rem;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+}
