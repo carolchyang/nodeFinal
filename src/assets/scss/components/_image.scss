@@ -1,0 +1,36 @@
+.thumbnail {
+  width: 2.8125rem;
+  height: 2.8125rem;
+  border-radius: 50%;
+  border: 2px solid $dark;
+}
+
+.thumbnail-xxl {
+  width: 6.75rem;
+  height: 6.75rem;
+}
+
+.thumbnail-xl {
+  width: 3.125rem;
+  height: 3.125rem;
+}
+
+.thumbnail-lg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.thumbnail-sm {
+  width: 1.875rem;
+  height: 1.875rem;
+}
+
+.bgCover {
+  width: 100%;
+  height: 9.75rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: 2px solid $dark;
+  border-radius: 0.5rem;
+}

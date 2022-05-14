@@ -1,11 +1,7 @@
 <template>
-  <div
-    class="customShadow customShadow-start mb-4 p-5 bg-white text-center h4 border border-2 fw-bold"
-  >
-    修改個人資料
-  </div>
+  <h1 class="header">修改個人資料</h1>
 
-  <nav class="customTabNav">
+  <nav class="navTab">
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
       <button
         class="nav-link active"
@@ -33,9 +29,9 @@
       </button>
     </div>
   </nav>
-  <div class="tab-content customTabContent" id="nav-tabContent">
+  <div class="tab-content navTabContent" id="nav-tabContent">
     <div
-      class="tab-pane fade show active"
+      class="tab-pane fade show active px-4 py-8 px-md-8"
       id="nav-profile"
       role="tabpanel"
       aria-labelledby="nav-profile-tab"
@@ -44,9 +40,9 @@
         src="../../assets/images/user_default.png"
         class="thumbnail thumbnail-xxl mx-auto mb-4"
       />
-      <div class="customFileBtn text-center mb-4">
-        <label for="file" class="">上傳大頭照</label>
-        <input class="" type="file" id="file" />
+      <div class="fileBtn text-center mb-4">
+        <label for="file">上傳大頭照</label>
+        <input type="file" id="file" />
       </div>
       <div class="mb-4">
         <label for="nickname" class="form-label">暱稱</label>
@@ -87,15 +83,12 @@
         <br />
         2. 解析度寬度至少 300像素以上，請重新輸入
       </small>
-      <button
-        type="button"
-        class="hoverBtn btn btn-primary w-100 border-dark rounded-2 shadow"
-      >
+      <button type="button" class="effectBtn btn btn-primary w-100">
         送出更新
       </button>
     </div>
     <div
-      class="tab-pane fade"
+      class="tab-pane fade px-4 py-8 px-md-8"
       id="nav-password"
       role="tabpanel"
       aria-labelledby="nav-password-tab"
@@ -120,10 +113,7 @@
         />
         <small class="text-danger">密碼不符合</small>
       </div>
-      <button
-        type="button"
-        class="hoverBtn btn btn-primary w-100 border-dark rounded-2 shadow"
-      >
+      <button type="button" class="effectBtn btn btn-primary w-100">
         重設密碼
       </button>
     </div>

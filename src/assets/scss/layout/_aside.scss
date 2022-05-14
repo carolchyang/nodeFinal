@@ -1,0 +1,73 @@
+.aside {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 97;
+}
+
+.asideContent {
+  max-width: 21.875rem;
+  margin: 0.5rem auto;
+  padding: 0.5rem 2rem;
+  background: $secondary;
+  border: 2px solid $dark;
+  border-radius: 2rem;
+}
+
+.asideList {
+  padding: 0 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  li:not(:last-child) {
+    margin-right: 1.5rem;
+  }
+}
+
+.asideLink {
+  display: flex;
+  align-items: center;
+  color: $dark;
+  &:hover {
+    .asideLinkIcon {
+      background-color: $primary;
+      color: $white;
+    }
+  }
+}
+
+.asideLinkIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3.125rem;
+  height: 3.125rem;
+  background-color: $white;
+  border: 2px solid $dark;
+  border-radius: 50%;
+  font-size: 1.25rem;
+}
+
+@include media-breakpoint-up(lg) {
+  .aside {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+  }
+  .asideContent {
+    display: block;
+    margin: 0;
+    padding: 2rem 1.5rem;
+    background: $white;
+    border-radius: 0;
+  }
+  .asideList {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .asideLinkIcon {
+    background-color: $info;
+  }
+}

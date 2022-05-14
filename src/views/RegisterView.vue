@@ -4,7 +4,7 @@
       <img src="../assets/images/login.png" class="d-none d-xl-block me-10" />
       <form class="loginForm">
         <img src="../assets/images/MetaWall.png" class="mx-auto" />
-        <h3 class="mb-9 text-center">註冊</h3>
+        <h1 class="mb-9 text-center h3">註冊</h1>
         <div class="mb-4">
           <input type="text" class="form-control" placeholder="暱稱" />
           <small class="text-danger">暱稱至少 2 個字元以上</small>
@@ -19,10 +19,10 @@
         </div>
         <router-link
           to="/"
-          class="btn btn-primary w-100 mb-4 border-dark rounded-2 shadow"
+          class="effectBtn btn btn-primary w-100 mb-4 disabled"
           >註冊</router-link
         >
-        <router-link to="/login" class="text-center hoverLink"
+        <router-link to="/login" class="link-dark text-center"
           >登入</router-link
         >
       </form>

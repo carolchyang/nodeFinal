@@ -23,13 +23,13 @@
 // @import "~bootstrap/scss/card";
 // @import "~bootstrap/scss/accordion";
 // @import "~bootstrap/scss/breadcrumb";
-// @import "~bootstrap/scss/pagination";
+@import "~bootstrap/scss/pagination";
 // @import "~bootstrap/scss/badge";
 // @import "~bootstrap/scss/alert";
 // @import "~bootstrap/scss/progress";
 @import "~bootstrap/scss/list-group";
 @import "~bootstrap/scss/close";
-// @import "~bootstrap/scss/toasts";
+@import "~bootstrap/scss/toasts";
 // @import "~bootstrap/scss/modal";
 // @import "~bootstrap/scss/tooltip";
 // @import "~bootstrap/scss/popover";
@@ -44,13 +44,19 @@
 // Utilities
 @import "~bootstrap/scss/utilities/api";
 
-@import "./partials/base";
-@import "./partials/link";
-@import "./partials/button";
-@import "./partials/shadow";
-@import "./partials/image";
-@import "./partials/circle";
-@import "./partials/header";
-@import "./partials/aside";
-@import "./partials/navTab";
+@import "./base/global";
+
+@import "./components/link";
+@import "./components/shadow";
+@import "./components/image";
+@import "./components/button";
+@import "./components/circle";
+@import "./components/navTab";
+@import "./components/card";
+@import "./components/header";
+@import "./components/toast";
+
+@import "./layout/navbar";
+@import "./layout/aside";
+
 @import "./pages/login";
