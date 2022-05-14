@@ -1,76 +1,36 @@
 <template>
-  <div
-    class="customShadow customShadow-start mb-4 p-5 bg-white text-center h4 border border-2 fw-bold"
-  >
-    追蹤名單
-  </div>
+  <h1 class="header">追蹤名單</h1>
 
-  <div
-    class="d-flex align-items-center mb-4 p-4 bg-white border border-2 rounded shadow-sm"
-  >
-    <img
-      src="../../assets/images/user51.png"
-      class="thumbnail thumbnail-xl border-0"
-    />
-    <div class="flex-grow-1 ms-4">
-      <router-link to="/" class="fw-bold hoverLink">愛爾敏</router-link>
-      <div class="d-flex justify-content-between fs-6">
-        <p class="text-light">追蹤時間： 2022/1/10 12:00</p>
-        <p>您已追蹤 90 天！</p>
+  <ul>
+    <li class="card">
+      <div class="d-flex flex-column flex-md-row align-items-center">
+        <img
+          src="../../assets/images/user4.png"
+          class="thumbnail thumbnail-xl d-none d-md-block border-0 me-4"
+        />
+        <div class="me-auto mb-2 mb-md-0">
+          <router-link to="/personalwall" class="link-dark fw-bold"
+            >阿爾敏</router-link
+          >
+          <span class="text-light fs-6">追蹤時間： 2022/1/10 12:00</span>
+        </div>
+        <p class="align-self-end fs-6">您已追蹤 90 天！</p>
       </div>
-    </div>
-  </div>
+    </li>
+  </ul>
 
-  <div
-    class="d-flex align-items-center mb-4 p-4 bg-white border border-2 rounded shadow-sm"
-  >
-    <img
-      src="../../assets/images/user52.png"
-      class="thumbnail thumbnail-xl border-0"
-    />
-    <div class="flex-grow-1 ms-4">
-      <router-link to="/" class="fw-bold hoverLink">李維</router-link>
-      <div class="d-flex justify-content-between fs-6">
-        <p class="text-light">追蹤時間： 2022/1/10 12:00</p>
-        <p>您已追蹤 90 天！</p>
-      </div>
-    </div>
-  </div>
-
-  <div
-    class="d-flex align-items-center mb-4 p-4 bg-white border border-2 rounded shadow-sm"
-  >
-    <img
-      src="../../assets/images/user53.png"
-      class="thumbnail thumbnail-xl border-0"
-    />
-    <div class="flex-grow-1 ms-4">
-      <router-link to="/" class="fw-bold hoverLink">米歇爾</router-link>
-      <div class="d-flex justify-content-between fs-6">
-        <p class="text-light">追蹤時間： 2022/1/10 12:00</p>
-        <p>您已追蹤 90 天！</p>
-      </div>
-    </div>
-  </div>
-  <div
-    class="d-flex align-items-center mb-4 p-4 bg-white border border-2 rounded shadow-sm"
-  >
-    <img
-      src="../../assets/images/user54.png"
-      class="thumbnail thumbnail-xl border-0"
-    />
-    <div class="flex-grow-1 ms-4">
-      <router-link to="/" class="fw-bold hoverLink">米卡莎</router-link>
-      <div class="d-flex justify-content-between fs-6">
-        <p class="text-light">追蹤時間： 2022/1/10 12:00</p>
-        <p>您已追蹤 90 天！</p>
-      </div>
-    </div>
-  </div>
+  <EmptyCardComponent class="d-none">
+    <template #default>目前還未追蹤任何人</template>
+  </EmptyCardComponent>
 </template>
 
 <script>
+import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
+
 export default {
   name: "TrackView",
+  components: {
+    EmptyCardComponent,
+  },
 };
 </script>

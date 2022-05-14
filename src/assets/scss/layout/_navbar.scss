@@ -1,0 +1,12 @@
+.navbar {
+  padding: 0.75rem 0;
+  background: $white;
+  border-bottom: 3px solid $dark;
+}
+
+.navbarBrand {
+  font-family: "Paytone One", $font-family-base;
+  color: $dark;
+  font-size: 1.625rem;
+  line-height: 1rem;
+}

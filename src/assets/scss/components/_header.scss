@@ -1,0 +1,58 @@
+.header {
+  position: relative;
+  margin-bottom: 1rem;
+  padding: 1.25rem;
+  background: $white;
+  text-align: center;
+  border: 2px solid $dark;
+  font-size: 1.25rem;
+  font-weight: bold;
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -0.5rem;
+    left: -0.5rem;
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    border: 2px solid $dark;
+    z-index: -1;
+  }
+}
+
+.header-rounded {
+  padding: 0;
+  border: 0;
+  &:after {
+    border-radius: 0.5rem;
+  }
+}
+
+.headerThumbnail {
+  display: none;
+  width: 5rem;
+  height: 5rem;
+  border: 2px solid $dark;
+  border-right: 0;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.headerContent {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  min-height: 5rem;
+  padding: 0 1rem;
+  border: 2px solid $dark;
+  border-radius: 0.5rem;
+}
+
+@include media-breakpoint-up(md) {
+  .headerThumbnail {
+    display: block;
+  }
+  .headerContent {
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+}

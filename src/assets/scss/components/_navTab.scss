@@ -1,4 +1,4 @@
-.customTabNav {
+.navTab {
   .nav {
     margin-left: 1rem;
   }
@@ -12,12 +12,13 @@
   }
 }
 
-.customTabContent {
-  background-color: $white;
+.navTabContent {
+  background: $white;
   border: 2px solid $dark;
+  border-radius: 0.5rem;
+  box-shadow: $box-shadow-sm;
   .tab-pane {
     max-width: 31.25rem;
     margin: 0 auto;
-    padding: 2rem;
   }
 }

@@ -1,9 +1,9 @@
 <template>
-  <header class="py-3 bg-white border-bottom border-3">
+  <div class="navbar">
     <div class="container d-flex justify-content-between align-items-center">
-      <router-link to="/" class="logo text-dark h2 lh-sm">MetaWall</router-link>
+      <router-link to="/" class="navbarBrand">MetaWall</router-link>
       <div class="d-flex align-items-center">
-        <img src="../assets/images/user.png" class="thumbnail thumbnail-sm" />
+        <img src="../assets/images/user1.png" class="thumbnail thumbnail-sm" />
         <div class="dropdown">
           <a
             class="dropdown-toggle ms-3 border-bottom border-2 text-dark fw-bolder"
@@ -16,7 +16,7 @@
             Member
           </a>
           <ul
-            class="dropdown-menu dropdown-menu-end customShadow customShadow-end text-center"
+            class="dropdown-menu dropdown-menu-end customShadow text-center"
             aria-labelledby="dropdownMenuLink"
           >
             <li class="bg-white border border-2 border-bottom-0">
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-  </header>
+  </div>
 </template>
 
 <script>
