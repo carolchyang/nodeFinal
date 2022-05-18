@@ -6,32 +6,32 @@ const routes = [
     component: () => import("../views/LayoutView.vue"),
     children: [
       {
-        path: "/",
+        path: "",
         name: "DynamicWallView",
         component: () => import("../views/front/DynamicWallView.vue"),
       },
       {
-        path: "/personalwall",
+        path: "personalwall",
         name: "PersonalWallView",
         component: () => import("../views/front/PersonalWallView.vue"),
       },
       {
-        path: "/likepost",
+        path: "likepost",
         name: "LikePostView",
         component: () => import("../views/front/LikePostView.vue"),
       },
       {
-        path: "/track",
+        path: "track",
         name: "TrackView",
         component: () => import("../views/front/TrackView.vue"),
       },
       {
-        path: "/profile",
+        path: "profile",
         name: "ProfileView",
         component: () => import("../views/front/ProfileView.vue"),
       },
       {
-        path: "/createpost",
+        path: "createpost",
         name: "CreatePostView",
         component: () => import("../views/front/CreatePostView.vue"),
       },
