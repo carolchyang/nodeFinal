@@ -45,3 +45,7 @@
     border-color: $gray-500;
   }
 }
+
+.btn-close-danger {
+  filter: hue-rotate(350deg);
+}

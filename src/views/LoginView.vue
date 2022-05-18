@@ -47,15 +47,16 @@ export default {
   name: "LoginView",
   methods: {
     login() {
-      // loading 效果
-      this.$emitter.emit("toggle-loading", true);
-      this.$emitter.emit("toggle-loading", false);
+      // loading 效果 - 啟用
+      // this.$emitter.emit("toggle-loading", true);
+      // loading 效果 - 關閉
+      // this.$emitter.emit("toggle-loading", false);
 
-      // 開啟 toast
-      this.$pushMessage({
-        style: "dark",
-        content: "登入成功",
-      });
+      // 傳送 toast 訊息
+      // this.$pushMessage({
+      //   style: "dark",
+      //   content: "登入成功",
+      // });
 
       this.$router.push("/");
     },

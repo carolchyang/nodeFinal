@@ -59,6 +59,9 @@
           <router-link to="/personalwall" class="link-dark">阿爾敏</router-link>
           <span class="d-block text-light fs-7 fw-normal">2022/1/10 12:00</span>
         </div>
+        <a href="#" class="cardCloseBtn" @click.prevent="toggleDelModal()">
+          <i class="bi bi-x-lg"></i>
+        </a>
       </div>
       <div class="mb-5">
         <p class="mb-4">
@@ -103,7 +106,7 @@
         </div>
       </div>
       <ul>
-        <li class="mb-4 p-4 bg-secondary rounded-2">
+        <li class="position-relative mb-4 p-4 bg-secondary rounded-2">
           <div class="d-flex align-items-center mb-1">
             <img
               src="../../assets/images/user2.png"
@@ -116,11 +119,18 @@
               <span class="d-block text-light fs-7 fw-normal"
                 >2022/1/10 12:00</span
               >
+              <a
+                href="#"
+                class="cardCloseBtn"
+                @click.prevent="toggleDelModal()"
+              >
+                <i class="bi bi-x-lg"></i>
+              </a>
             </div>
           </div>
           <p class="ms-12">真的～我已經準備冬眠了</p>
         </li>
-        <li class="p-4 bg-secondary rounded-2">
+        <li class="position-relative mb-4 p-4 bg-secondary rounded-2">
           <div class="d-flex align-items-center mb-1">
             <img
               src="../../assets/images/user3.png"
@@ -133,9 +143,40 @@
               <span class="d-block text-light fs-7 fw-normal"
                 >2022/1/10 12:00</span
               >
+              <a
+                href="#"
+                class="cardCloseBtn"
+                @click.prevent="toggleDelModal()"
+              >
+                <i class="bi bi-x-lg"></i>
+              </a>
             </div>
           </div>
           <p class="ms-12">會嗎？我沒穿衣服都不覺得冷</p>
+        </li>
+        <li class="position-relative p-4 bg-secondary rounded-2">
+          <div class="d-flex align-items-center mb-1">
+            <img
+              src="../../assets/images/user1.png"
+              class="thumbnail thumbnail-lg"
+            />
+            <div class="ms-3">
+              <router-link to="/dynamicwall" class="link-dark">
+                邊緣小杰
+              </router-link>
+              <span class="d-block text-light fs-7 fw-normal"
+                >2022/1/10 12:00</span
+              >
+              <a
+                href="#"
+                class="cardCloseBtn d-block"
+                @click.prevent="toggleDelModal('留言')"
+              >
+                <i class="bi bi-x-lg"></i>
+              </a>
+            </div>
+          </div>
+          <p class="ms-12">也太美了~</p>
         </li>
       </ul>
     </li>
@@ -149,6 +190,9 @@
           <router-link to="/personalwall" class="link-dark">阿爾敏</router-link>
           <span class="d-block text-light fs-7 fw-normal">2022/1/10 12:00</span>
         </div>
+        <a href="#" class="cardCloseBtn" @click.prevent="toggleDelModal()">
+          <i class="bi bi-x-lg"></i>
+        </a>
       </div>
       <div class="">
         <p class="mb-4">各位我有一個作戰計畫</p>
@@ -195,15 +239,38 @@
   <EmptyCardComponent class="d-none">
     <template #default>目前尚無動態</template>
   </EmptyCardComponent>
+
+  <DelModalComponent>
+    <template #default>
+      確定要刪除此則
+      <b class="text-danger">{{ modalItem }}</b>
+      ？（刪除後無法回復）
+    </template>
+  </DelModalComponent>
 </template>
 
 <script>
 import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
+import DelModalComponent from "@/components/DelModalComponent.vue";
+import { bsModal } from "@/scripts/methods";
 
 export default {
   name: "PersonalWallView",
+  data() {
+    return {
+      modalItem: "",
+    };
+  },
+  methods: {
+    toggleDelModal(item) {
+      this.modalItem = item;
+      this.bsModal = bsModal("delModal");
+      this.bsModal.show();
+    },
+  },
   components: {
     EmptyCardComponent,
+    DelModalComponent,
   },
 };
 </script>
