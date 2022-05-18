@@ -19,8 +19,16 @@
           >
             取消
           </button>
-          <button type="button" class="btn btn-outline-danger py-2 px-8">
-            確定刪除
+          <button
+            type="button"
+            class="btn btn-outline-danger py-2 px-8"
+            v-if="temp === '登出'"
+            @click.prevent="$emit('logout')"
+          >
+            確定
+          </button>
+          <button type="button" class="btn btn-outline-danger py-2 px-8" v-else>
+            確定
           </button>
         </div>
       </div>
@@ -30,6 +38,7 @@
 
 <script>
 export default {
-  name: "DeleteModalComponent",
+  name: "DelModalComponent",
+  props: ["temp"],
 };
 </script>

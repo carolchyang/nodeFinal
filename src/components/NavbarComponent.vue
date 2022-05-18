@@ -28,17 +28,53 @@
               >
             </li>
             <li class="bg-white border border-2">
-              <router-link to="/login" class="dropdown-item">登出</router-link>
+              <a
+                href="#"
+                class="dropdown-item"
+                @click.prevent="toggleDelModal('登出')"
+              >
+                登出
+              </a>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </div>
+
+  <DelModalComponent :temp="modalItem" @logout="logout">
+    <template #default>
+      確定要登出
+      <b class="text-danger">{{ modalItem }}</b>
+      ？（登出後請重新登入）
+    </template>
+  </DelModalComponent>
 </template>
 
 <script>
+import DelModalComponent from "@/components/DelModalComponent.vue";
+import { bsModal } from "@/scripts/methods";
+
 export default {
   name: "NavbarComponent",
+  data() {
+    return {
+      modalItem: "",
+    };
+  },
+  methods: {
+    toggleDelModal(item) {
+      this.modalItem = item;
+      this.bsModal = bsModal("delModal");
+      this.bsModal.show();
+    },
+    logout() {
+      this.$router.push("/login");
+      this.bsModal.hide();
+    },
+  },
+  components: {
+    DelModalComponent,
+  },
 };
 </script>
