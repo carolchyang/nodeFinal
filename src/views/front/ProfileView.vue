@@ -13,7 +13,7 @@
         aria-controls="nav-profile"
         aria-selected="true"
       >
-        暱稱修改
+        修改資料
       </button>
       <button
         class="nav-link"
@@ -36,56 +36,82 @@
       role="tabpanel"
       aria-labelledby="nav-profile-tab"
     >
-      <img
-        src="../../assets/images/user_default.png"
-        class="thumbnail thumbnail-xxl mx-auto mb-4"
-      />
-      <div class="fileBtn text-center mb-4">
-        <label for="file">上傳大頭照</label>
-        <input type="file" id="file" />
-      </div>
-      <div class="mb-4">
-        <label for="nickname" class="form-label">暱稱</label>
-        <input
-          type="text"
-          id="nickname"
-          class="form-control"
-          placeholder="請輸入暱稱"
+      <VForm
+        v-slot="{ errors, meta }"
+        @submit="resetProfile"
+        ref="resetProfileForm"
+      >
+        <img
+          id="fileimg"
+          src="../../assets/images/user_default.png"
+          class="thumbnail thumbnail-xxl mx-auto mb-4"
         />
-        <small class="text-danger"></small>
-      </div>
-      <div class="mb-8">
-        <h3 class="mb-2 h5 fw-normal">性別</h3>
-        <div class="form-check form-check-inline me-6">
+        <div class="fileBtn text-center mb-4">
+          <label for="file">上傳大頭照</label>
           <input
-            class="form-check-input"
-            type="radio"
-            name="sex"
-            id="male"
-            value="male"
-            checked="checked"
+            type="file"
+            accept="image/*"
+            id="file"
+            ref="uploadFile"
+            @change="uploadFile"
           />
-          <label class="form-check-label" for="male">男生</label>
         </div>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="sex"
-            id="female"
-            value="female"
-          />
-          <label class="form-check-label" for="female">女生</label>
+        <div class="mb-4">
+          <label for="nickname" class="form-label">暱稱</label>
+          <VField
+            type="text"
+            id="nickname"
+            placeholder="請輸入暱稱"
+            name="暱稱"
+            class="form-control"
+            :class="{ 'is-invalid': errors['暱稱'] }"
+            rules="required|min:2"
+            v-model="newProfile.nickname"
+            required
+          ></VField>
+          <error-message
+            name="暱稱"
+            class="invalid-feedback text-danger"
+          ></error-message>
         </div>
-      </div>
-      <small class="d-block mb-4 text-center text-danger">
-        1.圖片寬高比必需為 1:1，請重新輸入
-        <br />
-        2. 解析度寬度至少 300像素以上，請重新輸入
-      </small>
-      <button type="button" class="effectBtn btn btn-primary w-100">
-        送出更新
-      </button>
+        <div class="mb-8">
+          <h3 class="mb-2 h5 fw-normal">性別</h3>
+          <div class="form-check form-check-inline me-6">
+            <VField
+              type="radio"
+              id="male"
+              name="性別"
+              class="form-check-input"
+              rules="required"
+              value="male"
+              v-model="newProfile.gender"
+            ></VField>
+
+            <label class="form-check-label" for="male">男生</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <VField
+              type="radio"
+              id="female"
+              name="性別"
+              class="form-check-input"
+              rules="required"
+              value="female"
+              v-model="newProfile.gender"
+            ></VField>
+            <label class="form-check-label" for="female">女生</label>
+          </div>
+        </div>
+        <small class="d-block mb-4 text-center text-danger"></small>
+
+        <button
+          type="submit"
+          class="effectBtn btn btn-primary w-100"
+          :disabled="!meta.valid"
+        >
+          送出更新
+        </button>
+      </VForm>
     </div>
     <div
       class="tab-pane fade px-4 py-8 px-md-8"
@@ -93,29 +119,55 @@
       role="tabpanel"
       aria-labelledby="nav-password-tab"
     >
-      <div class="mb-4">
-        <label for="password" class="form-label">輸入新密碼</label>
-        <input
-          type="password"
-          id="password"
-          class="form-control"
-          placeholder="請輸入新密碼"
-        />
-        <small class="text-danger"></small>
-      </div>
-      <div class="mb-8">
-        <label for="checkPassword" class="form-label">再次輸入</label>
-        <input
-          type="password"
-          id="checkPassword"
-          class="form-control"
-          placeholder="再次輸入新密碼"
-        />
-        <small class="text-danger">密碼不符合</small>
-      </div>
-      <button type="button" class="effectBtn btn btn-primary w-100">
-        重設密碼
-      </button>
+      <VForm
+        v-slot="{ errors, meta }"
+        @submit="resetPassword"
+        ref="resetPasswordForm"
+      >
+        <div class="mb-4">
+          <label for="password" class="form-label">密碼</label>
+          <VField
+            type="password"
+            id="password"
+            placeholder="請輸入密碼"
+            name="密碼"
+            class="form-control"
+            :class="{ 'is-invalid': errors['密碼'] }"
+            rules="required|min:8"
+            v-model="newPassword.password"
+            required
+          ></VField>
+          <error-message
+            name="密碼"
+            class="invalid-feedback text-danger"
+          ></error-message>
+        </div>
+        <div class="mb-8">
+          <label for="confirmed" class="form-label">確認密碼</label>
+          <VField
+            type="password"
+            id="confirmed"
+            placeholder="請再次輸入密碼"
+            name="確認密碼"
+            class="form-control"
+            :class="{ 'is-invalid': errors['確認密碼'] }"
+            rules="required|confirmed:@密碼"
+            v-model="newPassword.confirmed"
+            required
+          ></VField>
+          <error-message
+            name="確認密碼"
+            class="invalid-feedback text-danger"
+          ></error-message>
+        </div>
+        <button
+          type="submit"
+          class="effectBtn btn btn-primary w-100"
+          :disabled="!meta.valid"
+        >
+          重設密碼
+        </button>
+      </VForm>
     </div>
   </div>
 </template>
@@ -123,5 +175,26 @@
 <script>
 export default {
   name: "ProfileView",
+  data() {
+    return {
+      newPassword: {
+        password: "",
+        confirmed: "",
+      },
+      newProfile: {
+        nickname: "",
+        gender: "",
+      },
+    };
+  },
+  methods: {
+    uploadFile() {},
+    resetProfile() {
+      this.$refs.resetProfileForm.resetForm();
+    },
+    resetPassword() {
+      this.$refs.resetPasswordForm.resetForm();
+    },
+  },
 };
 </script>
