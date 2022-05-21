@@ -5,11 +5,6 @@
   border: 2px solid $dark;
 }
 
-.thumbnail-xxl {
-  width: 6.75rem;
-  height: 6.75rem;
-}
-
 .thumbnail-xl {
   width: 3.125rem;
   height: 3.125rem;
@@ -33,4 +28,14 @@
   background-size: cover;
   border: 2px solid $dark;
   border-radius: 0.5rem;
+}
+
+.bgCoverRounded {
+  width: 6.75rem;
+  height: 6.75rem;
+  border-radius: 50%;
+  border: 2px solid $dark;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }

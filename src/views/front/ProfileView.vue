@@ -39,11 +39,11 @@
       aria-labelledby="nav-profile-tab"
     >
       <VForm v-slot="{ errors, meta }" @submit="resetProfile" ref="profileForm">
-        <img
-          id="fileimg"
-          src="../../assets/images/user_default.png"
-          class="thumbnail thumbnail-xxl mx-auto mb-4"
-        />
+        <div
+          class="bgCoverRounded mx-auto mb-4"
+          :style="{ backgroundImage: 'url(' + tempImg.url + ')' }"
+          v-if="tempImg.url"
+        ></div>
         <div class="fileBtn text-center mb-4">
           <label for="file">上傳大頭照</label>
           <input
@@ -53,6 +53,7 @@
             ref="uploadFile"
             @change="uploadFile"
           />
+          <small class="d-block mt-2 text-danger">{{ tempImg.msg }}</small>
         </div>
         <div class="mb-4">
           <label for="nickname" class="form-label">暱稱</label>
@@ -183,10 +184,31 @@ export default {
         nickname: "",
         gender: "",
       },
+      tempImg: {
+        url: require("@/assets/images/user_default.png"),
+        msg: "",
+      },
     };
   },
   methods: {
-    uploadFile() {},
+    uploadFile(e) {
+      this.tempImg = {
+        url: require("@/assets/images/user_default.png"),
+        msg: "",
+      };
+      const file = e.target.files[0];
+      if (file) {
+        const { size, type } = file;
+        if (!type.startsWith("image/")) {
+          this.tempImg.msg = "請確認圖片格式";
+        } else if (size > 102400) {
+          this.tempImg.msg = "圖片檔案不能超過 100 KB";
+        } else {
+          this.tempImg.url = URL.createObjectURL(file);
+          this.tempImg.msg = "";
+        }
+      }
+    },
     resetProfile() {
       this.resetForm("profile");
     },
@@ -194,6 +216,13 @@ export default {
       this.resetForm("password");
     },
     resetForm(name) {
+      if (name == "password") {
+        this.tempImg = {
+          url: require("@/assets/images/user_default.png"),
+          msg: "",
+        };
+      }
+
       const formName = `${name}Form`;
       this.$refs[formName].resetForm();
     },
