@@ -72,6 +72,10 @@ export default {
   methods: {
     post() {
       this.$refs.postForm.resetForm();
+      this.tempImg = {
+        url: "",
+        msg: "",
+      };
     },
     uploadFile(e) {
       this.tempImg = {

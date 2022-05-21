@@ -216,15 +216,15 @@ export default {
       this.resetForm("password");
     },
     resetForm(name) {
-      if (name == "password") {
+      const formName = `${name}Form`;
+      this.$refs[formName].resetForm();
+
+      if (name == "profile") {
         this.tempImg = {
           url: require("@/assets/images/user_default.png"),
           msg: "",
         };
       }
-
-      const formName = `${name}Form`;
-      this.$refs[formName].resetForm();
     },
   },
 };
