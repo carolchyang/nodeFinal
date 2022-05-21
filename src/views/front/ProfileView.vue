@@ -12,6 +12,7 @@
         role="tab"
         aria-controls="nav-profile"
         aria-selected="true"
+        @click="resetForm('password')"
       >
         修改資料
       </button>
@@ -24,6 +25,7 @@
         role="tab"
         aria-controls="nav-password"
         aria-selected="false"
+        @click="resetForm('profile')"
       >
         重設密碼
       </button>
@@ -36,11 +38,7 @@
       role="tabpanel"
       aria-labelledby="nav-profile-tab"
     >
-      <VForm
-        v-slot="{ errors, meta }"
-        @submit="resetProfile"
-        ref="resetProfileForm"
-      >
+      <VForm v-slot="{ errors, meta }" @submit="resetProfile" ref="profileForm">
         <img
           id="fileimg"
           src="../../assets/images/user_default.png"
@@ -122,7 +120,7 @@
       <VForm
         v-slot="{ errors, meta }"
         @submit="resetPassword"
-        ref="resetPasswordForm"
+        ref="passwordForm"
       >
         <div class="mb-4">
           <label for="password" class="form-label">密碼</label>
@@ -190,10 +188,14 @@ export default {
   methods: {
     uploadFile() {},
     resetProfile() {
-      this.$refs.resetProfileForm.resetForm();
+      this.resetForm("profile");
     },
     resetPassword() {
-      this.$refs.resetPasswordForm.resetForm();
+      this.resetForm("password");
+    },
+    resetForm(name) {
+      const formName = `${name}Form`;
+      this.$refs[formName].resetForm();
     },
   },
 };

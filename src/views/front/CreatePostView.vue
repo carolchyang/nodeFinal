@@ -81,11 +81,11 @@ export default {
       const file = e.target.files[0];
       if (file) {
         const { size, type } = file;
-        if (size > 102400) {
-          this.tempImg.msg = "圖片檔案不能超過 100 KB";
-          this.tempImg.url = "";
-        } else if (!type.startsWith("image/")) {
+        if (!type.startsWith("image/")) {
           this.tempImg.msg = "請確認圖片格式";
+          this.tempImg.url = "";
+        } else if (size > 102400) {
+          this.tempImg.msg = "圖片檔案不能超過 100 KB";
           this.tempImg.url = "";
         } else {
           this.tempImg.url = URL.createObjectURL(file);
