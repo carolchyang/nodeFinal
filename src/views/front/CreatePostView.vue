@@ -1,15 +1,30 @@
 <template>
   <h1 class="header">張貼動態</h1>
 
-  <div class="card p-md-8">
+  <VForm
+    v-slot="{ errors, meta }"
+    class="card p-md-8"
+    @submit="post"
+    ref="postForm"
+  >
     <div class="mb-4">
       <label for="content" class="form-label">貼文內容</label>
-      <textarea
-        class="form-control"
+      <VField
+        type="text"
         id="content"
-        rows="5"
         placeholder="輸入您的貼文內容"
-      ></textarea>
+        name="貼文內容"
+        class="form-control"
+        :class="{ 'is-invalid': errors['貼文內容'] }"
+        rows="5"
+        rules="required|min:5|max:200"
+        v-model="tempPost.content"
+        as="textarea"
+      ></VField>
+      <error-message
+        name="貼文內容"
+        class="invalid-feedback text-danger"
+      ></error-message>
     </div>
     <div class="fileBtn mb-4">
       <label for="file" class="rounded-1">上傳圖片</label>
@@ -20,18 +35,30 @@
 
     <div class="text-center">
       <button
-        type="button"
+        type="submit"
         class="effectBtn btn btn-primary w-100"
-        style="max-width: 323px"
+        :disabled="!meta.valid"
       >
         送出貼文
       </button>
     </div>
-  </div>
+  </VForm>
 </template>
 
 <script>
 export default {
   name: "CreatePostView",
+  data() {
+    return {
+      tempPost: {
+        content: "",
+      },
+    };
+  },
+  methods: {
+    post() {
+      this.$refs.postForm.resetForm();
+    },
+  },
 };
 </script>
