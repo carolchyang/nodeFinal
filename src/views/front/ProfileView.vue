@@ -132,7 +132,7 @@
             name="密碼"
             class="form-control"
             :class="{ 'is-invalid': errors['密碼'] }"
-            rules="required|min:8"
+            rules="required|password:8"
             v-model="newPassword.password"
             required
           ></VField>
