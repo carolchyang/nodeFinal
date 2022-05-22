@@ -28,7 +28,7 @@
               >
             </li>
             <li class="bg-white border border-2">
-              <router-link to="/login" class="dropdown-item">登出</router-link>
+              <router-link to="/signin" class="dropdown-item">登出</router-link>
             </li>
           </ul>
         </div>

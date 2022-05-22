@@ -38,14 +38,14 @@ const routes = [
     ],
   },
   {
-    path: "/login",
-    name: "LoginView",
-    component: () => import("../views/LoginView.vue"),
+    path: "/signin",
+    name: "SignInView",
+    component: () => import("../views/SignInView.vue"),
   },
   {
-    path: "/register",
-    name: "RegisterView",
-    component: () => import("../views/RegisterView.vue"),
+    path: "/signup",
+    name: "SignUpView",
+    component: () => import("../views/SignUpView.vue"),
   },
   {
     path: "/:pathMath(.*)*",

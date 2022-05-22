@@ -4,7 +4,7 @@
   >
     <p class="display-1">404</p>
     <p class="display-2 mb-8">發生錯誤</p>
-    <router-link to="/login" class="btn btn-primary">回到 登入頁</router-link>
+    <router-link to="/signin" class="btn btn-primary">回到 登入頁</router-link>
   </div>
 </template>
 

@@ -1,4 +1,4 @@
-.login {
+.signin {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,10 +9,10 @@
 }
 
 @include media-breakpoint-up(md) {
-  .login {
+  .signin {
     padding: 3rem;
   }
-  .loginForm {
+  .signinForm {
     min-width: 23.5rem;
   }
 }
