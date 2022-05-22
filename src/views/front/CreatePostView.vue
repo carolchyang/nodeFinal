@@ -1,37 +1,102 @@
 <template>
   <h1 class="header">張貼動態</h1>
 
-  <div class="card p-md-8">
+  <VForm
+    v-slot="{ errors, meta }"
+    class="card p-md-8"
+    @submit="post"
+    ref="postForm"
+  >
     <div class="mb-4">
       <label for="content" class="form-label">貼文內容</label>
-      <textarea
-        class="form-control"
+      <VField
+        type="text"
         id="content"
-        rows="5"
         placeholder="輸入您的貼文內容"
-      ></textarea>
+        name="貼文內容"
+        class="form-control"
+        :class="{ 'is-invalid': errors['貼文內容'] }"
+        rows="5"
+        rules="required|min:5|max:200"
+        v-model="tempPost.content"
+        as="textarea"
+      ></VField>
+      <error-message
+        name="貼文內容"
+        class="invalid-feedback text-danger"
+      ></error-message>
     </div>
-    <div class="fileBtn mb-4">
+    <div class="fileBtn mb-4" :class="{ 'mb-8': tempImg == '' }">
       <label for="file" class="rounded-1">上傳圖片</label>
-      <input class="" type="file" id="file" />
+      <input
+        type="file"
+        accept="image/*"
+        id="file"
+        ref="uploadFile"
+        @change="uploadFile"
+      />
+      <small class="ms-4 text-danger">{{ tempImg.msg }}</small>
     </div>
-
-    <img src="../../assets/images/image1.png" class="bgCover mb-8" />
+    <div
+      class="bgCover mb-8"
+      :style="{ backgroundImage: 'url(' + tempImg.url + ')' }"
+      v-if="tempImg.url"
+    ></div>
 
     <div class="text-center">
       <button
-        type="button"
+        type="submit"
         class="effectBtn btn btn-primary w-100"
-        style="max-width: 323px"
+        :disabled="!meta.valid"
       >
         送出貼文
       </button>
     </div>
-  </div>
+  </VForm>
 </template>
 
 <script>
 export default {
   name: "CreatePostView",
+  data() {
+    return {
+      tempPost: {
+        content: "",
+      },
+      tempImg: {
+        url: "",
+        msg: "",
+      },
+    };
+  },
+  methods: {
+    post() {
+      this.$refs.postForm.resetForm();
+      this.tempImg = {
+        url: "",
+        msg: "",
+      };
+    },
+    uploadFile(e) {
+      this.tempImg = {
+        url: "",
+        msg: "",
+      };
+      const file = e.target.files[0];
+      if (file) {
+        const { size, type } = file;
+        if (!type.startsWith("image/")) {
+          this.tempImg.msg = "請確認圖片格式";
+          this.tempImg.url = "";
+        } else if (size > 102400) {
+          this.tempImg.msg = "圖片檔案不能超過 100 KB";
+          this.tempImg.url = "";
+        } else {
+          this.tempImg.url = URL.createObjectURL(file);
+          this.tempImg.msg = "";
+        }
+      }
+    },
+  },
 };
 </script>

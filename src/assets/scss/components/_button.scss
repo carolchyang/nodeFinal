@@ -34,7 +34,8 @@
   }
 }
 
-.disabled.disabled {
+a.disabled,
+.btn:disabled {
   background-color: $gray-400;
   color: $white;
   border-color: $gray-500;
