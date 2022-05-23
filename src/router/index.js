@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { pushMessage, getToken, clearToken } from "@/scripts/methods";
+import { getToken, clearToken } from "@/scripts/methods";
 
 const routes = [
   {
@@ -90,10 +90,6 @@ router.beforeEach((to) => {
 
   if (token == "" && to.name !== "SignInView" && to.name !== "SignUpView") {
     clearToken();
-    pushMessage({
-      style: "danger",
-      content: "請確認登入狀態",
-    });
     return { name: "SignInView" };
   }
 });
