@@ -12,14 +12,14 @@
         <h1 class="mb-9 text-center h3">註冊</h1>
         <div class="mb-4">
           <VField
-            type="nickname"
-            id="nickname"
+            type="name"
+            id="name"
             name="暱稱"
             placeholder="請輸入暱稱"
             class="form-control"
             :class="{ 'is-invalid': errors['暱稱'] }"
             rules="required|min:2"
-            v-model="user.nickname"
+            v-model="user.name"
             required
           ></VField>
           <error-message
@@ -68,21 +68,23 @@
         >
           註冊
         </button>
-        <router-link to="/signin" class="link-dark text-center"
-          >登入</router-link
-        >
+        <router-link to="/signin" class="link-dark text-center">
+          登入
+        </router-link>
       </VForm>
     </div>
   </section>
 </template>
 
 <script>
+import { apiUserSignUp } from "@/scripts/api";
+
 export default {
   name: "SignUpView",
   data() {
     return {
       user: {
-        nickname: "",
+        name: "",
         email: "",
         password: "",
       },
@@ -90,8 +92,30 @@ export default {
   },
   methods: {
     signUp() {
-      this.$refs.form.resetForm();
-      this.$router.push("/");
+      this.$emitter.emit("toggle-loading", true);
+      apiUserSignUp(this.user)
+        .then((res) => {
+          this.$refs.form.resetForm();
+
+          this.$emitter.emit("toggle-loading", false);
+          this.$pushMessage({
+            style: "dark",
+            content: "註冊成功",
+          });
+
+          const { token } = res.data.data;
+          const expries = new Date(Date.now() + 1000 * 60 * 30).toGMTString();
+          document.cookie = `nodeFinal=${token}; expires=${expries}`;
+
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          this.$emitter.emit("toggle-loading", false);
+          this.$pushMessage({
+            style: "danger",
+            content: err.response.data.message || "註冊失敗",
+          });
+        });
     },
   },
 };
