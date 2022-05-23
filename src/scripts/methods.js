@@ -9,7 +9,7 @@ export const bsModal = (id) => new Modal(document.getElementById(id));
 
 export const setToken = (token) => {
   const expries = new Date(Date.now() + 1000 * 60 * 30).toGMTString();
-  document.cookie = `nodeFinal=${token}; expires=${expries}`;
+  document.cookie = `nodeFinal=${token}; expires=${expries}; path=/`;
 };
 
 export const getToken = () => {
