@@ -1,6 +1,6 @@
 <template>
   <div v-if="checkSuccess">
-    <NavbarComponent></NavbarComponent>
+    <NavbarComponent @sign-out="signOut"></NavbarComponent>
     <main class="container py-11">
       <div class="row">
         <div class="col-12 col-lg-8">
@@ -44,6 +44,11 @@ export default {
         });
         this.$router.push("/signin");
       }
+    },
+    signOut() {
+      document.cookie = "nodeFinal=;expires=;path=/";
+      this.checkSuccess = false;
+      this.$router.push("/signin");
     },
   },
   created() {

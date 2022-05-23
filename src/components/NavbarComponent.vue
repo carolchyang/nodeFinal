@@ -23,12 +23,18 @@
               <router-link to="/" class="dropdown-item">我的貼文牆</router-link>
             </li>
             <li class="bg-white border border-2 border-bottom-0">
-              <router-link to="/profile" class="dropdown-item"
-                >修改個人資料</router-link
-              >
+              <router-link to="/profile" class="dropdown-item">
+                修改個人資料
+              </router-link>
             </li>
             <li class="bg-white border border-2">
-              <router-link to="/signin" class="dropdown-item">登出</router-link>
+              <a
+                href="#"
+                class="dropdown-item"
+                @click.prevent="$emit('sign-out')"
+              >
+                登出
+              </a>
             </li>
           </ul>
         </div>
