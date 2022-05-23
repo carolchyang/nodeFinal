@@ -105,7 +105,7 @@ export default {
           const { token } = res.data.data;
           this.$setToken(token);
 
-          this.$router.push("/");
+          this.$router.push({ name: "DynamicWallView" });
         })
         .catch((err) => {
           this.$emitter.emit("toggle-loading", false);
