@@ -51,12 +51,15 @@
         >
           登入
         </button>
-        <router-link to="/signup" class="link-dark mb-4 text-center"
-          >註冊帳號</router-link
-        >
+        <router-link to="/signup" class="link-dark mb-10 text-center">
+          註冊帳號
+        </router-link>
 
-        <hr />
-        <a href="" class="link-dark mb-4">
+        <div class="text-end">
+          <a href="#" class="link-primary d-inline-block"> 忘記密碼 </a>
+        </div>
+        <hr class="mt-2" />
+        <a href="#" class="link-dark mb-4">
           <i class="bi bi-facebook text-primary me-4"></i>
           使用 Facebook 繼續
         </a>
@@ -74,6 +77,8 @@
 </template>
 
 <script>
+import { apiUserSignIn } from "@/scripts/api";
+
 export default {
   name: "SignInView",
   data() {
@@ -86,18 +91,30 @@ export default {
   },
   methods: {
     signIn() {
-      // loading 效果 - 啟用
-      // this.$emitter.emit("toggle-loading", true);
-      // loading 效果 - 關閉
-      // this.$emitter.emit("toggle-loading", false);
+      this.$emitter.emit("toggle-loading", true);
+      apiUserSignIn(this.user)
+        .then((res) => {
+          this.$refs.form.resetForm();
 
-      // 傳送 toast 訊息
-      // this.$pushMessage({
-      //   style: "dark",
-      //   content: "登入成功",
-      // });
-      this.$refs.form.resetForm();
-      this.$router.push("/");
+          this.$emitter.emit("toggle-loading", false);
+          this.$pushMessage({
+            style: "dark",
+            content: "登入成功",
+          });
+
+          const { token } = res.data.data;
+          const expries = new Date(Date.now() + 1000 * 60 * 30).toGMTString();
+          document.cookie = `nodeFinal=${token}; expires=${expries}`;
+
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          this.$emitter.emit("toggle-loading", false);
+          this.$pushMessage({
+            style: "danger",
+            content: err.response.data.message || "登入失敗",
+          });
+        });
     },
   },
 };

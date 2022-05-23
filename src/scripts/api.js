@@ -1,11 +1,12 @@
-// import axios from "axios";
+import axios from "axios";
 
-// const api = process.env.VUE_APP_API;
-// const path = process.env.VUE_APP_PATH;
+const api = process.env.VUE_APP_API;
 
-// // get 範例
-// export const apiUrlGetPosts = () => axios.get(`${api}/api/${path}/posts/all`);
-
-// // post 範例
-// export const apiUrlUpdatedPosts = (data) =>
-//   axios.post(`${api}/admin/updatedPosts`, data);
+// Users
+export const apiUserSignUp = (data) => axios.post(`${api}/users/sign_up`, data);
+export const apiUserSignIn = (data) => axios.post(`${api}/users/sign_in`, data);
+export const apiUserUpdatePassword = (data) =>
+  axios.post(`${api}/user/updatePassword`, data);
+export const apiUserProfile = () => axios.get(`${api}/users/profile`);
+export const apiUserUpdateProfile = (data) =>
+  axios.patch(`${api}/users/profile`, data);
