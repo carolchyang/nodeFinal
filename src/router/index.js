@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import { pushMessage } from "@/scripts/methods";
 
 const routes = [
   {
@@ -56,6 +57,22 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+router.beforeEach((to) => {
+  const token = document.cookie.replace(
+    /(?:(?:^|.*;\s*)nodeFinal\s*=\s*([^;]*).*$)|^.*$/,
+    "$1"
+  );
+
+  if (token == "" && to.name !== "SignInView" && to.name !== "SignUpView") {
+    document.cookie = "nodeFinal=;expires=;path=/";
+    pushMessage({
+      style: "danger",
+      content: "請確認登入狀態",
+    });
+    return { name: "SignInView" };
+  }
 });
 
 export default router;
