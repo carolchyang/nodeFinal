@@ -88,10 +88,6 @@ router.beforeEach((to) => {
 
   const token = getToken();
 
-  if (token !== "" && (to.name == "SignInView" || to.name == "SignUpView")) {
-    return { name: "DynamicWallView" };
-  }
-
   if (token == "" && to.name !== "SignInView" && to.name !== "SignUpView") {
     clearToken();
     pushMessage({

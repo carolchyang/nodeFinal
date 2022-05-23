@@ -9,7 +9,7 @@ import { localize, setLocale } from "@vee-validate/i18n";
 import zhTW from "@vee-validate/i18n/dist/locale/zh_TW.json";
 
 import emitter from "@/scripts/emitter";
-import { pushMessage, setToken, getToken, clearToken } from "@/scripts/methods";
+import { pushMessage } from "@/scripts/methods";
 
 import App from "./App.vue";
 import router from "./router";
@@ -35,9 +35,6 @@ setLocale("zh_TW");
 const app = createApp(App);
 app.config.globalProperties.$emitter = emitter;
 app.config.globalProperties.$pushMessage = pushMessage;
-app.config.globalProperties.$setToken = setToken;
-app.config.globalProperties.$getToken = getToken;
-app.config.globalProperties.$clearToken = clearToken;
 app.use(router);
 app.use(VueAxios, axios);
 app.component("VForm", Form);

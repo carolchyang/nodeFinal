@@ -18,6 +18,7 @@
 <script>
 import NavbarComponent from "@/components/NavbarComponent";
 import AsideComponent from "@/components/AsideComponent";
+import { getToken, clearToken } from "@/scripts/methods";
 
 export default {
   name: "LayoutView",
@@ -28,7 +29,7 @@ export default {
   },
   methods: {
     checkSignIn() {
-      const token = this.$getToken();
+      const token = getToken();
 
       if (token) {
         this.checkSuccess = true;
@@ -43,7 +44,7 @@ export default {
       }
     },
     signOut() {
-      this.$clearToken();
+      clearToken();
       this.checkSuccess = false;
       this.$router.push("/signin");
     },

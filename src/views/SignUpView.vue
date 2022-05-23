@@ -78,6 +78,7 @@
 
 <script>
 import { apiUserSignUp } from "@/scripts/api";
+import { setToken } from "@/scripts/methods";
 
 export default {
   name: "SignUpView",
@@ -104,7 +105,7 @@ export default {
           });
 
           const { token } = res.data.data;
-          this.$setToken(token);
+          setToken(token);
 
           this.$router.push({ name: "DynamicWallView" });
         })
