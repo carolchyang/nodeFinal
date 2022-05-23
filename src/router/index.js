@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { pushMessage } from "@/scripts/methods";
+import { pushMessage, getToken, clearToken } from "@/scripts/methods";
 
 const routes = [
   {
@@ -60,13 +60,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const token = document.cookie.replace(
-    /(?:(?:^|.*;\s*)nodeFinal\s*=\s*([^;]*).*$)|^.*$/,
-    "$1"
-  );
+  const token = getToken();
+
+  if (token !== "" && (to.name == "SignInView" || to.name == "SignUpView")) {
+    return { name: "DynamicWallView" };
+  }
 
   if (token == "" && to.name !== "SignInView" && to.name !== "SignUpView") {
-    document.cookie = "nodeFinal=;expires=;path=/";
+    clearToken();
     pushMessage({
       style: "danger",
       content: "請確認登入狀態",

@@ -104,8 +104,7 @@ export default {
           });
 
           const { token } = res.data.data;
-          const expries = new Date(Date.now() + 1000 * 60 * 30).toGMTString();
-          document.cookie = `nodeFinal=${token}; expires=${expries}`;
+          this.$setToken(token);
 
           this.$router.push("/");
         })

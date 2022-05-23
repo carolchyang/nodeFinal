@@ -28,14 +28,11 @@ export default {
   },
   methods: {
     checkSignIn() {
-      const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)nodeFinal\s*=\s*([^;]*).*$)|^.*$/,
-        "$1"
-      );
+      const token = this.$getToken();
 
       if (token) {
         this.checkSuccess = true;
-        this.$http.defaults.headers.common.Authorization = token;
+        this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
       } else {
         this.checkSuccess = false;
         this.$pushMessage({
@@ -46,7 +43,7 @@ export default {
       }
     },
     signOut() {
-      document.cookie = "nodeFinal=;expires=;path=/";
+      this.$clearToken();
       this.checkSuccess = false;
       this.$router.push("/signin");
     },
