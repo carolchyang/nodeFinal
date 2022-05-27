@@ -1,6 +1,6 @@
 <template>
   <div
-    class="toast-container position-absolute mt-27 me-12 end-0"
+    class="toast-container position-fixed mt-27 me-12 end-0"
     v-if="messages.length"
   >
     <div
