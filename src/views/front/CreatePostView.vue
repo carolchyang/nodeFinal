@@ -4,7 +4,7 @@
   <VForm
     v-slot="{ errors, meta }"
     class="card p-md-8"
-    @submit="post"
+    @submit="createPost"
     ref="postForm"
   >
     <div class="mb-4">
@@ -70,13 +70,15 @@ export default {
     };
   },
   methods: {
-    post() {
+    // 建立貼文
+    createPost() {
       this.$refs.postForm.resetForm();
       this.tempImg = {
         url: "",
         msg: "",
       };
     },
+    // 上傳檔案
     uploadFile(e) {
       this.tempImg = {
         url: "",

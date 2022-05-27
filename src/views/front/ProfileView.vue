@@ -196,6 +196,7 @@ export default {
     };
   },
   methods: {
+    // 上傳圖片
     uploadFile(e) {
       this.tempImg = {
         url: "",
@@ -214,12 +215,15 @@ export default {
         }
       }
     },
+    // 重設個人資料
     resetProfile() {
       this.resetForm("profile");
     },
+    // 重設密碼
     resetPassword() {
       this.resetForm("password");
     },
+    // 重置表單
     resetForm(name) {
       const formName = `${name}Form`;
       this.$refs[formName].resetForm();

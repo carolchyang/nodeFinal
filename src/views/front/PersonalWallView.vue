@@ -262,6 +262,7 @@ export default {
     };
   },
   methods: {
+    // 開啟 DelModal
     toggleDelModal(item) {
       this.modalItem = item;
       this.bsModal = bsModal("delModal");

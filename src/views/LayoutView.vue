@@ -28,7 +28,9 @@ export default {
     };
   },
   methods: {
+    // 確認登入狀態
     checkSignIn() {
+      // 取得 cookie 中的 token
       const token = getToken();
 
       if (token) {
@@ -43,6 +45,7 @@ export default {
         this.$router.push("/signin");
       }
     },
+    // 登出
     signOut() {
       clearToken();
       this.checkSuccess = false;

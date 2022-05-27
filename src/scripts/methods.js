@@ -1,11 +1,15 @@
 import emitter from "@/scripts/emitter";
 import { Modal } from "bootstrap";
 
+// Toast
 export const pushMessage = (msg) => {
   emitter.emit("push-message", msg);
 };
 
+// Modal
 export const bsModal = (id) => new Modal(document.getElementById(id));
+
+// token 相關
 
 export const setToken = (token) => {
   const expries = new Date(Date.now() + 1000 * 60 * 30).toGMTString();

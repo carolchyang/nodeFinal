@@ -91,10 +91,12 @@ export default {
     };
   },
   methods: {
+    // 登入
     signIn() {
       this.$emitter.emit("toggle-loading", true);
       apiUserSignIn(this.user)
         .then((res) => {
+          // 重置表單
           this.$refs.form.resetForm();
 
           this.$emitter.emit("toggle-loading", false);
@@ -103,6 +105,7 @@ export default {
             content: "登入成功",
           });
 
+          // 設定 token
           const { token } = res.data.data;
           setToken(token);
 

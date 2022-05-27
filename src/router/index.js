@@ -84,7 +84,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
+  // 動態更改頁面標題
   document.title = to.meta.title ? to.meta.title : "一加一等於 11";
+
+  // 判斷 token 及前往頁面來決定是否導向登入頁
 
   const token = getToken();
 

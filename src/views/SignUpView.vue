@@ -92,6 +92,7 @@ export default {
     };
   },
   methods: {
+    // 註冊
     signUp() {
       this.$emitter.emit("toggle-loading", true);
       apiUserSignUp(this.user)
@@ -104,6 +105,7 @@ export default {
             content: "註冊成功",
           });
 
+          // 設定 token
           const { token } = res.data.data;
           setToken(token);
 
