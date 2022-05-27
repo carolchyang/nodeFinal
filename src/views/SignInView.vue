@@ -103,10 +103,6 @@ export default {
           this.$refs.form.resetForm();
 
           this.$emitter.emit("toggle-loading", false);
-          this.$pushMessage({
-            style: "dark",
-            content: "登入成功",
-          });
 
           // 設定 token
           const { token } = res.data.data;
