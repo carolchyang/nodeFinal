@@ -73,6 +73,14 @@ const routes = [
     },
   },
   {
+    path: "/forget",
+    name: "ForgetView",
+    component: () => import("../views/ForgetView.vue"),
+    meta: {
+      title: "忘記密碼",
+    },
+  },
+  {
     path: "/:pathMath(.*)*",
     component: () => import("../views/NotFound.vue"),
   },
@@ -91,7 +99,12 @@ router.beforeEach((to) => {
 
   const token = getToken();
 
-  if (token == "" && to.name !== "SignInView" && to.name !== "SignUpView") {
+  if (
+    token == "" &&
+    to.name !== "SignInView" &&
+    to.name !== "SignUpView" &&
+    to.name !== "ForgetView"
+  ) {
     clearToken();
     return { name: "SignInView" };
   }

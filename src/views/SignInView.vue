@@ -56,8 +56,11 @@
         </router-link>
 
         <div class="text-end">
-          <a href="#" class="link-primary d-inline-block"> 忘記密碼 </a>
+          <router-link to="/forget" class="link-primary d-inline-block">
+            忘記密碼
+          </router-link>
         </div>
+
         <hr class="mt-2" />
         <a href="#" class="link-dark mb-4">
           <i class="bi bi-facebook text-primary me-4"></i>
