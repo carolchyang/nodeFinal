@@ -180,9 +180,9 @@
 
 <script>
 import {
-  apiUserProfile,
-  apiUserUpdateProfile,
-  apiUserUpdatePassword,
+  apiGetProfile,
+  apiUpdateProfile,
+  apiUpdatePassword,
 } from "@/scripts/api";
 
 export default {
@@ -208,7 +208,7 @@ export default {
     // 取得個人資料
     getProfile() {
       this.$emitter.emit("toggle-loading", true);
-      apiUserProfile()
+      apiGetProfile()
         .then((res) => {
           const data = res.data.data;
           this.profile = {
@@ -229,7 +229,7 @@ export default {
     // 更新個人資料
     updateProfile() {
       this.$emitter.emit("toggle-loading", true);
-      apiUserUpdateProfile(this.profile)
+      apiUpdateProfile(this.profile)
         .then((res) => {
           const data = res.data.data.user;
           this.profile = {
@@ -253,7 +253,7 @@ export default {
     },
     // 更新密碼
     updatePassword() {
-      apiUserUpdatePassword(this.tempPassword)
+      apiUpdatePassword(this.tempPassword)
         .then(() => {
           this.$pushMessage({
             style: "dark",
