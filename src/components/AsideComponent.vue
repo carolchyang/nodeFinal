@@ -32,7 +32,7 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/likepost" class="asideLink">
+          <router-link to="/likeposts" class="asideLink">
             <div class="asideLinkIcon">
               <i class="bi bi-hand-thumbs-up"></i>
             </div>

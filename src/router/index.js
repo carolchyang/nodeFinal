@@ -23,9 +23,9 @@ const routes = [
         },
       },
       {
-        path: "likepost",
-        name: "LikePostView",
-        component: () => import("../views/front/LikePostView.vue"),
+        path: "likeposts",
+        name: "LikePostsView",
+        component: () => import("../views/front/LikePostsView.vue"),
         meta: {
           title: "按讚貼文",
         },
