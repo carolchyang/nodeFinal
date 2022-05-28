@@ -18,7 +18,7 @@
             placeholder="請輸入暱稱"
             class="form-control"
             :class="{ 'is-invalid': errors['暱稱'] }"
-            rules="required|min:2"
+            rules="required"
             v-model="user.name"
             required
           ></VField>
