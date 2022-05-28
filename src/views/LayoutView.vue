@@ -33,6 +33,7 @@ export default {
       // 取得 cookie 中的 token
       const token = getToken();
 
+      // 若有 token 則登入，反之轉為登入頁面
       if (token) {
         this.checkSuccess = true;
         this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
