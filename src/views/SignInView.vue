@@ -1,11 +1,11 @@
 <template>
   <section class="d-flex justify-content-center align-items-center vh-100">
-    <div class="login">
-      <img src="../assets/images/login.png" class="d-none d-xl-block me-10" />
+    <div class="signin">
+      <img src="../assets/images/signin.png" class="d-none d-xl-block me-10" />
       <VForm
-        class="loginForm"
+        class="signinForm"
         v-slot="{ errors, meta }"
-        @submit="logIn"
+        @submit="signIn"
         ref="form"
       >
         <img src="../assets/images/MetaWall.png" class="mx-auto" />
@@ -15,7 +15,7 @@
             type="email"
             id="email"
             name="電子信箱"
-            placeholder="Email"
+            placeholder="請輸入電子信箱"
             class="form-control"
             :class="{ 'is-invalid': errors['電子信箱'] }"
             rules="email|required"
@@ -31,11 +31,11 @@
           <VField
             type="password"
             id="password"
-            placeholder="Password"
+            placeholder="請輸入密碼"
             name="密碼"
             class="form-control"
             :class="{ 'is-invalid': errors['密碼'] }"
-            rules="required|min:8"
+            rules="required|password:8"
             v-model="user.password"
             required
           ></VField>
@@ -51,12 +51,15 @@
         >
           登入
         </button>
-        <router-link to="/register" class="link-dark mb-4 text-center"
-          >註冊帳號</router-link
-        >
+        <router-link to="/signup" class="link-dark mb-10 text-center">
+          註冊帳號
+        </router-link>
 
-        <hr />
-        <a href="" class="link-dark mb-4">
+        <div class="text-end">
+          <a href="#" class="link-primary d-inline-block"> 忘記密碼 </a>
+        </div>
+        <hr class="mt-2" />
+        <a href="#" class="link-dark mb-4">
           <i class="bi bi-facebook text-primary me-4"></i>
           使用 Facebook 繼續
         </a>
@@ -74,8 +77,11 @@
 </template>
 
 <script>
+import { apiUserSignIn } from "@/scripts/api";
+import { setToken } from "@/scripts/methods";
+
 export default {
-  name: "LoginView",
+  name: "SignInView",
   data() {
     return {
       user: {
@@ -85,19 +91,30 @@ export default {
     };
   },
   methods: {
-    logIn() {
-      // loading 效果 - 啟用
-      // this.$emitter.emit("toggle-loading", true);
-      // loading 效果 - 關閉
-      // this.$emitter.emit("toggle-loading", false);
+    signIn() {
+      this.$emitter.emit("toggle-loading", true);
+      apiUserSignIn(this.user)
+        .then((res) => {
+          this.$refs.form.resetForm();
 
-      // 傳送 toast 訊息
-      // this.$pushMessage({
-      //   style: "dark",
-      //   content: "登入成功",
-      // });
-      this.$refs.form.resetForm();
-      this.$router.push("/");
+          this.$emitter.emit("toggle-loading", false);
+          this.$pushMessage({
+            style: "dark",
+            content: "登入成功",
+          });
+
+          const { token } = res.data.data;
+          setToken(token);
+
+          this.$router.push({ name: "DynamicWallView" });
+        })
+        .catch((err) => {
+          this.$emitter.emit("toggle-loading", false);
+          this.$pushMessage({
+            style: "danger",
+            content: err.response.data.message || "登入失敗",
+          });
+        });
     },
   },
 };

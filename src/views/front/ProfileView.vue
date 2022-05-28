@@ -44,6 +44,11 @@
           :style="{ backgroundImage: 'url(' + tempImg.url + ')' }"
           v-if="tempImg.url"
         ></div>
+        <div
+          class="bgCoverRounded mx-auto mb-4"
+          :class="{ profileUserPhoto: !tempImg.url }"
+          v-else
+        ></div>
         <div class="fileBtn text-center mb-4">
           <label for="file">上傳大頭照</label>
           <input
@@ -132,7 +137,7 @@
             name="密碼"
             class="form-control"
             :class="{ 'is-invalid': errors['密碼'] }"
-            rules="required|min:8"
+            rules="required|password:8"
             v-model="newPassword.password"
             required
           ></VField>
@@ -185,7 +190,7 @@ export default {
         gender: "",
       },
       tempImg: {
-        url: require("@/assets/images/user_default.png"),
+        url: "",
         msg: "",
       },
     };
@@ -193,7 +198,7 @@ export default {
   methods: {
     uploadFile(e) {
       this.tempImg = {
-        url: require("@/assets/images/user_default.png"),
+        url: "",
         msg: "",
       };
       const file = e.target.files[0];
@@ -221,7 +226,7 @@ export default {
 
       if (name == "profile") {
         this.tempImg = {
-          url: require("@/assets/images/user_default.png"),
+          url: "",
           msg: "",
         };
       }
@@ -229,3 +234,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.profileUserPhoto {
+  background-image: url("@/assets/images/user_default.png");
+}
+</style>

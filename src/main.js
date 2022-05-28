@@ -17,6 +17,15 @@ import router from "./router";
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
 });
+defineRule("password", (value, [limit]) => {
+  if (value.length < limit) {
+    return `密碼 不能小於 ${limit} 字元`;
+  }
+  if (!/^(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*$/i.test(value)) {
+    return "密碼 必須為英數混和";
+  }
+  return true;
+});
 configure({
   generateMessage: localize({ zh_TW: zhTW }),
   validateOnInput: true, // 調整為輸入字元立即進行驗證
