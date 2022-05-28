@@ -90,7 +90,6 @@
               id="male"
               name="性別"
               class="form-check-input"
-              rules=""
               value="male"
               v-model="profile.gender"
             ></VField>
@@ -103,7 +102,6 @@
               id="female"
               name="性別"
               class="form-check-input"
-              rules=""
               value="female"
               v-model="profile.gender"
             ></VField>
