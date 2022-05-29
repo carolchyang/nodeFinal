@@ -4,6 +4,8 @@
     id="delModal"
     tabindex="-1"
     aria-labelledby="delModalLabel"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered">
