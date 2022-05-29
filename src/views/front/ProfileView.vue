@@ -176,9 +176,18 @@
       </VForm>
     </div>
   </div>
+
+  <MsgModalComponent>
+    <template #default>
+      <h3 class="mb-5">{{ modal.title }}</h3>
+      <p class="text-gray-700">{{ modal.content }}</p>
+    </template>
+  </MsgModalComponent>
 </template>
 
 <script>
+import MsgModalComponent from "@/components/MsgModalComponent.vue";
+import { bsModal } from "@/scripts/methods";
 import {
   apiGetProfile,
   apiUpdateProfile,
@@ -202,6 +211,10 @@ export default {
       tempImg: {
         photo: "",
         msg: "",
+      },
+      modal: {
+        title: "",
+        content: "",
       },
     };
   },
@@ -238,10 +251,15 @@ export default {
             photo: data.photo,
             gender: data.gender,
           };
-          this.$pushMessage({
-            style: "dark",
-            content: "更新成功",
-          });
+
+          // 設定 msgModal 提示訊息
+          this.modal = {
+            title: "更新個人資料",
+            content: "已成功更新您的個人資料~",
+          };
+          // 開啟 msgModal
+          this.toggleMsgModal();
+
           this.$emitter.emit("toggle-loading", false);
         })
         .catch((err) => {
@@ -256,10 +274,14 @@ export default {
     updatePassword() {
       apiUpdatePassword(this.tempPassword)
         .then(() => {
-          this.$pushMessage({
-            style: "dark",
-            content: "更新密碼成功",
-          });
+          // 設定 msgModal 提示訊息
+          this.modal = {
+            title: "更新密碼成功",
+            content: "下次登入記得使用新密碼喔~",
+          };
+          // 開啟 msgModal
+          this.toggleMsgModal();
+
           this.$refs.passwordForm.resetForm();
           this.$emitter.emit("toggle-loading", false);
         })
@@ -302,9 +324,16 @@ export default {
         this.$refs.passwordForm.resetForm();
       }
     },
+    toggleMsgModal() {
+      this.bsModal = bsModal("msgModal");
+      this.bsModal.show();
+    },
   },
   mounted() {
     this.getProfile();
+  },
+  components: {
+    MsgModalComponent,
   },
 };
 </script>
