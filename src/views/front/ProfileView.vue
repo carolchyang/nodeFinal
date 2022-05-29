@@ -12,7 +12,7 @@
         role="tab"
         aria-controls="nav-profile"
         aria-selected="true"
-        @click="resetForm('password')"
+        @click="toggleForm('profile')"
       >
         修改資料
       </button>
@@ -25,7 +25,7 @@
         role="tab"
         aria-controls="nav-password"
         aria-selected="false"
-        @click="resetForm('profile')"
+        @click="toggleForm('password')"
       >
         重設密碼
       </button>
@@ -38,15 +38,19 @@
       role="tabpanel"
       aria-labelledby="nav-profile-tab"
     >
-      <VForm v-slot="{ errors, meta }" @submit="resetProfile" ref="profileForm">
+      <VForm
+        v-slot="{ errors, meta }"
+        @submit="updateProfile"
+        ref="profileForm"
+      >
         <div
           class="bgCoverRounded mx-auto mb-4"
-          :style="{ backgroundImage: 'url(' + tempImg.url + ')' }"
-          v-if="tempImg.url"
+          :style="{ backgroundImage: 'url(' + tempImg.photo + ')' }"
+          v-if="tempImg.photo"
         ></div>
         <div
           class="bgCoverRounded mx-auto mb-4"
-          :class="{ profileUserPhoto: !tempImg.url }"
+          :class="{ profileUserPhoto: !tempImg.photo }"
           v-else
         ></div>
         <div class="fileBtn text-center mb-4">
@@ -69,8 +73,8 @@
             name="暱稱"
             class="form-control"
             :class="{ 'is-invalid': errors['暱稱'] }"
-            rules="required|min:2"
-            v-model="newProfile.nickname"
+            rules=""
+            v-model="profile.name"
             required
           ></VField>
           <error-message
@@ -86,9 +90,8 @@
               id="male"
               name="性別"
               class="form-check-input"
-              rules="required"
               value="male"
-              v-model="newProfile.gender"
+              v-model="profile.gender"
             ></VField>
 
             <label class="form-check-label" for="male">男生</label>
@@ -99,9 +102,8 @@
               id="female"
               name="性別"
               class="form-check-input"
-              rules="required"
               value="female"
-              v-model="newProfile.gender"
+              v-model="profile.gender"
             ></VField>
             <label class="form-check-label" for="female">女生</label>
           </div>
@@ -125,7 +127,7 @@
     >
       <VForm
         v-slot="{ errors, meta }"
-        @submit="resetPassword"
+        @submit="updatePassword"
         ref="passwordForm"
       >
         <div class="mb-4">
@@ -138,7 +140,7 @@
             class="form-control"
             :class="{ 'is-invalid': errors['密碼'] }"
             rules="required|password:8"
-            v-model="newPassword.password"
+            v-model="tempPassword.password"
             required
           ></VField>
           <error-message
@@ -156,7 +158,7 @@
             class="form-control"
             :class="{ 'is-invalid': errors['確認密碼'] }"
             rules="required|confirmed:@密碼"
-            v-model="newPassword.confirmed"
+            v-model="tempPassword.passwordConfirm"
             required
           ></VField>
           <error-message
@@ -177,28 +179,102 @@
 </template>
 
 <script>
+import {
+  apiGetProfile,
+  apiUpdateProfile,
+  apiUpdatePassword,
+} from "@/scripts/api";
+
 export default {
   name: "ProfileView",
+  props: ["userInfo"],
   data() {
     return {
-      newPassword: {
-        password: "",
-        confirmed: "",
-      },
-      newProfile: {
-        nickname: "",
+      profile: {
+        name: "",
+        photo: "",
         gender: "",
       },
+      tempPassword: {
+        password: "",
+        passwordConfirm: "",
+      },
       tempImg: {
-        url: "",
+        photo: "",
         msg: "",
       },
     };
   },
   methods: {
+    // 取得個人資料
+    getProfile() {
+      this.$emitter.emit("toggle-loading", true);
+      apiGetProfile()
+        .then((res) => {
+          const data = res.data.data;
+          this.profile = {
+            name: data.name,
+            photo: data.photo,
+            gender: data.gender,
+          };
+          this.$emitter.emit("toggle-loading", false);
+        })
+        .catch((err) => {
+          this.$pushMessage({
+            style: "danger",
+            content: err.response.data.message || "取得個人資料失敗",
+          });
+          this.$emitter.emit("toggle-loading", false);
+        });
+    },
+    // 更新個人資料
+    updateProfile() {
+      this.$emitter.emit("toggle-loading", true);
+      apiUpdateProfile(this.profile)
+        .then((res) => {
+          const data = res.data.data.user;
+          this.profile = {
+            name: data.name,
+            photo: data.photo,
+            gender: data.gender,
+          };
+          this.$pushMessage({
+            style: "dark",
+            content: "更新成功",
+          });
+          this.$emitter.emit("toggle-loading", false);
+        })
+        .catch((err) => {
+          this.$pushMessage({
+            style: "danger",
+            content: err.response.data.message || "更新失敗",
+          });
+          this.$emitter.emit("toggle-loading", false);
+        });
+    },
+    // 更新密碼
+    updatePassword() {
+      apiUpdatePassword(this.tempPassword)
+        .then(() => {
+          this.$pushMessage({
+            style: "dark",
+            content: "更新密碼成功",
+          });
+          this.resetForm("password");
+          this.$emitter.emit("toggle-loading", false);
+        })
+        .catch((err) => {
+          this.$emitter.emit("toggle-loading", false);
+          this.$pushMessage({
+            style: "danger",
+            content: err.response.data.message || "更新密碼失敗",
+          });
+        });
+    },
+    // 上傳圖片
     uploadFile(e) {
       this.tempImg = {
-        url: "",
+        photo: "",
         msg: "",
       };
       const file = e.target.files[0];
@@ -209,28 +285,26 @@ export default {
         } else if (size > 102400) {
           this.tempImg.msg = "圖片檔案不能超過 100 KB";
         } else {
-          this.tempImg.url = URL.createObjectURL(file);
+          this.tempImg.photo = URL.createObjectURL(file);
           this.tempImg.msg = "";
         }
       }
     },
-    resetProfile() {
-      this.resetForm("profile");
-    },
-    resetPassword() {
-      this.resetForm("password");
-    },
-    resetForm(name) {
-      const formName = `${name}Form`;
-      this.$refs[formName].resetForm();
-
+    // 切換表單
+    toggleForm(name) {
       if (name == "profile") {
         this.tempImg = {
-          url: "",
+          photo: "",
           msg: "",
         };
+        this.getProfile();
+      } else {
+        this.$refs.passwordForm.resetForm();
       }
     },
+  },
+  mounted() {
+    this.getProfile();
   },
 };
 </script>

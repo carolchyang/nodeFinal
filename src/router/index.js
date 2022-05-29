@@ -23,9 +23,9 @@ const routes = [
         },
       },
       {
-        path: "likepost",
-        name: "LikePostView",
-        component: () => import("../views/front/LikePostView.vue"),
+        path: "likeposts",
+        name: "LikePostsView",
+        component: () => import("../views/front/LikePostsView.vue"),
         meta: {
           title: "按讚貼文",
         },
@@ -73,6 +73,14 @@ const routes = [
     },
   },
   {
+    path: "/forget",
+    name: "ForgetView",
+    component: () => import("../views/ForgetView.vue"),
+    meta: {
+      title: "忘記密碼",
+    },
+  },
+  {
     path: "/:pathMath(.*)*",
     component: () => import("../views/NotFound.vue"),
   },
@@ -84,11 +92,19 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
+  // 動態更改頁面標題
   document.title = to.meta.title ? to.meta.title : "一加一等於 11";
+
+  // 判斷 token 及前往頁面來決定是否導向登入頁
 
   const token = getToken();
 
-  if (token == "" && to.name !== "SignInView" && to.name !== "SignUpView") {
+  if (
+    token == "" &&
+    to.name !== "SignInView" &&
+    to.name !== "SignUpView" &&
+    to.name !== "ForgetView"
+  ) {
     clearToken();
     return { name: "SignInView" };
   }

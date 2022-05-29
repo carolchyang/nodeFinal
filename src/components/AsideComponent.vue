@@ -10,10 +10,16 @@
         <li class="d-none d-lg-flex mb-9">
           <router-link to="/" class="asideLink">
             <img
-              src="../assets/images/user1.png"
+              :src="userInfo.photo"
               class="thumbnail thumbnail-xl"
+              v-if="userInfo.photo"
             />
-            <h5 class="ms-4 fw-bolder">邊緣小杰</h5>
+            <img
+              src="../assets/images/user_default.png"
+              class="thumbnail thumbnail-xl"
+              v-else
+            />
+            <h5 class="ms-4 fw-bolder">{{ userInfo.name }}</h5>
           </router-link>
         </li>
         <li class="d-lg-none">
@@ -32,7 +38,7 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/likepost" class="asideLink">
+          <router-link to="/likeposts" class="asideLink">
             <div class="asideLinkIcon">
               <i class="bi bi-hand-thumbs-up"></i>
             </div>
@@ -54,5 +60,6 @@
 <script>
 export default {
   name: "AsideComponent",
+  props: ["userInfo"],
 };
 </script>
