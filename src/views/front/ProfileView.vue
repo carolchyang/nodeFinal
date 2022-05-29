@@ -260,7 +260,7 @@ export default {
             style: "dark",
             content: "更新密碼成功",
           });
-          this.resetForm("password");
+          this.$refs.passwordForm.resetForm();
           this.$emitter.emit("toggle-loading", false);
         })
         .catch((err) => {
