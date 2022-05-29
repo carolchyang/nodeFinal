@@ -59,6 +59,7 @@ import { bsModal } from "@/scripts/methods";
 
 export default {
   name: "PersonalWallView",
+  props: ["userInfo"],
   data() {
     return {
       modalItem: "",

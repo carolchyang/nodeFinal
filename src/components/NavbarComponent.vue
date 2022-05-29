@@ -3,7 +3,16 @@
     <div class="container d-flex justify-content-between align-items-center">
       <router-link to="/" class="navbarBrand">MetaWall</router-link>
       <div class="d-flex align-items-center">
-        <img src="../assets/images/user1.png" class="thumbnail thumbnail-sm" />
+        <img
+          :src="userInfo.photo"
+          class="thumbnail thumbnail-sm"
+          v-if="userInfo.photo"
+        />
+        <img
+          src="../assets/images/user_default.png"
+          class="thumbnail thumbnail-sm"
+          v-else
+        />
         <div class="dropdown">
           <a
             class="dropdown-toggle ms-3 border-bottom border-2 text-dark fw-bolder"
@@ -46,5 +55,6 @@
 <script>
 export default {
   name: "NavbarComponent",
+  props: ["userInfo"],
 };
 </script>

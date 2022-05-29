@@ -187,6 +187,7 @@ import {
 
 export default {
   name: "ProfileView",
+  props: ["userInfo"],
   data() {
     return {
       profile: {
