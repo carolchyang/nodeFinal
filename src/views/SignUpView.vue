@@ -77,6 +77,8 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import { apiUserSignUp } from "@/scripts/api";
 import { setToken } from "@/scripts/methods";
 
@@ -100,7 +102,7 @@ export default {
           this.$refs.form.resetForm();
 
           this.$emitter.emit("toggle-loading", false);
-          this.$pushMessage({
+          this.pushMessage({
             style: "dark",
             content: "註冊成功",
           });
@@ -113,12 +115,13 @@ export default {
         })
         .catch((err) => {
           this.$emitter.emit("toggle-loading", false);
-          this.$pushMessage({
+          this.pushMessage({
             style: "danger",
             content: err.response.data.message || "註冊失敗",
           });
         });
     },
+    ...mapActions(statusStore, ["pushMessage"]),
   },
 };
 </script>

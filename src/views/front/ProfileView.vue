@@ -187,6 +187,8 @@
 
 <script>
 import MsgModalComponent from "@/components/MsgModalComponent.vue";
+import { mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import { bsModal } from "@/scripts/methods";
 import {
   apiGetProfile,
@@ -233,7 +235,7 @@ export default {
           this.$emitter.emit("toggle-loading", false);
         })
         .catch((err) => {
-          this.$pushMessage({
+          this.pushMessage({
             style: "danger",
             content: err.response.data.message || "取得個人資料失敗",
           });
@@ -263,7 +265,7 @@ export default {
           this.$emitter.emit("toggle-loading", false);
         })
         .catch((err) => {
-          this.$pushMessage({
+          this.pushMessage({
             style: "danger",
             content: err.response.data.message || "更新失敗",
           });
@@ -287,7 +289,7 @@ export default {
         })
         .catch((err) => {
           this.$emitter.emit("toggle-loading", false);
-          this.$pushMessage({
+          this.pushMessage({
             style: "danger",
             content: err.response.data.message || "更新密碼失敗",
           });
@@ -328,6 +330,7 @@ export default {
       this.bsModal = bsModal("msgModal");
       this.bsModal.show();
     },
+    ...mapActions(statusStore, ["pushMessage"]),
   },
   mounted() {
     this.getProfile();

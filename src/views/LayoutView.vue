@@ -21,6 +21,8 @@
 <script>
 import NavbarComponent from "@/components/NavbarComponent";
 import AsideComponent from "@/components/AsideComponent";
+import { mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import { getToken, clearToken } from "@/scripts/methods";
 import { apiGetProfile } from "@/scripts/api";
 
@@ -47,7 +49,7 @@ export default {
         this.getProfile();
       } else {
         this.checkSuccess = false;
-        this.$pushMessage({
+        this.pushMessage({
           style: "danger",
           content: "請先登入",
         });
@@ -69,7 +71,7 @@ export default {
           this.$emitter.emit("toggle-loading", false);
         })
         .catch((err) => {
-          this.$pushMessage({
+          this.pushMessage({
             style: "danger",
             content:
               err.response.data.message || "取得個人資料失敗，請重新登入",
@@ -77,6 +79,7 @@ export default {
           this.$emitter.emit("toggle-loading", false);
         });
     },
+    ...mapActions(statusStore, ["pushMessage"]),
   },
   created() {
     this.checkSignIn();

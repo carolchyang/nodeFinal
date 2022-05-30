@@ -80,6 +80,8 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import { apiUserSignIn } from "@/scripts/api";
 import { setToken } from "@/scripts/methods";
 
@@ -101,23 +103,21 @@ export default {
         .then((res) => {
           // 重置表單
           this.$refs.form.resetForm();
-
           this.$emitter.emit("toggle-loading", false);
-
           // 設定 token
           const { token } = res.data.data;
           setToken(token);
-
           this.$router.push({ name: "DynamicWallView" });
         })
         .catch((err) => {
           this.$emitter.emit("toggle-loading", false);
-          this.$pushMessage({
+          this.pushMessage({
             style: "danger",
             content: err.response.data.message || "登入失敗",
           });
         });
     },
+    ...mapActions(statusStore, ["pushMessage"]),
   },
 };
 </script>
