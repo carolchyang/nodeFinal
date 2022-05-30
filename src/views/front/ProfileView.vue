@@ -187,25 +187,16 @@
 
 <script>
 import MsgModalComponent from "@/components/MsgModalComponent.vue";
-import { mapActions } from "pinia";
+import { mapState, mapActions } from "pinia";
 import statusStore from "@/stores/statusStore";
+import userStore from "@/stores/userStore";
 import { bsModal } from "@/scripts/methods";
-import {
-  apiGetProfile,
-  apiUpdateProfile,
-  apiUpdatePassword,
-} from "@/scripts/api";
+import { apiUpdateProfile, apiUpdatePassword } from "@/scripts/api";
 
 export default {
   name: "ProfileView",
-  props: ["userInfo"],
   data() {
     return {
-      profile: {
-        name: "",
-        photo: "",
-        gender: "",
-      },
       tempPassword: {
         password: "",
         passwordConfirm: "",
@@ -221,27 +212,6 @@ export default {
     };
   },
   methods: {
-    // 取得個人資料
-    getProfile() {
-      this.$emitter.emit("toggle-loading", true);
-      apiGetProfile()
-        .then((res) => {
-          const data = res.data.data;
-          this.profile = {
-            name: data.name,
-            photo: data.photo,
-            gender: data.gender,
-          };
-          this.$emitter.emit("toggle-loading", false);
-        })
-        .catch((err) => {
-          this.pushMessage({
-            style: "danger",
-            content: err.response.data.message || "取得個人資料失敗",
-          });
-          this.$emitter.emit("toggle-loading", false);
-        });
-    },
     // 更新個人資料
     updateProfile() {
       this.$emitter.emit("toggle-loading", true);
@@ -331,9 +301,10 @@ export default {
       this.bsModal.show();
     },
     ...mapActions(statusStore, ["pushMessage"]),
+    ...mapActions(userStore, ["getProfile"]),
   },
-  mounted() {
-    this.getProfile();
+  computed: {
+    ...mapState(userStore, ["profile"]),
   },
   components: {
     MsgModalComponent,

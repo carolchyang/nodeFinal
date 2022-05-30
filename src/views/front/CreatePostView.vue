@@ -58,7 +58,6 @@
 <script>
 export default {
   name: "CreatePostView",
-  props: ["userInfo"],
   data() {
     return {
       tempPost: {
