@@ -190,7 +190,7 @@ import MsgModalComponent from "@/components/MsgModalComponent.vue";
 import { mapState, mapActions } from "pinia";
 import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
-import { bsModal } from "@/scripts/methods";
+import modalStore from "@/stores/modalStore";
 import { apiUpdateProfile, apiUpdatePassword } from "@/scripts/api";
 
 export default {
@@ -204,10 +204,6 @@ export default {
       tempImg: {
         photo: "",
         msg: "",
-      },
-      modal: {
-        title: "",
-        content: "",
       },
     };
   },
@@ -225,12 +221,12 @@ export default {
           };
 
           // 設定 msgModal 提示訊息
-          this.modal = {
+          const modal = {
             title: "更新個人資料",
             content: "已成功更新您的個人資料~",
           };
           // 開啟 msgModal
-          this.toggleMsgModal();
+          this.toggleMsgModal(modal);
 
           this.$emitter.emit("toggle-loading", false);
         })
@@ -247,12 +243,12 @@ export default {
       apiUpdatePassword(this.tempPassword)
         .then(() => {
           // 設定 msgModal 提示訊息
-          this.modal = {
+          const modal = {
             title: "更新密碼成功",
             content: "下次登入記得使用新密碼喔~",
           };
           // 開啟 msgModal
-          this.toggleMsgModal();
+          this.toggleMsgModal(modal);
 
           this.$refs.passwordForm.resetForm();
           this.$emitter.emit("toggle-loading", false);
@@ -296,15 +292,13 @@ export default {
         this.$refs.passwordForm.resetForm();
       }
     },
-    toggleMsgModal() {
-      this.bsModal = bsModal("msgModal");
-      this.bsModal.show();
-    },
     ...mapActions(statusStore, ["pushMessage"]),
     ...mapActions(userStore, ["getProfile"]),
+    ...mapActions(modalStore, ["toggleMsgModal"]),
   },
   computed: {
     ...mapState(userStore, ["profile"]),
+    ...mapState(modalStore, ["modal"]),
   },
   components: {
     MsgModalComponent,
