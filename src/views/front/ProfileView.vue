@@ -210,7 +210,7 @@ export default {
   methods: {
     // 更新個人資料
     updateProfile() {
-      this.$emitter.emit("toggle-loading", true);
+      this.toggleLoading(true);
       apiUpdateProfile(this.tempProfile)
         .then((res) => {
           const data = res.data.data.user;
@@ -225,18 +225,19 @@ export default {
           // 開啟 msgModal
           this.toggleMsgModal(modal);
 
-          this.$emitter.emit("toggle-loading", false);
+          this.toggleLoading(false);
         })
         .catch((err) => {
           this.pushMessage({
             style: "danger",
             content: err.response.data.message || "更新失敗",
           });
-          this.$emitter.emit("toggle-loading", false);
+          this.toggleLoading(false);
         });
     },
     // 更新密碼
     updatePassword() {
+      this.toggleLoading(true);
       apiUpdatePassword(this.tempPassword)
         .then(() => {
           // 設定 msgModal 提示訊息
@@ -248,14 +249,14 @@ export default {
           this.toggleMsgModal(modal);
 
           this.$refs.passwordForm.resetForm();
-          this.$emitter.emit("toggle-loading", false);
+          this.toggleLoading(false);
         })
         .catch((err) => {
-          this.$emitter.emit("toggle-loading", false);
           this.pushMessage({
             style: "danger",
             content: err.response.data.message || "更新密碼失敗",
           });
+          this.toggleLoading(false);
         });
     },
     // 上傳圖片
@@ -289,7 +290,7 @@ export default {
         this.$refs.passwordForm.resetForm();
       }
     },
-    ...mapActions(statusStore, ["pushMessage"]),
+    ...mapActions(statusStore, ["pushMessage", "toggleLoading"]),
     ...mapActions(userStore, ["getProfile", "updateProfileData"]),
     ...mapActions(modalStore, ["toggleMsgModal"]),
   },

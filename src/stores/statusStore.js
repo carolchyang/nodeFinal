@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export default defineStore("statusStore", {
   state: () => ({
     messages: [],
+    isLoading: false,
   }),
   actions: {
     showToast() {
@@ -17,6 +18,9 @@ export default defineStore("statusStore", {
       const { style = "dark", content } = data;
       this.messages.push({ style, content });
       this.showToast();
+    },
+    toggleLoading(status) {
+      this.isLoading = status;
     },
   },
 });

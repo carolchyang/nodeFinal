@@ -96,16 +96,16 @@ export default {
   methods: {
     // 註冊
     signUp() {
-      this.$emitter.emit("toggle-loading", true);
+      this.toggleLoading(true);
       apiUserSignUp(this.user)
         .then((res) => {
           this.$refs.form.resetForm();
 
-          this.$emitter.emit("toggle-loading", false);
           this.pushMessage({
             style: "dark",
             content: "註冊成功",
           });
+          this.toggleLoading(false);
 
           // 設定 token
           const { token } = res.data.data;
@@ -114,14 +114,14 @@ export default {
           this.$router.push({ name: "DynamicWallView" });
         })
         .catch((err) => {
-          this.$emitter.emit("toggle-loading", false);
           this.pushMessage({
             style: "danger",
             content: err.response.data.message || "註冊失敗",
           });
+          this.toggleLoading(false);
         });
     },
-    ...mapActions(statusStore, ["pushMessage"]),
+    ...mapActions(statusStore, ["pushMessage", "toggleLoading"]),
   },
 };
 </script>

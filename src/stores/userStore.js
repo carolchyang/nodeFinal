@@ -24,10 +24,12 @@ export default defineStore("userStore", {
   actions: {
     // 取得用戶資料
     getProfile() {
+      status.isLoading = true;
       apiGetProfile()
         .then((res) => {
           const data = res.data.data;
           this.updateProfileData(data);
+          status.isLoading = false;
         })
         .catch((err) => {
           status.pushMessage({
@@ -35,6 +37,7 @@ export default defineStore("userStore", {
             content:
               err.response.data.message || "取得個人資料失敗，請重新登入",
           });
+          status.isLoading = false;
         });
     },
     // 更新用戶 data 資料
