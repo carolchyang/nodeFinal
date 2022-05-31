@@ -4,7 +4,7 @@
   <VForm
     v-slot="{ errors, meta }"
     class="card p-md-8"
-    @submit="createPost"
+    @submit="submitPost"
     ref="postForm"
   >
     <div class="mb-4">
@@ -17,7 +17,7 @@
         class="form-control"
         :class="{ 'is-invalid': errors['貼文內容'] }"
         rows="5"
-        rules="required|min:5|max:200"
+        rules="required|max:200"
         v-model="tempPost.content"
         as="textarea"
       ></VField>
@@ -56,12 +56,16 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import postStore from "@/stores/postStore";
+
 export default {
   name: "CreatePostView",
   data() {
     return {
       tempPost: {
         content: "",
+        imageId: "",
       },
       tempImg: {
         url: "",
@@ -71,12 +75,8 @@ export default {
   },
   methods: {
     // 建立貼文
-    createPost() {
-      this.$refs.postForm.resetForm();
-      this.tempImg = {
-        url: "",
-        msg: "",
-      };
+    submitPost() {
+      this.createPost(this.tempPost);
     },
     // 上傳檔案
     uploadFile(e) {
@@ -99,6 +99,7 @@ export default {
         }
       }
     },
+    ...mapActions(postStore, ["createPost"]),
   },
 };
 </script>
