@@ -29,7 +29,7 @@ export const apiForgetPassword = (data) => axios.post(`${api}/forget`, data);
 export const apiModifyPassword = (data) =>
   axios.post(`${api}/forget/update`, data);
 
-// Forget
+// Follow
 export const apiGetFollow = (data) => axios.get(`${api}/follow`, data);
 export const apiAddFollow = () => axios.get(`${api}/follow`);
 export const apiDelFollow = (id) => axios.delete(`${api}/follow/${id}`);
