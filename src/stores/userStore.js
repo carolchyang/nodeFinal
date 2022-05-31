@@ -13,6 +13,12 @@ export default defineStore("userStore", {
         gender: "",
         _id: "",
       },
+      // 個人資料頁面暫存表格
+      tempProfile: {
+        name: "",
+        photo: "",
+        gender: "",
+      },
     };
   },
   actions: {
@@ -20,7 +26,8 @@ export default defineStore("userStore", {
     getProfile() {
       apiGetProfile()
         .then((res) => {
-          this.profile = res.data.data;
+          const data = res.data.data;
+          this.updateProfileData(data);
         })
         .catch((err) => {
           status.pushMessage({
@@ -29,6 +36,15 @@ export default defineStore("userStore", {
               err.response.data.message || "取得個人資料失敗，請重新登入",
           });
         });
+    },
+    // 更新用戶 data 資料
+    updateProfileData(data) {
+      this.profile = data;
+      this.tempProfile = {
+        name: data.name,
+        photo: data.photo,
+        gender: data.gender,
+      };
     },
   },
 });

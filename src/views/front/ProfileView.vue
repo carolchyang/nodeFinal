@@ -74,7 +74,7 @@
             class="form-control"
             :class="{ 'is-invalid': errors['暱稱'] }"
             rules=""
-            v-model="profile.name"
+            v-model="tempProfile.name"
             required
           ></VField>
           <error-message
@@ -91,7 +91,7 @@
               name="性別"
               class="form-check-input"
               value="male"
-              v-model="profile.gender"
+              v-model="tempProfile.gender"
             ></VField>
 
             <label class="form-check-label" for="male">男生</label>
@@ -103,7 +103,7 @@
               name="性別"
               class="form-check-input"
               value="female"
-              v-model="profile.gender"
+              v-model="tempProfile.gender"
             ></VField>
             <label class="form-check-label" for="female">女生</label>
           </div>
@@ -211,14 +211,11 @@ export default {
     // 更新個人資料
     updateProfile() {
       this.$emitter.emit("toggle-loading", true);
-      apiUpdateProfile(this.profile)
+      apiUpdateProfile(this.tempProfile)
         .then((res) => {
           const data = res.data.data.user;
-          this.profile = {
-            name: data.name,
-            photo: data.photo,
-            gender: data.gender,
-          };
+          // 更新用戶 data 資料
+          this.updateProfileData(data);
 
           // 設定 msgModal 提示訊息
           const modal = {
@@ -293,11 +290,11 @@ export default {
       }
     },
     ...mapActions(statusStore, ["pushMessage"]),
-    ...mapActions(userStore, ["getProfile"]),
+    ...mapActions(userStore, ["getProfile", "updateProfileData"]),
     ...mapActions(modalStore, ["toggleMsgModal"]),
   },
   computed: {
-    ...mapState(userStore, ["profile"]),
+    ...mapState(userStore, ["profile", "tempProfile"]),
     ...mapState(modalStore, ["modal"]),
   },
   components: {
