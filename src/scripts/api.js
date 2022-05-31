@@ -11,3 +11,28 @@ export const apiGetProfile = () => axios.get(`${api}/users/profile`);
 export const apiUpdateProfile = (data) =>
   axios.patch(`${api}/users/profile`, data);
 export const apiGetLikePosts = (id) => axios.get(`${api}/users/${id}/likes`);
+
+// Post
+export const apiGetPosts = (data) => axios.get(`${api}/article`, data);
+export const apiCreatePost = (data) => axios.post(`${api}/article`, data);
+export const apiDelPost = (id) => axios.delete(`${api}/article/${id}`);
+export const apiClickLike = (id) => axios.get(`${api}/article/${id}/likes`);
+export const apiDelLike = (id) => axios.delete(`${api}/article/${id}/likes`);
+
+// Comment
+export const apiGetComment = () => axios.get(`${api}/comments`);
+export const apiCreateComment = (data) => axios.post(`${api}/comments`, data);
+export const apiDelComment = (id) => axios.delete(`${api}/comments/${id}`);
+
+// Forget
+export const apiForgetPassword = (data) => axios.post(`${api}/forget`, data);
+export const apiModifyPassword = (data) =>
+  axios.post(`${api}/forget/update`, data);
+
+// Forget
+export const apiGetFollow = (data) => axios.get(`${api}/follow`, data);
+export const apiAddFollow = () => axios.get(`${api}/follow`);
+export const apiDelFollow = (id) => axios.delete(`${api}/follow/${id}`);
+
+// UpLoad
+export const apiUpLoadFile = (data) => axios.post(`${api}/upload`, data);
