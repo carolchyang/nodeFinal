@@ -29,7 +29,12 @@
             aria-labelledby="dropdownMenuLink"
           >
             <li class="bg-white border border-2 border-bottom-0">
-              <router-link to="/" class="dropdown-item">我的貼文牆</router-link>
+              <router-link to="/personalwall" class="dropdown-item">
+                我的貼文牆
+              </router-link>
+            </li>
+            <li class="bg-white border border-2 border-bottom-0">
+              <router-link to="/" class="dropdown-item">全體動態牆</router-link>
             </li>
             <li class="bg-white border border-2 border-bottom-0">
               <router-link to="/profile" class="dropdown-item">

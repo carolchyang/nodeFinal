@@ -8,8 +8,8 @@
         張貼動態
       </router-link>
       <ul class="asideList">
-        <li class="d-none d-lg-flex mb-9">
-          <router-link to="/" class="asideLink">
+        <li class="mb-lg-8">
+          <router-link to="/personalwall" class="asideLink">
             <img
               :src="profile.photo"
               class="thumbnail thumbnail-xl"
@@ -20,14 +20,17 @@
               class="thumbnail thumbnail-xl"
               v-else
             />
-            <h5 class="ms-4 fw-bolder">{{ profile.name }}</h5>
+            <h5 class="d-none d-lg-block ms-4 fw-bolder">
+              {{ profile.name }} 的貼文牆
+            </h5>
           </router-link>
         </li>
-        <li class="d-lg-none">
+        <li class="mb-lg-8">
           <router-link to="/" class="asideLink">
             <div class="asideLinkIcon">
               <i class="bi bi-house-door"></i>
             </div>
+            <h5 class="d-none d-lg-block ms-4 fw-bolder">全體動態牆</h5>
           </router-link>
         </li>
         <li class="mb-lg-8">
