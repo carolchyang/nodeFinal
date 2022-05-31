@@ -13,7 +13,8 @@ export const apiUpdateProfile = (data) =>
 export const apiGetLikePosts = (id) => axios.get(`${api}/users/${id}/likes`);
 
 // Post
-export const apiGetPosts = (data) => axios.get(`${api}/article`, data);
+export const apiGetPosts = (data) =>
+  axios.get(`${api}/article`, { params: data });
 export const apiCreatePost = (data) => axios.post(`${api}/article`, data);
 export const apiDelPost = (id) => axios.delete(`${api}/article/${id}`);
 export const apiClickLike = (id) => axios.get(`${api}/article/${id}/likes`);
@@ -30,7 +31,8 @@ export const apiModifyPassword = (data) =>
   axios.post(`${api}/forget/update`, data);
 
 // Follow
-export const apiGetFollow = (data) => axios.get(`${api}/follow`, data);
+export const apiGetFollow = (data) =>
+  axios.get(`${api}/follow`, { params: data });
 export const apiAddFollow = () => axios.get(`${api}/follow`);
 export const apiDelFollow = (id) => axios.delete(`${api}/follow/${id}`);
 
