@@ -127,7 +127,7 @@
     >
       <VForm
         v-slot="{ errors, meta }"
-        @submit="updatePassword"
+        @submit="submitPassword"
         ref="passwordForm"
       >
         <div class="mb-4">
@@ -191,16 +191,11 @@ import { mapState, mapActions } from "pinia";
 import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
 import modalStore from "@/stores/modalStore";
-import { apiUpdateProfile, apiUpdatePassword } from "@/scripts/api";
 
 export default {
   name: "ProfileView",
   data() {
     return {
-      tempPassword: {
-        password: "",
-        passwordConfirm: "",
-      },
       tempImg: {
         photo: "",
         msg: "",
@@ -208,56 +203,11 @@ export default {
     };
   },
   methods: {
-    // 更新個人資料
-    updateProfile() {
-      this.toggleLoading(true);
-      apiUpdateProfile(this.tempProfile)
-        .then((res) => {
-          const data = res.data.data.user;
-          // 更新用戶 data 資料
-          this.updateProfileData(data);
-
-          // 設定 msgModal 提示訊息
-          const modal = {
-            title: "更新個人資料",
-            content: "已成功更新您的個人資料~",
-          };
-          // 開啟 msgModal
-          this.toggleMsgModal(modal);
-
-          this.toggleLoading(false);
-        })
-        .catch((err) => {
-          this.pushMessage({
-            style: "danger",
-            content: err.response.data.message || "更新失敗",
-          });
-          this.toggleLoading(false);
-        });
-    },
     // 更新密碼
-    updatePassword() {
-      this.toggleLoading(true);
-      apiUpdatePassword(this.tempPassword)
-        .then(() => {
-          // 設定 msgModal 提示訊息
-          const modal = {
-            title: "更新密碼成功",
-            content: "下次登入記得使用新密碼喔~",
-          };
-          // 開啟 msgModal
-          this.toggleMsgModal(modal);
-
-          this.$refs.passwordForm.resetForm();
-          this.toggleLoading(false);
-        })
-        .catch((err) => {
-          this.pushMessage({
-            style: "danger",
-            content: err.response.data.message || "更新密碼失敗",
-          });
-          this.toggleLoading(false);
-        });
+    submitPassword() {
+      // 取得 password 的 form 表單
+      const form = this.$refs.passwordForm;
+      this.updatePassword(form);
     },
     // 上傳圖片
     uploadFile(e) {
@@ -291,11 +241,11 @@ export default {
       }
     },
     ...mapActions(statusStore, ["pushMessage", "toggleLoading"]),
-    ...mapActions(userStore, ["getProfile", "updateProfileData"]),
+    ...mapActions(userStore, ["getProfile", "updateProfile", "updatePassword"]),
     ...mapActions(modalStore, ["toggleMsgModal"]),
   },
   computed: {
-    ...mapState(userStore, ["profile", "tempProfile"]),
+    ...mapState(userStore, ["profile", "tempProfile", "tempPassword"]),
     ...mapState(modalStore, ["modal"]),
   },
   components: {
