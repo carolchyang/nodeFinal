@@ -4,22 +4,23 @@
       <router-link
         to="/createpost"
         class="effectBtn d-none d-lg-block btn btn-primary w-100 mb-6 fw-bold"
-        >張貼動態</router-link
       >
+        張貼動態
+      </router-link>
       <ul class="asideList">
         <li class="d-none d-lg-flex mb-9">
           <router-link to="/" class="asideLink">
             <img
-              :src="userInfo.photo"
+              :src="profile.photo"
               class="thumbnail thumbnail-xl"
-              v-if="userInfo.photo"
+              v-if="profile.photo"
             />
             <img
               src="../assets/images/user_default.png"
               class="thumbnail thumbnail-xl"
               v-else
             />
-            <h5 class="ms-4 fw-bolder">{{ userInfo.name }}</h5>
+            <h5 class="ms-4 fw-bolder">{{ profile.name }}</h5>
           </router-link>
         </li>
         <li class="d-lg-none">
@@ -58,8 +59,13 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import userStore from "@/stores/userStore";
+
 export default {
   name: "AsideComponent",
-  props: ["userInfo"],
+  computed: {
+    ...mapState(userStore, ["profile"]),
+  },
 };
 </script>

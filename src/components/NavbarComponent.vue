@@ -4,9 +4,9 @@
       <router-link to="/" class="navbarBrand">MetaWall</router-link>
       <div class="d-flex align-items-center">
         <img
-          :src="userInfo.photo"
+          :src="profile.photo"
           class="thumbnail thumbnail-sm"
-          v-if="userInfo.photo"
+          v-if="profile.photo"
         />
         <img
           src="../assets/images/user_default.png"
@@ -15,14 +15,14 @@
         />
         <div class="dropdown">
           <a
-            class="dropdown-toggle ms-3 border-bottom border-2 text-dark fw-bolder"
+            class="dropdown-toggle ms-3 px-2 border-bottom border-2 text-dark fw-bolder"
             href="#"
             role="button"
             id="dropdownMenuLink"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Member
+            {{ profile.name }}
           </a>
           <ul
             class="dropdown-menu dropdown-menu-end customShadow text-center"
@@ -53,8 +53,13 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import userStore from "@/stores/userStore";
+
 export default {
   name: "NavbarComponent",
-  props: ["userInfo"],
+  computed: {
+    ...mapState(userStore, ["profile"]),
+  },
 };
 </script>

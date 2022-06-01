@@ -243,7 +243,7 @@
   <DelModalComponent>
     <template #default>
       確定要刪除此則
-      <b class="text-danger">{{ modalItem }}</b>
+      <b class="text-danger">{{ modal.title }}</b>
       ？（刪除後無法回復）
     </template>
   </DelModalComponent>
@@ -252,23 +252,16 @@
 <script>
 import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
 import DelModalComponent from "@/components/DelModalComponent.vue";
-import { bsModal } from "@/scripts/methods";
+import { mapState, mapActions } from "pinia";
+import modalStore from "@/stores/modalStore";
 
 export default {
   name: "PersonalWallView",
-  props: ["userInfo"],
-  data() {
-    return {
-      modalItem: "",
-    };
-  },
   methods: {
-    // 開啟 DelModal
-    toggleDelModal(item) {
-      this.modalItem = item;
-      this.bsModal = bsModal("delModal");
-      this.bsModal.show();
-    },
+    ...mapActions(modalStore, ["toggleDelModal"]),
+  },
+  computed: {
+    ...mapState(modalStore, ["modal"]),
   },
   components: {
     EmptyCardComponent,

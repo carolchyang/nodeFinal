@@ -1,17 +1,14 @@
 <template>
   <div v-if="checkSuccess">
-    <NavbarComponent
-      @sign-out="signOut"
-      :user-info="userInfo"
-    ></NavbarComponent>
+    <NavbarComponent @sign-out="signOut"></NavbarComponent>
     <main class="container py-11">
       <div class="row">
         <div class="col-12 col-lg-8">
-          <router-view :user-info="userInfo"></router-view>
+          <router-view></router-view>
         </div>
 
         <div class="col-lg-4">
-          <AsideComponent :user-info="userInfo"></AsideComponent>
+          <AsideComponent></AsideComponent>
         </div>
       </div>
     </main>
@@ -21,15 +18,16 @@
 <script>
 import NavbarComponent from "@/components/NavbarComponent";
 import AsideComponent from "@/components/AsideComponent";
+import { mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
+import userStore from "@/stores/userStore";
 import { getToken, clearToken } from "@/scripts/methods";
-import { apiGetProfile } from "@/scripts/api";
 
 export default {
   name: "LayoutView",
   data() {
     return {
       checkSuccess: false,
-      userInfo: {},
     };
   },
   methods: {
@@ -47,7 +45,7 @@ export default {
         this.getProfile();
       } else {
         this.checkSuccess = false;
-        this.$pushMessage({
+        this.pushMessage({
           style: "danger",
           content: "請先登入",
         });
@@ -60,23 +58,8 @@ export default {
       this.checkSuccess = false;
       this.$router.push("/signin");
     },
-    // 取得用戶資料
-    getProfile() {
-      this.$emitter.emit("toggle-loading", true);
-      apiGetProfile()
-        .then((res) => {
-          this.userInfo = res.data.data;
-          this.$emitter.emit("toggle-loading", false);
-        })
-        .catch((err) => {
-          this.$pushMessage({
-            style: "danger",
-            content:
-              err.response.data.message || "取得個人資料失敗，請重新登入",
-          });
-          this.$emitter.emit("toggle-loading", false);
-        });
-    },
+    ...mapActions(statusStore, ["pushMessage"]),
+    ...mapActions(userStore, ["getProfile"]),
   },
   created() {
     this.checkSignIn();

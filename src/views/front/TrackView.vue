@@ -29,7 +29,6 @@ import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
 
 export default {
   name: "TrackView",
-  props: ["userInfo"],
   components: {
     EmptyCardComponent,
   },

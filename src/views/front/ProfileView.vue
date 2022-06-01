@@ -74,7 +74,7 @@
             class="form-control"
             :class="{ 'is-invalid': errors['暱稱'] }"
             rules=""
-            v-model="profile.name"
+            v-model="tempProfile.name"
             required
           ></VField>
           <error-message
@@ -91,7 +91,7 @@
               name="性別"
               class="form-check-input"
               value="male"
-              v-model="profile.gender"
+              v-model="tempProfile.gender"
             ></VField>
 
             <label class="form-check-label" for="male">男生</label>
@@ -103,7 +103,7 @@
               name="性別"
               class="form-check-input"
               value="female"
-              v-model="profile.gender"
+              v-model="tempProfile.gender"
             ></VField>
             <label class="form-check-label" for="female">女生</label>
           </div>
@@ -127,7 +127,7 @@
     >
       <VForm
         v-slot="{ errors, meta }"
-        @submit="updatePassword"
+        @submit="submitPassword"
         ref="passwordForm"
       >
         <div class="mb-4">
@@ -187,111 +187,27 @@
 
 <script>
 import MsgModalComponent from "@/components/MsgModalComponent.vue";
-import { bsModal } from "@/scripts/methods";
-import {
-  apiGetProfile,
-  apiUpdateProfile,
-  apiUpdatePassword,
-} from "@/scripts/api";
+import { mapState, mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
+import userStore from "@/stores/userStore";
+import modalStore from "@/stores/modalStore";
 
 export default {
   name: "ProfileView",
-  props: ["userInfo"],
   data() {
     return {
-      profile: {
-        name: "",
-        photo: "",
-        gender: "",
-      },
-      tempPassword: {
-        password: "",
-        passwordConfirm: "",
-      },
       tempImg: {
         photo: "",
         msg: "",
       },
-      modal: {
-        title: "",
-        content: "",
-      },
     };
   },
   methods: {
-    // 取得個人資料
-    getProfile() {
-      this.$emitter.emit("toggle-loading", true);
-      apiGetProfile()
-        .then((res) => {
-          const data = res.data.data;
-          this.profile = {
-            name: data.name,
-            photo: data.photo,
-            gender: data.gender,
-          };
-          this.$emitter.emit("toggle-loading", false);
-        })
-        .catch((err) => {
-          this.$pushMessage({
-            style: "danger",
-            content: err.response.data.message || "取得個人資料失敗",
-          });
-          this.$emitter.emit("toggle-loading", false);
-        });
-    },
-    // 更新個人資料
-    updateProfile() {
-      this.$emitter.emit("toggle-loading", true);
-      apiUpdateProfile(this.profile)
-        .then((res) => {
-          const data = res.data.data.user;
-          this.profile = {
-            name: data.name,
-            photo: data.photo,
-            gender: data.gender,
-          };
-
-          // 設定 msgModal 提示訊息
-          this.modal = {
-            title: "更新個人資料",
-            content: "已成功更新您的個人資料~",
-          };
-          // 開啟 msgModal
-          this.toggleMsgModal();
-
-          this.$emitter.emit("toggle-loading", false);
-        })
-        .catch((err) => {
-          this.$pushMessage({
-            style: "danger",
-            content: err.response.data.message || "更新失敗",
-          });
-          this.$emitter.emit("toggle-loading", false);
-        });
-    },
     // 更新密碼
-    updatePassword() {
-      apiUpdatePassword(this.tempPassword)
-        .then(() => {
-          // 設定 msgModal 提示訊息
-          this.modal = {
-            title: "更新密碼成功",
-            content: "下次登入記得使用新密碼喔~",
-          };
-          // 開啟 msgModal
-          this.toggleMsgModal();
-
-          this.$refs.passwordForm.resetForm();
-          this.$emitter.emit("toggle-loading", false);
-        })
-        .catch((err) => {
-          this.$emitter.emit("toggle-loading", false);
-          this.$pushMessage({
-            style: "danger",
-            content: err.response.data.message || "更新密碼失敗",
-          });
-        });
+    submitPassword() {
+      // 取得 password 的 form 表單
+      const form = this.$refs.passwordForm;
+      this.updatePassword(form);
     },
     // 上傳圖片
     uploadFile(e) {
@@ -324,13 +240,13 @@ export default {
         this.$refs.passwordForm.resetForm();
       }
     },
-    toggleMsgModal() {
-      this.bsModal = bsModal("msgModal");
-      this.bsModal.show();
-    },
+    ...mapActions(statusStore, ["pushMessage", "toggleLoading"]),
+    ...mapActions(userStore, ["getProfile", "updateProfile", "updatePassword"]),
+    ...mapActions(modalStore, ["toggleMsgModal"]),
   },
-  mounted() {
-    this.getProfile();
+  computed: {
+    ...mapState(userStore, ["profile", "tempProfile", "tempPassword"]),
+    ...mapState(modalStore, ["modal"]),
   },
   components: {
     MsgModalComponent,

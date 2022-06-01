@@ -30,32 +30,16 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
+
 export default {
   name: "ToastMessage",
-  data() {
-    return {
-      messages: [],
-    };
-  },
   methods: {
-    showToast() {
-      setTimeout(() => {
-        this.messages.shift();
-      }, 3000);
-    },
-    clearToast(index) {
-      this.messages.splice(index, 1);
-    },
+    ...mapActions(statusStore, ["showToast", "clearToast", "pushMessage"]),
   },
-  mounted() {
-    this.$emitter.on("push-message", (message) => {
-      const { style = "dark", content } = message;
-      this.messages.push({ style, content });
-      this.showToast();
-    });
-  },
-  unmounted() {
-    this.$emitter.off("push-message");
+  computed: {
+    ...mapState(statusStore, ["messages"]),
   },
 };
 </script>

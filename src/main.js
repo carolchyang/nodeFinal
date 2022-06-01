@@ -3,6 +3,7 @@ import { createApp } from "vue";
 import "bootstrap";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import { createPinia } from "pinia";
 import { Field, Form, ErrorMessage, defineRule, configure } from "vee-validate";
 import AllRules from "@vee-validate/rules";
 import { localize, setLocale } from "@vee-validate/i18n";
@@ -32,11 +33,13 @@ configure({
 });
 setLocale("zh_TW");
 
+const pinia = createPinia();
 const app = createApp(App);
 app.config.globalProperties.$emitter = emitter;
 app.config.globalProperties.$pushMessage = pushMessage;
 app.use(router);
 app.use(VueAxios, axios);
+app.use(pinia);
 app.component("VForm", Form);
 app.component("VField", Field);
 app.component("ErrorMessage", ErrorMessage);
