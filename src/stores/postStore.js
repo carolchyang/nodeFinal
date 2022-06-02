@@ -7,7 +7,10 @@ const status = statusStore();
 
 export default defineStore("postStore", {
   state: () => {
-    return {};
+    return {
+      posts: [],
+      pagination: {},
+    };
   },
   actions: {
     // 建立貼文
@@ -23,7 +26,6 @@ export default defineStore("postStore", {
           status.isLoading = false;
         })
         .catch((err) => {
-          console.log(err);
           status.pushMessage({
             style: "danger",
             content: err.response.data.message || "建立貼文失敗",
