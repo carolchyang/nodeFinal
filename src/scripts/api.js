@@ -1,6 +1,8 @@
 import axios from "axios";
+import { getToken } from "@/scripts/methods";
 
 const api = process.env.VUE_APP_API;
+const token = getToken();
 
 // Users
 export const apiUserSignUp = (data) => axios.post(`${api}/users/sign_up`, data);
@@ -9,13 +11,24 @@ export const apiUpdatePassword = (data) =>
   axios.post(`${api}/users/updatePassword`, data);
 export const apiGetProfile = () => axios.get(`${api}/users/profile`);
 export const apiUpdateProfile = (data) =>
-  axios.post(`${api}/users/profile`, data);
+  axios.post(`${api}/users/profile`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 export const apiGetLikePosts = (id) => axios.get(`${api}/users/${id}/likes`);
 
 // Post
 export const apiGetPosts = (data) =>
   axios.get(`${api}/article`, { params: data });
-export const apiCreatePost = (data) => axios.post(`${api}/article`, data);
+export const apiCreatePost = (data) =>
+  axios.post(`${api}/article`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 export const apiDelPost = (id) => axios.delete(`${api}/article/${id}`);
 export const apiClickLike = (id) => axios.get(`${api}/article/${id}/likes`);
 export const apiDelLike = (id) => axios.delete(`${api}/article/${id}/likes`);
