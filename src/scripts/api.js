@@ -34,7 +34,7 @@ export const apiClickLike = (id) => axios.get(`${api}/article/${id}/likes`);
 export const apiDelLike = (id) => axios.delete(`${api}/article/${id}/likes`);
 
 // Comment
-export const apiGetComment = () => axios.get(`${api}/comments`);
+export const apiGetComments = () => axios.get(`${api}/comments`);
 export const apiCreateComment = (data) => axios.post(`${api}/comments`, data);
 export const apiDelComment = (id) => axios.delete(`${api}/comments/${id}`);
 
