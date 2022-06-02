@@ -29,9 +29,15 @@
             aria-labelledby="dropdownMenuLink"
           >
             <li class="bg-white border border-2 border-bottom-0">
-              <router-link to="/personalwall" class="dropdown-item">
+              <a href="#" @click.prevent="toPersonalWall" class="dropdown-item">
                 我的貼文牆
-              </router-link>
+              </a>
+              <!-- <router-link
+                :to="{ name: 'PersonalWallView', params: { id: profile._id } }"
+                class="dropdown-item"
+              >
+                我的貼文牆
+              </router-link> -->
             </li>
             <li class="bg-white border border-2 border-bottom-0">
               <router-link to="/" class="dropdown-item">全體動態牆</router-link>
@@ -63,6 +69,15 @@ import userStore from "@/stores/userStore";
 
 export default {
   name: "NavbarComponent",
+  data() {
+    return {};
+  },
+  methods: {
+    toPersonalWall() {
+      const id = this.profile._id;
+      this.$router.push({ path: `/personalwall/${id}` });
+    },
+  },
   computed: {
     ...mapState(userStore, ["profile"]),
   },

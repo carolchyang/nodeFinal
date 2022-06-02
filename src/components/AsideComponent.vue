@@ -9,7 +9,7 @@
       </router-link>
       <ul class="asideList">
         <li class="mb-lg-8">
-          <router-link to="/personalwall" class="asideLink">
+          <a href="#" class="asideLink" @click.prevent="toPersonalWall">
             <img
               :src="profile.photo"
               class="thumbnail thumbnail-xl"
@@ -23,7 +23,7 @@
             <h5 class="d-none d-lg-block ms-4 fw-bolder">
               {{ profile.name }} 的貼文牆
             </h5>
-          </router-link>
+          </a>
         </li>
         <li class="mb-lg-8">
           <router-link to="/" class="asideLink">
@@ -67,6 +67,12 @@ import userStore from "@/stores/userStore";
 
 export default {
   name: "AsideComponent",
+  methods: {
+    toPersonalWall() {
+      const id = this.profile._id;
+      this.$router.push({ path: `/personalwall/${id}` });
+    },
+  },
   computed: {
     ...mapState(userStore, ["profile"]),
   },

@@ -15,7 +15,7 @@ const routes = [
         },
       },
       {
-        path: "personalwall",
+        path: "personalwall/:id",
         name: "PersonalWallView",
         component: () => import("../views/front/PersonalWallView.vue"),
         meta: {
