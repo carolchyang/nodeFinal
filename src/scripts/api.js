@@ -9,7 +9,7 @@ export const apiUpdatePassword = (data) =>
   axios.post(`${api}/users/updatePassword`, data);
 export const apiGetProfile = () => axios.get(`${api}/users/profile`);
 export const apiUpdateProfile = (data) =>
-  axios.patch(`${api}/users/profile`, data);
+  axios.post(`${api}/users/profile`, data);
 export const apiGetLikePosts = (id) => axios.get(`${api}/users/${id}/likes`);
 
 // Post
@@ -33,7 +33,7 @@ export const apiModifyPassword = (data) =>
 // Follow
 export const apiGetFollow = (data) =>
   axios.get(`${api}/follow`, { params: data });
-export const apiAddFollow = () => axios.get(`${api}/follow`);
+export const apiAddFollow = (data) => axios.post(`${api}/follow`, data);
 export const apiDelFollow = (id) => axios.delete(`${api}/follow/${id}`);
 
 // UpLoad
