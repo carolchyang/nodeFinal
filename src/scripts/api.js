@@ -17,7 +17,8 @@ export const apiUpdateProfile = (data) =>
       "Content-Type": "multipart/form-data",
     },
   });
-export const apiGetLikePosts = (id) => axios.get(`${api}/users/${id}/likes`);
+export const apiGetLikePosts = (id, data) =>
+  axios.get(`${api}/users/${id}/likes`, { params: data });
 
 // Post
 export const apiGetPosts = (data) =>
@@ -31,8 +32,7 @@ export const apiCreatePost = (data) =>
   });
 export const apiDelPost = (id) => axios.delete(`${api}/article/${id}`);
 export const apiClickLike = (id) => axios.get(`${api}/article/${id}/likes`);
-export const apiDelLike = (id, data) =>
-  axios.delete(`${api}/article/${id}/likes`, data);
+export const apiDelLike = (id) => axios.delete(`${api}/article/${id}/likes`);
 
 // Comment
 export const apiGetComments = () => axios.get(`${api}/comments`);
