@@ -34,7 +34,7 @@
           </router-link>
         </li>
         <li class="mb-lg-8">
-          <router-link to="/track" class="asideLink">
+          <router-link to="/follow" class="asideLink">
             <div class="asideLinkIcon">
               <i class="bi bi-bell"></i>
             </div>

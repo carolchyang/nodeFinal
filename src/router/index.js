@@ -31,9 +31,9 @@ const routes = [
         },
       },
       {
-        path: "track",
-        name: "TrackView",
-        component: () => import("../views/front/TrackView.vue"),
+        path: "follow",
+        name: "FollowView",
+        component: () => import("../views/front/FollowView.vue"),
         meta: {
           title: "追蹤名單",
         },
