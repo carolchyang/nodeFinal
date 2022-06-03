@@ -16,6 +16,12 @@ export const getTime = (time) => {
   return newTime;
 };
 
+// 取得距離時間
+export const getDiffTime = (time) => {
+  const newTime = moment(time).fromNow();
+  return newTime;
+};
+
 // token 相關
 
 export const setToken = (token) => {

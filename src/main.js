@@ -10,7 +10,7 @@ import { localize, setLocale } from "@vee-validate/i18n";
 import zhTW from "@vee-validate/i18n/dist/locale/zh_TW.json";
 
 import emitter from "@/scripts/emitter";
-import { getTime } from "@/scripts/methods";
+import { getTime, getDiffTime } from "@/scripts/methods";
 
 import App from "./App.vue";
 import router from "./router";
@@ -37,6 +37,7 @@ const pinia = createPinia();
 const app = createApp(App);
 app.config.globalProperties.$emitter = emitter;
 app.config.globalProperties.$getTime = getTime;
+app.config.globalProperties.$getDiffTime = getDiffTime;
 app.use(router);
 app.use(VueAxios, axios);
 app.use(pinia);
