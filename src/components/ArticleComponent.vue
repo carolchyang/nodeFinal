@@ -34,7 +34,7 @@
           href="#"
           class="cardCloseBtn"
           @click.prevent="delData(item._id, 'post')"
-          v-if="profile._id === item.userId?._id"
+          v-if="profile._id === item.userId?._id && !postId"
         >
           <i class="bi bi-x-lg"></i>
         </a>
@@ -167,8 +167,8 @@ import { mapActions } from "pinia";
 import modalStore from "@/stores/modalStore";
 export default {
   name: "ArticleComponent",
-  props: ["data", "profile", "likePostArray"],
-  emits: ["get-all", "toggle-like", "update-comments", "to-personalwall"],
+  props: ["data", "profile", "likePostArray", "postId"],
+  emits: ["toggle-like", "update-comments", "to-personalwall"],
   data() {
     return {
       content: "",

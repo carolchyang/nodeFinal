@@ -47,13 +47,13 @@
           <i class="bi bi-hand-thumbs-up text-primary fs-4 lh-sm"></i>
           <span class="d-block">取消</span>
         </a>
-        <a
-          href="#"
+        <router-link
+          :to="{ path: `/singlepost/${item.post?._id}` }"
           class="link-dark me-md-9 text-center fw-bold text-decoration-none"
         >
           <i class="bi bi-arrow-right-circle fs-4 lh-sm"></i>
           <span class="d-block">查看</span>
-        </a>
+        </router-link>
       </div>
     </li>
   </ul>
