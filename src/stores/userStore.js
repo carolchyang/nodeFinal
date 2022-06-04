@@ -35,7 +35,7 @@ export default defineStore("userStore", {
         passwordConfirm: "",
       },
       //個人牆頁面設置
-      personInfo: {
+      personalInfo: {
         name: "",
         photo: "",
         _id: "",
@@ -161,8 +161,8 @@ export default defineStore("userStore", {
       };
     },
     // 取得 personalWall 用戶資料
-    togglePersonInfo(data) {
-      this.personInfo = data;
+    togglePersonalInfo(data) {
+      this.personalInfo = data;
     },
   },
 });

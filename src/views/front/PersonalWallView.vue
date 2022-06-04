@@ -1,9 +1,9 @@
 <template>
   <div class="header header-rounded d-flex mb-5">
     <img
-      :src="personInfo.photo"
+      :src="personalInfo.photo"
       class="headerThumbnail"
-      v-if="personInfo.photo"
+      v-if="personalInfo.photo"
     />
     <img
       src="../../assets/images/user_default.png"
@@ -12,13 +12,13 @@
     />
     <div class="headerContent">
       <h2 class="text-start h5 fw-bold mx-auto ms-md-0">
-        <span class="d-block">{{ personInfo.name }} 的貼文牆</span>
+        <span class="d-block">{{ personalInfo.name }} 的貼文牆</span>
       </h2>
       <div class="d-none">
         <button
           type="button"
           class="btn btn-warning py-2 px-8 border-dark fw-bold shadow"
-          @click.prevent="toggleFollow(personInfo._id, 'create')"
+          @click.prevent="toggleFollow(personalInfo._id, 'create')"
           v-if="!isFollow"
         >
           追蹤
@@ -171,10 +171,10 @@ export default {
     // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
       const { _id } = data;
-      this.togglePersonInfo(data);
+      this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
-    ...mapActions(userStore, ["getProfile", "togglePersonInfo"]),
+    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
     ...mapActions(postStore, ["getPosts", "delPost"]),
     ...mapActions(likeStore, ["getLikes", "clickLike", "delLike"]),
     ...mapActions(commentStore, ["getComments", "createComment", "delComment"]),
@@ -182,7 +182,7 @@ export default {
   },
   computed: {
     ...mapState(modalStore, ["modal", "modalItem"]),
-    ...mapState(userStore, ["profile", "personInfo"]),
+    ...mapState(userStore, ["profile", "personalInfo"]),
     ...mapState(postStore, ["posts", "pagination"]),
     ...mapState(likeStore, ["likes", "likePostArray"]),
     ...mapState(commentStore, ["comments"]),
@@ -197,7 +197,7 @@ export default {
   created() {
     // 取得 personalWall 用戶資料
     this.personalId = this.$route.params.id;
-    if (!this.personInfo._id) {
+    if (!this.personalInfo._id) {
       this.$router.push("/");
     } else {
       this.init();

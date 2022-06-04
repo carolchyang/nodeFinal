@@ -79,10 +79,10 @@ export default {
     // 轉至 PersonalWall 頁面
     toPersonalWall() {
       const _id = this.profile._id;
-      this.togglePersonInfo(this.profile);
+      this.togglePersonalInfo(this.profile);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
-    ...mapActions(userStore, ["togglePersonInfo"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
   },
   computed: {
     ...mapState(userStore, ["profile"]),
