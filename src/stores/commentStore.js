@@ -34,7 +34,6 @@ export default defineStore("commentStore", {
       status.isLoading = true;
       await apiCreateComment(data)
         .then(() => {
-          this.getComments();
           status.pushMessage({
             style: "dark",
             content: "已建立貼文",
@@ -54,7 +53,6 @@ export default defineStore("commentStore", {
       status.isLoading = true;
       await apiDelComment(id)
         .then(() => {
-          this.getComments();
           modal.closeDelModal();
           status.pushMessage({
             style: "dark",

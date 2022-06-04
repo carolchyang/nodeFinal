@@ -167,7 +167,7 @@ import { mapActions } from "pinia";
 import modalStore from "@/stores/modalStore";
 export default {
   name: "ArticleComponent",
-  props: ["data", "profile", "likePostArray", "comments"],
+  props: ["data", "profile", "likePostArray"],
   emits: ["get-all", "toggle-like", "update-comments", "to-personalwall"],
   data() {
     return {
