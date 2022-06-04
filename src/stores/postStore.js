@@ -51,13 +51,14 @@ export default defineStore("postStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "取得貼文失敗",
+            content: err.response?.data?.message || "取得貼文失敗",
           });
           status.isLoading = false;
         });
     },
     // 建立貼文
     async createPost(data) {
+      console.log(data);
       status.isLoading = true;
       await apiCreatePost(data)
         .then(() => {
@@ -69,9 +70,10 @@ export default defineStore("postStore", {
           status.isLoading = false;
         })
         .catch((err) => {
+          console.log(err);
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "建立貼文失敗",
+            content: err.response?.data?.message || "建立貼文失敗",
           });
           status.isLoading = false;
         });
@@ -96,7 +98,7 @@ export default defineStore("postStore", {
           modal.closeDelModal();
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "刪除貼文失敗",
+            content: err.response?.data?.message || "刪除貼文失敗",
           });
           status.isLoading = false;
         });

@@ -35,7 +35,7 @@ export default defineStore("followStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "取得追蹤名單失敗",
+            content: err.response?.data?.message || "取得追蹤名單失敗",
           });
           status.isLoading = false;
         });
@@ -55,7 +55,7 @@ export default defineStore("followStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "新增追蹤失敗",
+            content: err.response?.data?.message || "新增追蹤失敗",
           });
           status.isLoading = false;
         });
@@ -75,7 +75,7 @@ export default defineStore("followStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "取消追蹤失敗",
+            content: err.response?.data?.message || "取消追蹤失敗",
           });
           status.isLoading = false;
         });
