@@ -30,16 +30,22 @@ export default defineStore("userStore", {
         password: "",
         passwordConfirm: "",
       },
+      //個人牆頁面設置
+      personInfo: {
+        name: "",
+        photo: "",
+        _id: "",
+      },
     };
   },
   actions: {
     // 取得用戶資料
-    getProfile() {
+    async getProfile() {
       status.isLoading = true;
-      apiGetProfile()
+      await apiGetProfile()
         .then((res) => {
-          const data = res.data.data;
-          this.updateProfileData(data);
+          this.profile = res.data.data;
+          this.updateProfileData(this.profile);
           status.isLoading = false;
         })
         .catch((err) => {
@@ -52,14 +58,14 @@ export default defineStore("userStore", {
         });
     },
     // 更新個人資料
-    updateProfile() {
+    async updateProfile(data) {
       status.toggleLoading(true);
-      apiUpdateProfile(this.tempProfile)
+      await apiUpdateProfile(data)
         .then((res) => {
-          const data = res.data.data.user;
+          this.profile = res.data.data.user;
 
           // 更新用戶 data 資料
-          this.updateProfileData(data);
+          this.updateProfileData(this.profile);
 
           // 開啟 msgModal 提示訊息
           modal.toggleMsgModal({
@@ -77,9 +83,9 @@ export default defineStore("userStore", {
         });
     },
     // 更新密碼
-    updatePassword(form) {
+    async updatePassword(form) {
       status.toggleLoading(true);
-      apiUpdatePassword(this.tempPassword)
+      await apiUpdatePassword(this.tempPassword)
         .then(() => {
           // 開啟 msgModal 提示訊息
           modal.toggleMsgModal({
@@ -101,12 +107,14 @@ export default defineStore("userStore", {
     },
     // 更新用戶 data 資料
     updateProfileData(data) {
-      this.profile = data;
       this.tempProfile = {
         name: data.name,
         photo: data.photo,
         gender: data.gender,
       };
+    },
+    togglePersonInfo(data) {
+      this.personInfo = data;
     },
   },
 });

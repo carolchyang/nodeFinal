@@ -23,3 +23,13 @@
     color: $danger;
   }
 }
+
+.cardImgLink {
+  color: $dark;
+  &:hover {
+    color: $primary;
+    img {
+      transform: scale(1.1);
+    }
+  }
+}

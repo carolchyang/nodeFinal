@@ -7,7 +7,7 @@
           <router-view :key="$route.fullPath"></router-view>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-4 position-relative">
           <AsideComponent></AsideComponent>
         </div>
       </div>

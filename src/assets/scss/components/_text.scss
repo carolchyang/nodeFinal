@@ -1,6 +1,8 @@
 .textTruncate {
   max-width: 25rem;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  p {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

@@ -21,7 +21,11 @@
           >
             取消
           </button>
-          <button type="button" class="btn btn-outline-danger py-2 px-8">
+          <button
+            type="button"
+            class="btn btn-outline-danger py-2 px-8"
+            @click.prevent="$emit('del-data')"
+          >
             確定
           </button>
         </div>

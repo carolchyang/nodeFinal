@@ -54,7 +54,8 @@
 
 @include media-breakpoint-up(lg) {
   .aside {
-    position: relative;
+    position: sticky;
+    top: 3rem;
     bottom: auto;
     left: auto;
     right: auto;

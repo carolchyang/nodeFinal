@@ -5,6 +5,8 @@ export default defineStore("modalStore", {
   state: () => {
     return {
       modal: {
+        type: "",
+        id: "",
         title: "",
         content: "",
       },
@@ -12,7 +14,7 @@ export default defineStore("modalStore", {
   },
   actions: {
     toggleDelModal(item) {
-      this.modal.title = item;
+      this.modal = item;
       this.bsModal = bsModal("delModal");
       this.bsModal.show();
     },
@@ -20,6 +22,15 @@ export default defineStore("modalStore", {
       this.modal = item;
       this.bsModal = bsModal("msgModal");
       this.bsModal.show();
+    },
+    closeDelModal() {
+      this.modal = {
+        type: "",
+        id: "",
+        title: "",
+        content: "",
+      };
+      this.bsModal.hide();
     },
   },
 });

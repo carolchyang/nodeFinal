@@ -1,19 +1,23 @@
 import { defineStore } from "pinia";
-import { apiGetFollow, apiCreateFollow, apiDelFollow } from "@/scripts/api";
+import { apiGetLikePosts, apiClickLike, apiDelLike } from "@/scripts/api";
 import statusStore from "./statusStore";
+import userStore from "./userStore";
 
 const status = statusStore();
+const user = userStore();
 
-export default defineStore("followStore", {
+export default defineStore("likeStore", {
   state: () => {
     return {
-      follows: [],
-      followArray: [],
+      likes: [],
+      likePostArray: [],
     };
   },
   actions: {
-    // 取得追蹤名單
-    async getFollows(data) {
+    // 取得按讚
+    async getLikes(data) {
+      const id = user.profile._id;
+
       // 使用 tempData 處理傳入的參數，避免傳進空值造成錯誤
       let tempData = data || {};
       tempData = {
@@ -21,74 +25,72 @@ export default defineStore("followStore", {
         pageCount: 100,
         // 第幾頁
         page: data?.page || 1,
-        // 排序順序 1 新到舊 0 舊到新
-        reverse: data?.reverse == 0 ? 0 : 1,
+        // 排序順序 0 新到舊 1 舊到新
+        reverse: 0,
       };
 
       status.isLoading = true;
-      await apiGetFollow(tempData)
+      await apiGetLikePosts(id, tempData)
         .then((res) => {
-          this.follows = res.data.data.data;
-          this.getFollowArray();
+          this.likes = res.data.data.likes;
+          this.getLikePostArray();
           status.isLoading = false;
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "取得追蹤名單失敗",
+            content: err.response.data.message || "取得按讚失敗",
           });
           status.isLoading = false;
         });
     },
-    // 新增追蹤
-    async createFollow(id) {
-      status.isLoading = true;
-      await apiCreateFollow({ targetUserId: id })
-        .then(() => {
-          this.getFollows();
-          status.pushMessage({
-            style: "dark",
-            content: "已追蹤",
-          });
-          status.isLoading = false;
-        })
-        .catch((err) => {
-          status.pushMessage({
-            style: "danger",
-            content: err.response.data.message || "新增追蹤失敗",
-          });
-          status.isLoading = false;
-        });
-    },
-    // 取消追蹤
-    async delFollow(id) {
-      status.isLoading = true;
-      await apiDelFollow(id)
-        .then(() => {
-          this.getFollows();
-          status.pushMessage({
-            style: "dark",
-            content: "取消追蹤成功",
-          });
-          status.isLoading = false;
-        })
-        .catch((err) => {
-          status.pushMessage({
-            style: "danger",
-            content: err.response.data.message || "取消追蹤失敗",
-          });
-          status.isLoading = false;
-        });
-    },
-    getFollowArray() {
+    // 所有按讚文章 ID
+    getLikePostArray() {
       const array = [];
-      this.follows.forEach((item) => {
-        array.push({
-          followId: item._id,
-          targetUserId: item.targetUserId._id,
-        });
+      this.likes.forEach((item) => {
+        array.push(item.post._id);
       });
-      this.followArray = array;
+      this.likePostArray = array;
+    },
+    // 按讚
+    async clickLike(id) {
+      status.isLoading = true;
+      await apiClickLike(id)
+        .then(() => {
+          this.getLikes();
+          status.pushMessage({
+            style: "dark",
+            content: "已按讚",
+          });
+          status.isLoading = false;
+        })
+        .catch((err) => {
+          status.pushMessage({
+            style: "danger",
+            content: err.response.data.message || "按讚失敗",
+          });
+          status.isLoading = false;
+        });
+    },
+    // 取消按讚
+    async delLike(id) {
+      status.isLoading = true;
+      await apiDelLike(id)
+        .then(() => {
+          this.getLikes();
+          status.pushMessage({
+            style: "dark",
+            content: "取消按讚成功",
+          });
+          status.isLoading = false;
+        })
+        .catch((err) => {
+          status.pushMessage({
+            style: "danger",
+            content: err.response.data.message || "取消按讚失敗",
+          });
+          status.isLoading = false;
+        });
     },
   },
 });

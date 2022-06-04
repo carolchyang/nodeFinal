@@ -27,6 +27,15 @@ defineRule("password", (value, [limit]) => {
   }
   return true;
 });
+defineRule("nickanem", (value, [limit]) => {
+  if (value.length > limit) {
+    return `暱稱 不能大於 ${limit} 字元`;
+  }
+  if (value.length == 0) {
+    return "暱稱 為必填";
+  }
+  return true;
+});
 configure({
   generateMessage: localize({ zh_TW: zhTW }),
   validateOnInput: true, // 調整為輸入字元立即進行驗證

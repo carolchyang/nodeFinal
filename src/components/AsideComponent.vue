@@ -9,7 +9,15 @@
       </router-link>
       <ul class="asideList">
         <li class="mb-lg-8">
-          <a href="#" class="asideLink" @click.prevent="toPersonalWall">
+          <a
+            href="#"
+            class="asideLink"
+            :class="{
+              active:
+                $route.name === 'PersonalWallView' && 'router-link-active',
+            }"
+            @click.prevent="toPersonalWall"
+          >
             <img
               :src="profile.photo"
               class="thumbnail thumbnail-xl"
@@ -62,16 +70,18 @@
 </template>
 
 <script>
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import userStore from "@/stores/userStore";
 
 export default {
   name: "AsideComponent",
   methods: {
     toPersonalWall() {
-      const id = this.profile._id;
-      this.$router.push({ path: `/personalwall/${id}` });
+      const _id = this.profile._id;
+      this.togglePersonInfo(this.profile);
+      this.$router.push({ path: `/personalwall/${_id}` });
     },
+    ...mapActions(userStore, ["togglePersonInfo"]),
   },
   computed: {
     ...mapState(userStore, ["profile"]),
