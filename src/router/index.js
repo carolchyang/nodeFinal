@@ -81,6 +81,14 @@ const routes = [
     },
   },
   {
+    path: "/reset",
+    name: "ResetPasswordView",
+    component: () => import("../views/ResetPasswordView.vue"),
+    meta: {
+      title: "重設密碼",
+    },
+  },
+  {
     path: "/:pathMath(.*)*",
     component: () => import("../views/NotFound.vue"),
   },
@@ -93,6 +101,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
+  // 若是從信箱收取重設密碼信，則直接跳轉至 ResetPasswordView
+  if (to.fullPath.startsWith("/reset/")) {
+    const token = to.fullPath.split("/reset/").pop();
+    return { name: "ResetPasswordView", params: { token } };
+  }
+
   // 動態更改頁面標題
   document.title = to.meta.title ? to.meta.title : "一加一等於 11";
 
@@ -104,7 +118,8 @@ router.beforeEach((to) => {
     token == "" &&
     to.name !== "SignInView" &&
     to.name !== "SignUpView" &&
-    to.name !== "ForgetView"
+    to.name !== "ForgetView" &&
+    to.name !== "ResetPasswordView"
   ) {
     clearToken();
     return { name: "SignInView" };

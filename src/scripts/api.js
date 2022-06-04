@@ -41,8 +41,12 @@ export const apiDelComment = (id) => axios.delete(`${api}/comments/${id}`);
 
 // Forget
 export const apiForgetPassword = (data) => axios.post(`${api}/forget`, data);
-export const apiModifyPassword = (data) =>
-  axios.post(`${api}/forget/update`, data);
+export const apiModifyPassword = (customToken, data) =>
+  axios.post(`${api}/forget/Update`, data, {
+    headers: {
+      Authorization: `Bearer ${customToken}`,
+    },
+  });
 
 // Follow
 export const apiGetFollow = (data) =>

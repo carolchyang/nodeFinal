@@ -1,8 +1,11 @@
+import router from "@/router";
 import { defineStore } from "pinia";
 import {
   apiGetProfile,
   apiUpdateProfile,
   apiUpdatePassword,
+  apiForgetPassword,
+  apiModifyPassword,
 } from "@/scripts/api";
 import statusStore from "./statusStore";
 import modalStore from "./modalStore";
@@ -101,6 +104,49 @@ export default defineStore("userStore", {
           status.pushMessage({
             style: "danger",
             content: err.response.data.message || "更新密碼失敗",
+          });
+          status.toggleLoading(false);
+        });
+    },
+    // 寄信重設 Email
+    async sendForgetEmail(data) {
+      status.toggleLoading(true);
+      await apiForgetPassword(data)
+        .then(() => {
+          // 開啟 msgModal 提示訊息
+          modal.toggleMsgModal({
+            title: "信件已寄出，請收取郵件",
+            content: "請至信箱收取重設密碼信，若 1 天內沒收到信再請嘗試一次~",
+          });
+
+          status.toggleLoading(false);
+        })
+        .catch((err) => {
+          modal.toggleMsgModal({
+            title: "驗證信箱失敗",
+            content: err.response.data.message || "驗證信箱失敗，再請確認信箱",
+          });
+          status.toggleLoading(false);
+        });
+    },
+    // 重設密碼 - 收取郵件
+    async modifyPassword(token, data) {
+      status.toggleLoading(true);
+      await apiModifyPassword(token, data)
+        .then(() => {
+          // 開啟 msgModal 提示訊息
+          modal.toggleMsgModal({
+            title: "重設密碼成功",
+            content: "請使用新密碼登入喔~",
+          });
+
+          router.push("/sigin");
+          status.toggleLoading(false);
+        })
+        .catch((err) => {
+          modal.toggleMsgModal({
+            title: "重設密碼失敗",
+            content: err.response.data.message || "重設密碼失敗",
           });
           status.toggleLoading(false);
         });
