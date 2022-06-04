@@ -24,7 +24,7 @@ export default defineStore("commentStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "取得回覆失敗",
+            content: err.response?.data?.message || "取得回覆失敗",
           });
           status.isLoading = false;
         });
@@ -34,7 +34,6 @@ export default defineStore("commentStore", {
       status.isLoading = true;
       await apiCreateComment(data)
         .then(() => {
-          this.getComments();
           status.pushMessage({
             style: "dark",
             content: "已建立貼文",
@@ -44,7 +43,7 @@ export default defineStore("commentStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "建立回覆失敗",
+            content: err.response?.data?.message || "建立回覆失敗",
           });
           status.isLoading = false;
         });
@@ -54,7 +53,6 @@ export default defineStore("commentStore", {
       status.isLoading = true;
       await apiDelComment(id)
         .then(() => {
-          this.getComments();
           modal.closeDelModal();
           status.pushMessage({
             style: "dark",
@@ -66,7 +64,7 @@ export default defineStore("commentStore", {
           modal.closeDelModal();
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "刪除回覆失敗",
+            content: err.response?.data?.message || "刪除回覆失敗",
           });
           status.isLoading = false;
         });

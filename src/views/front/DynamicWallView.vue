@@ -36,7 +36,6 @@
     :data="posts"
     :profile="profile"
     :likePostArray="likePostArray"
-    :comments="comments"
     @get-all="getAll"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
@@ -123,7 +122,6 @@ export default {
       await this.getProfile();
       await this.getAll();
       await this.getLikes();
-      await this.getComments();
     },
     // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
@@ -134,14 +132,13 @@ export default {
     ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
     ...mapActions(postStore, ["getPosts", "delPost"]),
     ...mapActions(likeStore, ["getLikes", "clickLike", "delLike"]),
-    ...mapActions(commentStore, ["getComments", "createComment", "delComment"]),
+    ...mapActions(commentStore, ["createComment", "delComment"]),
   },
   computed: {
     ...mapState(modalStore, ["modal", "modalItem"]),
     ...mapState(userStore, ["profile"]),
     ...mapState(postStore, ["posts", "pagination"]),
     ...mapState(likeStore, ["likes", "likePostArray"]),
-    ...mapState(commentStore, ["comments"]),
   },
   components: {
     ArticleComponent,

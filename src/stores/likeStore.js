@@ -39,7 +39,7 @@ export default defineStore("likeStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "取得按讚失敗",
+            content: err.response?.data?.message || "取得按讚失敗",
           });
           status.isLoading = false;
         });
@@ -67,7 +67,7 @@ export default defineStore("likeStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "按讚失敗",
+            content: err.response?.data?.message || "按讚失敗",
           });
           status.isLoading = false;
         });
@@ -87,7 +87,7 @@ export default defineStore("likeStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "取消按讚失敗",
+            content: err.response?.data?.message || "取消按讚失敗",
           });
           status.isLoading = false;
         });

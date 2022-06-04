@@ -112,7 +112,7 @@ export default {
         .catch((err) => {
           this.pushMessage({
             style: "danger",
-            content: err.response.data.message || "登入失敗",
+            content: err.response?.data?.message || "登入失敗",
           });
           this.toggleLoading(false);
         });

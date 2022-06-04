@@ -56,7 +56,7 @@ export default defineStore("userStore", {
           status.pushMessage({
             style: "danger",
             content:
-              err.response.data.message || "取得個人資料失敗，請重新登入",
+              err.response?.data?.message || "取得個人資料失敗，請重新登入",
           });
           status.isLoading = false;
         });
@@ -81,7 +81,7 @@ export default defineStore("userStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "更新失敗",
+            content: err.response?.data?.message || "更新失敗",
           });
           status.toggleLoading(false);
         });
@@ -104,7 +104,7 @@ export default defineStore("userStore", {
         .catch((err) => {
           status.pushMessage({
             style: "danger",
-            content: err.response.data.message || "更新密碼失敗",
+            content: err.response?.data?.message || "更新密碼失敗",
           });
           status.toggleLoading(false);
         });
@@ -125,7 +125,8 @@ export default defineStore("userStore", {
         .catch((err) => {
           modal.toggleMsgModal({
             title: "驗證信箱失敗",
-            content: err.response.data.message || "驗證信箱失敗，再請確認信箱",
+            content:
+              err.response?.data?.message || "驗證信箱失敗，再請確認信箱",
           });
           status.toggleLoading(false);
         });
@@ -147,7 +148,7 @@ export default defineStore("userStore", {
         .catch((err) => {
           modal.toggleMsgModal({
             title: "重設密碼失敗",
-            content: err.response.data.message || "重設密碼失敗",
+            content: err.response?.data?.message || "重設密碼失敗",
           });
           status.toggleLoading(false);
         });
