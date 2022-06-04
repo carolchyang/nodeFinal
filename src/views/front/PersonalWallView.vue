@@ -72,7 +72,6 @@
     :data="posts"
     :profile="profile"
     :likePostArray="likePostArray"
-    @get-all="getAll"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
     @to-personalwall="toPersonalWall"

@@ -54,6 +54,14 @@ const routes = [
           title: "新增貼文",
         },
       },
+      {
+        path: "singlepost/:id",
+        name: "SinglePostView",
+        component: () => import("../views/front/SinglePostView.vue"),
+        meta: {
+          title: "新增貼文",
+        },
+      },
     ],
   },
   {

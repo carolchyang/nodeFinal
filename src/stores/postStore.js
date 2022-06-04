@@ -58,7 +58,6 @@ export default defineStore("postStore", {
     },
     // 建立貼文
     async createPost(data) {
-      console.log(data);
       status.isLoading = true;
       await apiCreatePost(data)
         .then(() => {
@@ -70,7 +69,6 @@ export default defineStore("postStore", {
           status.isLoading = false;
         })
         .catch((err) => {
-          console.log(err);
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "建立貼文失敗",
