@@ -15,7 +15,7 @@ const routes = [
         },
       },
       {
-        path: "personalwall",
+        path: "personalwall/:id",
         name: "PersonalWallView",
         component: () => import("../views/front/PersonalWallView.vue"),
         meta: {
@@ -31,9 +31,9 @@ const routes = [
         },
       },
       {
-        path: "track",
-        name: "TrackView",
-        component: () => import("../views/front/TrackView.vue"),
+        path: "follow",
+        name: "FollowView",
+        component: () => import("../views/front/FollowView.vue"),
         meta: {
           title: "追蹤名單",
         },
@@ -81,6 +81,14 @@ const routes = [
     },
   },
   {
+    path: "/reset",
+    name: "ResetPasswordView",
+    component: () => import("../views/ResetPasswordView.vue"),
+    meta: {
+      title: "重設密碼",
+    },
+  },
+  {
     path: "/:pathMath(.*)*",
     component: () => import("../views/NotFound.vue"),
   },
@@ -88,14 +96,21 @@ const routes = [
 
 const router = createRouter({
   history: createWebHashHistory(),
+  linkExactActiveClass: "active",
   routes,
 });
 
 router.beforeEach((to) => {
+  // 若是從信箱收取重設密碼信，則直接跳轉至 ResetPasswordView
+  if (to.fullPath.startsWith("/reset/")) {
+    const token = to.fullPath.split("/reset/").pop();
+    return { name: "ResetPasswordView", params: { token } };
+  }
+
   // 動態更改頁面標題
   document.title = to.meta.title ? to.meta.title : "一加一等於 11";
 
-  // 判斷 token 及前往頁面來決定是否導向登入頁
+  // 判斷 token 及前往頁面來決定是否導向登入頁、註冊頁、忘記密碼頁、重設密碼頁
 
   const token = getToken();
 
@@ -103,7 +118,8 @@ router.beforeEach((to) => {
     token == "" &&
     to.name !== "SignInView" &&
     to.name !== "SignUpView" &&
-    to.name !== "ForgetView"
+    to.name !== "ForgetView" &&
+    to.name !== "ResetPasswordView"
   ) {
     clearToken();
     return { name: "SignInView" };

@@ -10,7 +10,7 @@ import { localize, setLocale } from "@vee-validate/i18n";
 import zhTW from "@vee-validate/i18n/dist/locale/zh_TW.json";
 
 import emitter from "@/scripts/emitter";
-import { pushMessage } from "@/scripts/methods";
+import { getTime, getDiffTime } from "@/scripts/methods";
 
 import App from "./App.vue";
 import router from "./router";
@@ -27,6 +27,15 @@ defineRule("password", (value, [limit]) => {
   }
   return true;
 });
+defineRule("nickanem", (value, [limit]) => {
+  if (value.length > limit) {
+    return `暱稱 不能大於 ${limit} 字元`;
+  }
+  if (value.length == 0) {
+    return "暱稱 為必填";
+  }
+  return true;
+});
 configure({
   generateMessage: localize({ zh_TW: zhTW }),
   validateOnInput: true, // 調整為輸入字元立即進行驗證
@@ -36,7 +45,8 @@ setLocale("zh_TW");
 const pinia = createPinia();
 const app = createApp(App);
 app.config.globalProperties.$emitter = emitter;
-app.config.globalProperties.$pushMessage = pushMessage;
+app.config.globalProperties.$getTime = getTime;
+app.config.globalProperties.$getDiffTime = getDiffTime;
 app.use(router);
 app.use(VueAxios, axios);
 app.use(pinia);

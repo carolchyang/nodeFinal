@@ -4,10 +4,10 @@
     <main class="container py-11">
       <div class="row">
         <div class="col-12 col-lg-8">
-          <router-view></router-view>
+          <router-view :key="$route.fullPath"></router-view>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-4 position-relative">
           <AsideComponent></AsideComponent>
         </div>
       </div>

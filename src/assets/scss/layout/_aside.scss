@@ -7,7 +7,7 @@
 }
 
 .asideContent {
-  max-width: 21.875rem;
+  max-width: 28rem;
   margin: 0.5rem auto;
   padding: 0.5rem 2rem;
   background: $secondary;
@@ -18,18 +18,21 @@
 .asideList {
   padding: 0 0.75rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   li:not(:last-child) {
-    margin-right: 1.5rem;
+    margin-right: 0.5rem;
   }
 }
 
 .asideLink {
   display: flex;
   align-items: center;
+  min-width: 3.125rem;
   color: $dark;
-  &:hover {
+  &:hover,
+  &.active {
+    color: $primary;
     .asideLinkIcon {
       background-color: $primary;
       color: $white;
@@ -51,7 +54,8 @@
 
 @include media-breakpoint-up(lg) {
   .aside {
-    position: relative;
+    position: sticky;
+    top: 3rem;
     bottom: auto;
     left: auto;
     right: auto;

@@ -29,7 +29,20 @@
             aria-labelledby="dropdownMenuLink"
           >
             <li class="bg-white border border-2 border-bottom-0">
-              <router-link to="/" class="dropdown-item">我的貼文牆</router-link>
+              <a
+                href="#"
+                @click.prevent="toPersonalWall"
+                class="dropdown-item"
+                :class="{
+                  active:
+                    $route.name === 'PersonalWallView' && 'router-link-active',
+                }"
+              >
+                我的貼文牆
+              </a>
+            </li>
+            <li class="bg-white border border-2 border-bottom-0">
+              <router-link to="/" class="dropdown-item">全體動態牆</router-link>
             </li>
             <li class="bg-white border border-2 border-bottom-0">
               <router-link to="/profile" class="dropdown-item">
@@ -53,11 +66,20 @@
 </template>
 
 <script>
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import userStore from "@/stores/userStore";
 
 export default {
   name: "NavbarComponent",
+  methods: {
+    // 轉至 PersonalWall 頁面
+    toPersonalWall() {
+      const _id = this.profile._id;
+      this.togglePersonalInfo(this.profile);
+      this.$router.push({ path: `/personalwall/${_id}` });
+    },
+    ...mapActions(userStore, ["togglePersonalInfo"]),
+  },
   computed: {
     ...mapState(userStore, ["profile"]),
   },

@@ -40,7 +40,9 @@
     >
       <VForm
         v-slot="{ errors, meta }"
-        @submit="updateProfile"
+        id="profileForm"
+        enctype="multipart/form-data"
+        @submit="submitProfile"
         ref="profileForm"
       >
         <div
@@ -50,16 +52,21 @@
         ></div>
         <div
           class="bgCoverRounded mx-auto mb-4"
+          :style="{ backgroundImage: 'url(' + profile.photo + ')' }"
+          v-else-if="profile.photo"
+        ></div>
+        <div
+          class="bgCoverRounded mx-auto mb-4"
           :class="{ profileUserPhoto: !tempImg.photo }"
           v-else
         ></div>
         <div class="fileBtn text-center mb-4">
-          <label for="file">上傳大頭照</label>
+          <label for="photo">上傳大頭照</label>
           <input
             type="file"
             accept="image/*"
-            id="file"
-            ref="uploadFile"
+            id="photo"
+            name="photo"
             @change="uploadFile"
           />
           <small class="d-block mt-2 text-danger">{{ tempImg.msg }}</small>
@@ -68,17 +75,17 @@
           <label for="nickname" class="form-label">暱稱</label>
           <VField
             type="text"
-            id="nickname"
+            id="name"
             placeholder="請輸入暱稱"
-            name="暱稱"
+            name="name"
             class="form-control"
-            :class="{ 'is-invalid': errors['暱稱'] }"
-            rules=""
+            :class="{ 'is-invalid': errors['name'] }"
+            rules="nickanem:8"
             v-model="tempProfile.name"
             required
           ></VField>
           <error-message
-            name="暱稱"
+            name="name"
             class="invalid-feedback text-danger"
           ></error-message>
         </div>
@@ -88,7 +95,7 @@
             <VField
               type="radio"
               id="male"
-              name="性別"
+              name="gender"
               class="form-check-input"
               value="male"
               v-model="tempProfile.gender"
@@ -100,7 +107,7 @@
             <VField
               type="radio"
               id="female"
-              name="性別"
+              name="gender"
               class="form-check-input"
               value="female"
               v-model="tempProfile.gender"
@@ -197,7 +204,7 @@ export default {
   data() {
     return {
       tempImg: {
-        photo: "",
+        photo: this.profile?.photo || "",
         msg: "",
       },
     };
@@ -209,36 +216,46 @@ export default {
       const form = this.$refs.passwordForm;
       this.updatePassword(form);
     },
-    // 上傳圖片
+    // 瀏覽圖片
     uploadFile(e) {
+      // 先清空圖片資料
+
       this.tempImg = {
-        photo: "",
+        photo: this.profile?.photo || "",
         msg: "",
       };
+      // 取得上傳的檔案
       const file = e.target.files[0];
+      // 篩選圖片格式及大小
       if (file) {
         const { size, type } = file;
         if (!type.startsWith("image/")) {
           this.tempImg.msg = "請確認圖片格式";
-        } else if (size > 102400) {
-          this.tempImg.msg = "圖片檔案不能超過 100 KB";
+        } else if (size > 1048576) {
+          this.tempImg.msg = "圖片檔案不能超過 1 MB";
         } else {
+          // 放入瀏覽圖
           this.tempImg.photo = URL.createObjectURL(file);
-          this.tempImg.msg = "";
         }
       }
     },
     // 切換表單
     toggleForm(name) {
       if (name == "profile") {
+        this.$refs.profileForm.resetForm();
         this.tempImg = {
-          photo: "",
+          photo: this.profile?.photo || "",
           msg: "",
         };
         this.getProfile();
       } else {
         this.$refs.passwordForm.resetForm();
       }
+    },
+    // 建立貼文
+    submitProfile() {
+      const formData = new FormData(document.getElementById("profileForm"));
+      this.updateProfile(formData);
     },
     ...mapActions(statusStore, ["pushMessage", "toggleLoading"]),
     ...mapActions(userStore, ["getProfile", "updateProfile", "updatePassword"]),

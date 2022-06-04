@@ -8,8 +8,16 @@
         張貼動態
       </router-link>
       <ul class="asideList">
-        <li class="d-none d-lg-flex mb-9">
-          <router-link to="/" class="asideLink">
+        <li class="mb-lg-8">
+          <a
+            href="#"
+            class="asideLink"
+            :class="{
+              active:
+                $route.name === 'PersonalWallView' && 'router-link-active',
+            }"
+            @click.prevent="toPersonalWall"
+          >
             <img
               :src="profile.photo"
               class="thumbnail thumbnail-xl"
@@ -20,18 +28,21 @@
               class="thumbnail thumbnail-xl"
               v-else
             />
-            <h5 class="ms-4 fw-bolder">{{ profile.name }}</h5>
-          </router-link>
+            <h5 class="d-none d-lg-block ms-4 fw-bolder">
+              {{ profile.name }} 的貼文牆
+            </h5>
+          </a>
         </li>
-        <li class="d-lg-none">
+        <li class="mb-lg-8">
           <router-link to="/" class="asideLink">
             <div class="asideLinkIcon">
               <i class="bi bi-house-door"></i>
             </div>
+            <h5 class="d-none d-lg-block ms-4 fw-bolder">全體動態牆</h5>
           </router-link>
         </li>
         <li class="mb-lg-8">
-          <router-link to="/track" class="asideLink">
+          <router-link to="/follow" class="asideLink">
             <div class="asideLinkIcon">
               <i class="bi bi-bell"></i>
             </div>
@@ -59,11 +70,20 @@
 </template>
 
 <script>
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import userStore from "@/stores/userStore";
 
 export default {
   name: "AsideComponent",
+  methods: {
+    // 轉至 PersonalWall 頁面
+    toPersonalWall() {
+      const _id = this.profile._id;
+      this.togglePersonalInfo(this.profile);
+      this.$router.push({ path: `/personalwall/${_id}` });
+    },
+    ...mapActions(userStore, ["togglePersonalInfo"]),
+  },
   computed: {
     ...mapState(userStore, ["profile"]),
   },

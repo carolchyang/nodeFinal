@@ -15,6 +15,6 @@
 
 <script>
 export default {
-  name: "DynamicWallView",
+  name: "EmptyCardComponent",
 };
 </script>

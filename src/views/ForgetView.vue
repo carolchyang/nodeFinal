@@ -5,7 +5,7 @@
       <VForm
         class="signinForm"
         v-slot="{ errors, meta }"
-        @submit="checkAccount"
+        @submit="sendForgetEmail(user)"
         ref="form"
       >
         <img src="../assets/images/MetaWall.png" class="mx-auto" />
@@ -44,9 +44,21 @@
       </VForm>
     </div>
   </section>
+
+  <MsgModalComponent>
+    <template #default>
+      <h3 class="mb-5">{{ modal.title }}</h3>
+      <p class="text-gray-700">{{ modal.content }}</p>
+    </template>
+  </MsgModalComponent>
 </template>
 
 <script>
+import MsgModalComponent from "@/components/MsgModalComponent.vue";
+import { mapState, mapActions } from "pinia";
+import modalStore from "@/stores/modalStore";
+import userStore from "@/stores/userStore";
+
 export default {
   name: "SignUpView",
   data() {
@@ -57,10 +69,13 @@ export default {
     };
   },
   methods: {
-    // 驗證帳號
-    checkAccount() {
-      this.$refs.form.resetForm();
-    },
+    ...mapActions(userStore, ["sendForgetEmail"]),
+  },
+  computed: {
+    ...mapState(modalStore, ["modal"]),
+  },
+  components: {
+    MsgModalComponent,
   },
 };
 </script>
