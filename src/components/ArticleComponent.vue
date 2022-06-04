@@ -175,6 +175,7 @@ export default {
     };
   },
   methods: {
+    // 開啟 DelModal
     delData(id, delItem) {
       const modal = {
         type: delItem,
@@ -184,6 +185,7 @@ export default {
       };
       this.toggleDelModal(modal);
     },
+    // 新增回覆
     addComment(e, id) {
       const content = e.target.nextElementSibling.value.trim();
       if (content) {

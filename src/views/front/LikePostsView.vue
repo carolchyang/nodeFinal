@@ -72,10 +72,12 @@ import likeStore from "@/stores/likeStore";
 export default {
   name: "PersonalWallView",
   methods: {
+    // 取得按讚貼文
     getLikeAll(page = 1) {
       const data = { page };
       this.getLikes(data);
     },
+    // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
       const { _id } = data;
       this.togglePersonInfo(data);

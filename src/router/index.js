@@ -110,7 +110,7 @@ router.beforeEach((to) => {
   // 動態更改頁面標題
   document.title = to.meta.title ? to.meta.title : "一加一等於 11";
 
-  // 判斷 token 及前往頁面來決定是否導向登入頁
+  // 判斷 token 及前往頁面來決定是否導向登入頁、註冊頁、忘記密碼頁、重設密碼頁
 
   const token = getToken();
 

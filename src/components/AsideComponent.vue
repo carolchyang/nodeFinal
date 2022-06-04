@@ -76,6 +76,7 @@ import userStore from "@/stores/userStore";
 export default {
   name: "AsideComponent",
   methods: {
+    // 轉至 PersonalWall 頁面
     toPersonalWall() {
       const _id = this.profile._id;
       this.togglePersonInfo(this.profile);

@@ -80,6 +80,7 @@ export default defineStore("followStore", {
           status.isLoading = false;
         });
     },
+    // 取得追蹤 id、被追蹤者 id
     getFollowArray() {
       const array = [];
       this.follows.forEach((item) => {

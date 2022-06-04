@@ -81,6 +81,7 @@ export default {
     };
   },
   methods: {
+    // 送出重設密碼表單
     submit() {
       this.modifyPassword(this.token, this.tempPassword);
     },

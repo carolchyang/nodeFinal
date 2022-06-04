@@ -16,6 +16,7 @@ const modal = modalStore();
 export default defineStore("userStore", {
   state: () => {
     return {
+      // 個人資料
       profile: {
         name: "",
         photo: "",
@@ -151,7 +152,7 @@ export default defineStore("userStore", {
           status.toggleLoading(false);
         });
     },
-    // 更新用戶 data 資料
+    // 更新個人資料頁面 - 個人資料暫存表格
     updateProfileData(data) {
       this.tempProfile = {
         name: data.name,
@@ -159,6 +160,7 @@ export default defineStore("userStore", {
         gender: data.gender,
       };
     },
+    // 取得 personalWall 用戶資料
     togglePersonInfo(data) {
       this.personInfo = data;
     },

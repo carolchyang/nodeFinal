@@ -84,6 +84,7 @@ export default {
     };
   },
   methods: {
+    // 取得貼文資訊
     getAll(page = 1) {
       const data = {};
       data.page = page;
@@ -94,6 +95,7 @@ export default {
       }
       this.getPosts(data);
     },
+    // 刪除回覆/貼文
     async delData() {
       let modalType = "delComment";
       if (this.modal.type == "post") {
@@ -102,6 +104,7 @@ export default {
       await this[modalType](this.modal.id);
       await this.getAll();
     },
+    // 切換按讚狀態
     async toggleLike({ id, type }) {
       let toggleType = "clickLike";
       if (type == "cancel") {
@@ -110,16 +113,19 @@ export default {
       await this[toggleType](id);
       await this.getAll();
     },
+    // 建立回覆
     async updateComments(data) {
       await this.createComment(data);
       await this.getAll();
     },
+    // 取得全部動態牆所需資料
     async init() {
       await this.getProfile();
       await this.getAll();
       await this.getLikes();
       await this.getComments();
     },
+    // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
       const { _id } = data;
       this.togglePersonInfo(data);

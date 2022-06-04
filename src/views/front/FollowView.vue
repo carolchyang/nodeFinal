@@ -66,6 +66,7 @@ import userStore from "@/stores/userStore";
 export default {
   name: "FollowView",
   methods: {
+    // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
       const { _id } = data;
       this.togglePersonInfo(data);

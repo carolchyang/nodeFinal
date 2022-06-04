@@ -87,6 +87,7 @@ export default {
         }
       }
     },
+    // 重設圖片
     resetImg() {
       this.tempImg = {
         url: "",

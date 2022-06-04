@@ -47,6 +47,7 @@ export default {
   props: ["pagination"],
   emits: ["get-all"],
   methods: {
+    // 換頁功能
     changePage(page = 1) {
       this.$emit("get-all", page);
     },
