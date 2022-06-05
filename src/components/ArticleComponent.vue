@@ -30,6 +30,7 @@
             </span>
           </div>
         </a>
+        <!-- 若為此登入者所發的文 && postId 沒有值 - 非單一貼文頁面 -->
         <a
           href="#"
           class="cardCloseBtn"

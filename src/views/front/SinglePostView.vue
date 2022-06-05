@@ -1,9 +1,9 @@
 <template>
+  <!-- 單一頁面不給刪除 postId 用來判定是否可以刪除 -->
   <ArticleComponent
     :postId="postId"
     :data="posts"
     :profile="profile"
-    :likePostArray="likePostArray"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
     @to-personalwall="toPersonalWall"
@@ -42,35 +42,28 @@ export default {
       await this.createComment(data);
       await this.getPosts({ postId: this.postId });
     },
-    // 取得全部動態牆所需資料
-    async init() {
-      await this.getProfile();
-      await this.getPosts({ postId: this.postId });
-      await this.getLikes();
-    },
     // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
       const { _id } = data;
       this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
-    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(postStore, ["getPosts"]),
-    ...mapActions(likeStore, ["getLikes", "clickLike", "delLike"]),
+    ...mapActions(likeStore, ["clickLike", "delLike"]),
     ...mapActions(commentStore, ["createComment", "delComment"]),
   },
   computed: {
     ...mapState(modalStore, ["modal", "modalItem"]),
     ...mapState(userStore, ["profile"]),
     ...mapState(postStore, ["posts"]),
-    ...mapState(likeStore, ["likes", "likePostArray"]),
   },
   components: {
     ArticleComponent,
   },
   created() {
     this.postId = this.$route.params.id;
-    this.init();
+    this.getPosts({ postId: this.postId });
   },
 };
 </script>
