@@ -1,6 +1,7 @@
 import router from "@/router";
 import { defineStore } from "pinia";
 import {
+  apiUserSignIn,
   apiGetProfile,
   apiUpdateProfile,
   apiUpdatePassword,
@@ -9,6 +10,7 @@ import {
 } from "@/scripts/api";
 import statusStore from "./statusStore";
 import modalStore from "./modalStore";
+import { setToken } from "@/scripts/methods";
 
 const status = statusStore();
 const modal = modalStore();
@@ -43,10 +45,38 @@ export default defineStore("userStore", {
     };
   },
   actions: {
+    // 登入
+    signIn(form, data) {
+      status.toggleLoading(true);
+      apiUserSignIn(data)
+        .then((res) => {
+          // 設定 profile 資料
+          this.profile = res.data.data.user;
+
+          // 設定 token
+          const { token } = res.data.data.token;
+          setToken(token);
+
+          // 重置表單
+          form.resetForm();
+
+          status.toggleLoading(false);
+
+          // 轉至全體動態牆頁面
+          router.push({ name: "DynamicWallView" });
+        })
+        .catch((err) => {
+          status.pushMessage({
+            style: "danger",
+            content: err.response?.data?.message || "登入失敗",
+          });
+          status.toggleLoading(false);
+        });
+    },
     // 取得用戶資料
-    async getProfile() {
+    async getProfile(id) {
       status.isLoading = true;
-      await apiGetProfile()
+      await apiGetProfile(id)
         .then((res) => {
           this.profile = res.data.data;
           this.updateProfileData(this.profile);

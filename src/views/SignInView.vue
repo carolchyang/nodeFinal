@@ -5,7 +5,7 @@
       <VForm
         class="signinForm"
         v-slot="{ errors, meta }"
-        @submit="signIn"
+        @submit="submitSignin"
         ref="form"
       >
         <img src="../assets/images/MetaWall.png" class="mx-auto" />
@@ -81,9 +81,7 @@
 
 <script>
 import { mapActions } from "pinia";
-import statusStore from "@/stores/statusStore";
-import { apiUserSignIn } from "@/scripts/api";
-import { setToken } from "@/scripts/methods";
+import userStore from "@/stores/userStore";
 
 export default {
   name: "SignInView",
@@ -97,27 +95,11 @@ export default {
   },
   methods: {
     // 登入
-    signIn() {
-      this.toggleLoading(true);
-      apiUserSignIn(this.user)
-        .then((res) => {
-          // 重置表單
-          this.$refs.form.resetForm();
-          this.toggleLoading(false);
-          // 設定 token
-          const { token } = res.data.data;
-          setToken(token);
-          this.$router.push({ name: "DynamicWallView" });
-        })
-        .catch((err) => {
-          this.pushMessage({
-            style: "danger",
-            content: err.response?.data?.message || "登入失敗",
-          });
-          this.toggleLoading(false);
-        });
+    submitSignin() {
+      const form = this.$refs.form;
+      this.signIn(form, this.user);
     },
-    ...mapActions(statusStore, ["pushMessage", "toggleLoading"]),
+    ...mapActions(userStore, ["signIn"]),
   },
 };
 </script>
