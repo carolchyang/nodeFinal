@@ -55,7 +55,7 @@ export default defineStore("userStore", {
           this.profile = res.data.data.user;
 
           // 設定 token
-          const { token } = res.data.data.token;
+          const { token } = res.data.data;
           setToken(token);
 
           // 重置表單
