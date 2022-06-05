@@ -20,7 +20,6 @@ import NavbarComponent from "@/components/NavbarComponent";
 import AsideComponent from "@/components/AsideComponent";
 import { mapActions } from "pinia";
 import statusStore from "@/stores/statusStore";
-import userStore from "@/stores/userStore";
 import { getToken, clearToken } from "@/scripts/methods";
 
 export default {
@@ -40,9 +39,6 @@ export default {
       if (token) {
         this.checkSuccess = true;
         this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
-
-        // 取得用戶資料
-        this.getProfile();
       } else {
         this.checkSuccess = false;
         this.pushMessage({
@@ -59,7 +55,6 @@ export default {
       this.$router.push("/signin");
     },
     ...mapActions(statusStore, ["pushMessage"]),
-    ...mapActions(userStore, ["getProfile"]),
   },
   created() {
     this.checkSignIn();
