@@ -87,10 +87,8 @@ export default {
       const data = {};
       data.page = page;
       data.reverse = this.reverse;
+      data.content = this.keyword;
 
-      if (this.keyword) {
-        data.content = this.keyword;
-      }
       this.getPosts(data);
     },
     // 刪除回覆/貼文

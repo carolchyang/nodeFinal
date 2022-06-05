@@ -28,13 +28,12 @@ export default defineStore("postStore", {
         sort: 1,
         // 排序順序 1 新到舊 0 舊到新
         reverse: data?.reverse == 0 ? 0 : 1,
+        // 關鍵字篩選 若沒有則返回所有貼文
+        content: data?.content,
       };
 
-      // // 搜尋貼文內容
-      if (data?.content) {
-        tempData.content = data.content;
-        // 指定使用者
-      } else if (data?.userId) {
+      // 指定使用者
+      if (data?.userId) {
         tempData.userId = data.userId;
         // 指定貼文
       } else if (data?.postId) {
