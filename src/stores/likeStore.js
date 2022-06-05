@@ -44,26 +44,26 @@ export default defineStore("likeStore", {
     },
     // 按讚
     async clickLike(id) {
-      status.isLoading = true;
+      status.toggleIconLoading(id, "like");
       await apiClickLike(id)
         .then(() => {
           status.pushMessage({
             style: "dark",
             content: "已按讚",
           });
-          status.isLoading = false;
+          status.toggleIconLoading("", "");
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "按讚失敗",
           });
-          status.isLoading = false;
+          status.toggleIconLoading("", "");
         });
     },
     // 取消按讚
     async delLike(id, nowPage) {
-      status.isLoading = true;
+      status.toggleIconLoading(id, "like");
       await apiDelLike(id)
         .then(() => {
           // 若為 likePost 頁面
@@ -74,14 +74,14 @@ export default defineStore("likeStore", {
             style: "dark",
             content: "取消按讚成功",
           });
-          status.isLoading = false;
+          status.toggleIconLoading("", "");
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "取消按讚失敗",
           });
-          status.isLoading = false;
+          status.toggleIconLoading("", "");
         });
     },
   },

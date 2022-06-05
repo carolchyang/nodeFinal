@@ -67,6 +67,7 @@ import PaginationComponent from "@/components/PaginationComponent";
 import DelModalComponent from "@/components/DelModalComponent.vue";
 import { mapState, mapActions } from "pinia";
 import modalStore from "@/stores/modalStore";
+import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
 import postStore from "@/stores/postStore";
 import likeStore from "@/stores/likeStore";
@@ -120,6 +121,7 @@ export default {
       this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
+    ...mapActions(statusStore, ["togglePersonalInfo"]),
     ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(postStore, ["getPosts", "delPost"]),
     ...mapActions(likeStore, ["clickLike", "delLike"]),

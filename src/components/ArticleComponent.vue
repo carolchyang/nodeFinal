@@ -81,9 +81,9 @@
         </div>
         <div class="d-flex align-items-center">
           <img
-            :src="item.userId?.photo"
+            :src="profile?.photo"
             class="thumbnail thumbnail-lg me-2"
-            v-if="item.userId?.photo"
+            v-if="profile?.photo"
           />
           <img
             src="../assets/images/user_default.png"
@@ -92,7 +92,7 @@
           />
           <div class="input-group flex-row-reverse">
             <button
-              class="effectBtn btn btn-primary py-2 px-6 px-sm-10"
+              class="effectBtn btn btn-primary py-2 px-5 px-sm-10"
               type="button"
               id="sendmessage"
               @click.prevent="addComment($event, item._id)"
@@ -170,11 +170,6 @@ export default {
   name: "ArticleComponent",
   props: ["data", "profile", "postId"],
   emits: ["toggle-like", "update-comments", "to-personalwall"],
-  data() {
-    return {
-      content: "",
-    };
-  },
   methods: {
     // 開啟 DelModal
     delData(id, delItem) {
@@ -189,10 +184,12 @@ export default {
     // 新增回覆
     addComment(e, id) {
       // 取得回覆內容
-      const content = e.target.nextElementSibling.value.trim();
+      const target = e.target.nextElementSibling;
+      let content = target.value.trim();
       if (content) {
         this.$emit("update-comments", { postId: id, content });
       }
+      target.value = "";
     },
     ...mapActions(modalStore, ["toggleDelModal"]),
   },

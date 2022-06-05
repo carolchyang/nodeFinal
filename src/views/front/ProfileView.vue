@@ -247,12 +247,12 @@ export default {
           photo: this.profile?.photo || "",
           msg: "",
         };
-        this.getProfile();
+        this.getProfile(this.profile._id);
       } else {
         this.$refs.passwordForm.resetForm();
       }
     },
-    // 建立貼文
+    // 更新個人資料
     submitProfile() {
       const formData = new FormData(document.getElementById("profileForm"));
       this.updateProfile(formData);

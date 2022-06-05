@@ -31,26 +31,22 @@ export default defineStore("commentStore", {
     },
     // 建立回覆
     async createComment(data) {
-      status.isLoading = true;
       await apiCreateComment(data)
         .then(() => {
           status.pushMessage({
             style: "dark",
-            content: "已建立貼文",
+            content: "已建立回覆",
           });
-          status.isLoading = false;
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "建立回覆失敗",
           });
-          status.isLoading = false;
         });
     },
     // 刪除回覆
     async delComment(id) {
-      status.isLoading = true;
       await apiDelComment(id)
         .then(() => {
           modal.closeDelModal();
@@ -58,7 +54,6 @@ export default defineStore("commentStore", {
             style: "dark",
             content: "刪除回覆成功",
           });
-          status.isLoading = false;
         })
         .catch((err) => {
           modal.closeDelModal();
@@ -66,7 +61,6 @@ export default defineStore("commentStore", {
             style: "danger",
             content: err.response?.data?.message || "刪除回覆失敗",
           });
-          status.isLoading = false;
         });
     },
   },

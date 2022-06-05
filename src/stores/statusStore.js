@@ -4,6 +4,10 @@ export default defineStore("statusStore", {
   state: () => ({
     messages: [],
     isLoading: false,
+    iconLoading: {
+      id: "",
+      type: "",
+    },
   }),
   actions: {
     // 開啟 Toast
@@ -25,6 +29,13 @@ export default defineStore("statusStore", {
     // 切換 loading
     toggleLoading(status) {
       this.isLoading = status;
+    },
+    // 切換 loading 狀態
+    toggleIconLoading(id, type) {
+      this.iconLoading = {
+        id,
+        type,
+      };
     },
   },
 });
