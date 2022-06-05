@@ -18,17 +18,31 @@
         <button
           type="button"
           class="btn btn-warning py-2 px-8 border-dark fw-bold shadow"
+          :disabled="loadingStatus"
           @click.prevent="toggleFollow(personalInfo._id, 'create')"
           v-if="!isFollow"
         >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+            v-if="loadingStatus"
+          ></span>
           追蹤
         </button>
         <button
           type="button"
           class="btn btn-secondary py-2 px-8 border-dark fw-bold shadow"
+          :disabled="loadingStatus"
           @click.prevent="toggleFollow(personalInfo._id, 'del')"
           v-else
         >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+            v-if="loadingStatus"
+          ></span>
           取消追蹤
         </button>
       </div>
@@ -116,6 +130,7 @@ export default {
       personalId: "",
       keyword: "",
       reverse: 1,
+      loadingStatus: false,
     };
   },
   methods: {
@@ -140,15 +155,18 @@ export default {
     },
     // 切換按讚狀態
     async toggleLike({ id, type }) {
+      // this.loadingStatus = true;
       let toggleType = "clickLike";
       if (type == "cancel") {
         toggleType = "delLike";
       }
       await this[toggleType](id);
       await this.getAll();
+      // this.loadingStatus = false;
     },
     // 切換追蹤狀態
     async toggleFollow(_id, type) {
+      this.loadingStatus = true;
       let toggleType = "";
       let id = "";
       // 若為取消追蹤則取得 followId
@@ -164,7 +182,8 @@ export default {
         toggleType = "createFollow";
         id = _id;
       }
-      this[toggleType](id);
+      await this[toggleType](id);
+      this.loadingStatus = false;
     },
     // 建立回覆
     async updateComments(data) {
