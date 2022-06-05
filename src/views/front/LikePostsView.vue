@@ -1,6 +1,5 @@
 <template>
   <h1 class="header">我按讚的貼文</h1>
-
   <ul class="mb-6">
     <li class="card py-4" v-for="(item, key) in likes" :key="key">
       <div class="d-flex align-items-center">
@@ -42,7 +41,7 @@
         <a
           href="#"
           class="d-none d-md-block link-dark me-3 me-sm-9 text-center fw-bold text-decoration-none"
-          @click.prevent="delLike(item.post?._id)"
+          @click.prevent="delLike(item.post?._id, 'likePage')"
         >
           <i class="bi bi-hand-thumbs-up text-primary fs-4 lh-sm"></i>
           <span class="d-block">取消</span>
@@ -83,7 +82,7 @@ export default {
       this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
-    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(likeStore, ["getLikes", "delLike"]),
   },
   computed: {
@@ -92,9 +91,8 @@ export default {
   components: {
     EmptyCardComponent,
   },
-  async created() {
-    await this.getProfile();
-    await this.getLikeAll();
+  created() {
+    this.getLikeAll();
   },
 };
 </script>

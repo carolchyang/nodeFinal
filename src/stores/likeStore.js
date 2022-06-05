@@ -10,7 +10,6 @@ export default defineStore("likeStore", {
   state: () => {
     return {
       likes: [],
-      likePostArray: [],
     };
   },
   actions: {
@@ -33,7 +32,6 @@ export default defineStore("likeStore", {
       await apiGetLikePosts(id, tempData)
         .then((res) => {
           this.likes = res.data.data.likes;
-          this.getLikePostArray();
           status.isLoading = false;
         })
         .catch((err) => {
@@ -43,14 +41,6 @@ export default defineStore("likeStore", {
           });
           status.isLoading = false;
         });
-    },
-    // 所有按讚文章 ID
-    getLikePostArray() {
-      const array = [];
-      this.likes.forEach((item) => {
-        array.push(item.post._id);
-      });
-      this.likePostArray = array;
     },
     // 按讚
     async clickLike(id) {
@@ -72,10 +62,14 @@ export default defineStore("likeStore", {
         });
     },
     // 取消按讚
-    async delLike(id) {
+    async delLike(id, nowPage) {
       status.isLoading = true;
       await apiDelLike(id)
         .then(() => {
+          // 若為 likePost 頁面
+          if (nowPage == "likePage") {
+            this.getLikes();
+          }
           status.pushMessage({
             style: "dark",
             content: "取消按讚成功",
