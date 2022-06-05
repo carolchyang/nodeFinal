@@ -57,7 +57,6 @@ export default defineStore("likeStore", {
       status.isLoading = true;
       await apiClickLike(id)
         .then(() => {
-          this.getLikes();
           status.pushMessage({
             style: "dark",
             content: "已按讚",
@@ -77,7 +76,6 @@ export default defineStore("likeStore", {
       status.isLoading = true;
       await apiDelLike(id)
         .then(() => {
-          this.getLikes();
           status.pushMessage({
             style: "dark",
             content: "取消按讚成功",

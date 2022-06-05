@@ -35,7 +35,6 @@
   <ArticleComponent
     :data="posts"
     :profile="profile"
-    :likePostArray="likePostArray"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
     @to-personalwall="toPersonalWall"
@@ -97,6 +96,7 @@ export default {
       if (this.modal.type == "post") {
         modalType = "delPost";
       }
+
       await this[modalType](this.modal.id);
       await this.getAll();
     },
@@ -114,28 +114,21 @@ export default {
       await this.createComment(data);
       await this.getAll();
     },
-    // 取得全部動態牆所需資料
-    async init() {
-      await this.getProfile();
-      await this.getAll();
-      await this.getLikes();
-    },
     // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
       const { _id } = data;
       this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
-    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(postStore, ["getPosts", "delPost"]),
-    ...mapActions(likeStore, ["getLikes", "clickLike", "delLike"]),
+    ...mapActions(likeStore, ["clickLike", "delLike"]),
     ...mapActions(commentStore, ["createComment", "delComment"]),
   },
   computed: {
     ...mapState(modalStore, ["modal", "modalItem"]),
     ...mapState(userStore, ["profile"]),
     ...mapState(postStore, ["posts", "pagination"]),
-    ...mapState(likeStore, ["likes", "likePostArray"]),
   },
   components: {
     ArticleComponent,
@@ -144,7 +137,7 @@ export default {
     DelModalComponent,
   },
   created() {
-    this.init();
+    this.getAll();
   },
 };
 </script>

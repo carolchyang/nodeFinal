@@ -52,28 +52,28 @@
           <a
             href="#"
             class="link-primary thumbsIcon"
-            v-if="likePostArray.includes(item._id)"
+            v-if="item.likeCount?.length"
             @click.prevent="
               $emit('toggle-like', { id: item._id, type: 'cancel' })
             "
           >
             <i class="bi bi-hand-thumbs-up fs-4 me-2"></i>
             <span class="me-2">
-              {{ item.likeCount }}
+              {{ item.likeCount?.length }}
             </span>
             <span> 已按讚</span>
           </a>
           <a
             href="#"
             class="link-light thumbsIcon"
-            v-else
+            v-if="!item.likeCount?.length"
             @click.prevent="
               $emit('toggle-like', { id: item._id, type: 'check' })
             "
           >
             <i class="bi bi-hand-thumbs-up fs-4 me-2"></i>
-            <span v-if="item.likeCount > 0">
-              {{ item.likeCount }}
+            <span v-if="item.likeCount?.length">
+              {{ item.likeCount?.length }}
             </span>
             <span v-else> 成為第一個按讚的人 </span>
           </a>
@@ -108,7 +108,7 @@
           </div>
         </div>
       </div>
-      <ul v-if="item.comment !== []">
+      <ul v-if="item.comments?.length">
         <li
           class="position-relative mb-4 p-4 bg-secondary rounded-2"
           v-for="commentItem in item.comments"
@@ -167,7 +167,7 @@ import { mapActions } from "pinia";
 import modalStore from "@/stores/modalStore";
 export default {
   name: "ArticleComponent",
-  props: ["data", "profile", "likePostArray", "postId"],
+  props: ["data", "profile", "postId"],
   emits: ["toggle-like", "update-comments", "to-personalwall"],
   data() {
     return {
@@ -187,6 +187,7 @@ export default {
     },
     // 新增回覆
     addComment(e, id) {
+      // 取得回覆內容
       const content = e.target.nextElementSibling.value.trim();
       if (content) {
         this.$emit("update-comments", { postId: id, content });
