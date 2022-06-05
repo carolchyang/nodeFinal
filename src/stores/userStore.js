@@ -205,7 +205,7 @@ export default defineStore("userStore", {
             content: "請使用新密碼登入喔~",
           });
 
-          router.push("/sigin");
+          router.push("/signin");
           status.toggleLoading(false);
         })
         .catch((err) => {
