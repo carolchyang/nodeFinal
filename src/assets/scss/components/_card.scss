@@ -9,6 +9,22 @@
   &:last-child {
     margin-bottom: 0;
   }
+  &:before {
+    content: "";
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba($secondary, 0.4);
+  }
+  &.disabled {
+    pointer-events: none;
+    &:before {
+      display: block;
+    }
+  }
 }
 
 .cardCloseBtn {

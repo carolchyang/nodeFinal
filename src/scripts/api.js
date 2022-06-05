@@ -9,7 +9,7 @@ export const apiUserSignUp = (data) => axios.post(`${api}/users/sign_up`, data);
 export const apiUserSignIn = (data) => axios.post(`${api}/users/sign_in`, data);
 export const apiUpdatePassword = (data) =>
   axios.post(`${api}/users/updatePassword`, data);
-export const apiGetProfile = () => axios.get(`${api}/users/profile`);
+export const apiGetProfile = (id) => axios.get(`${api}/users/${id}`);
 export const apiUpdateProfile = (data) =>
   axios.post(`${api}/users/profile`, data, {
     headers: {
@@ -17,8 +17,8 @@ export const apiUpdateProfile = (data) =>
       "Content-Type": "multipart/form-data",
     },
   });
-export const apiGetLikePosts = (id, data) =>
-  axios.get(`${api}/users/${id}/likes`, { params: data });
+export const apiGetLikePosts = (data) =>
+  axios.get(`${api}/users/likes`, { params: data });
 
 // Post
 export const apiGetPosts = (data) =>

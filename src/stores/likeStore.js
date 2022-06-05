@@ -10,7 +10,6 @@ export default defineStore("likeStore", {
   state: () => {
     return {
       likes: [],
-      likePostArray: [],
     };
   },
   actions: {
@@ -33,7 +32,6 @@ export default defineStore("likeStore", {
       await apiGetLikePosts(id, tempData)
         .then((res) => {
           this.likes = res.data.data.likes;
-          this.getLikePostArray();
           status.isLoading = false;
         })
         .catch((err) => {
@@ -44,52 +42,46 @@ export default defineStore("likeStore", {
           status.isLoading = false;
         });
     },
-    // 所有按讚文章 ID
-    getLikePostArray() {
-      const array = [];
-      this.likes.forEach((item) => {
-        array.push(item.post._id);
-      });
-      this.likePostArray = array;
-    },
     // 按讚
     async clickLike(id) {
-      status.isLoading = true;
+      status.toggleIconLoading(id, "like");
       await apiClickLike(id)
         .then(() => {
-          this.getLikes();
           status.pushMessage({
             style: "dark",
             content: "已按讚",
           });
-          status.isLoading = false;
+          status.toggleIconLoading("", "");
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "按讚失敗",
           });
-          status.isLoading = false;
+          status.toggleIconLoading("", "");
         });
     },
     // 取消按讚
-    async delLike(id) {
-      status.isLoading = true;
+    async delLike(id, nowPage) {
+      status.toggleIconLoading(id, "like");
       await apiDelLike(id)
         .then(() => {
-          this.getLikes();
+          // 若為 likePost 頁面
+          if (nowPage == "likePage") {
+            this.getLikes();
+          }
           status.pushMessage({
             style: "dark",
             content: "取消按讚成功",
           });
-          status.isLoading = false;
+          status.toggleIconLoading("", "");
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "取消按讚失敗",
           });
-          status.isLoading = false;
+          status.toggleIconLoading("", "");
         });
     },
   },

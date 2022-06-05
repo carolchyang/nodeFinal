@@ -16,7 +16,7 @@ export default defineStore("postStore", {
   },
   actions: {
     // 取得貼文
-    async getPosts(data) {
+    async getPosts(data, type) {
       // 使用 tempData 處理傳入的參數，避免傳進空值造成錯誤
       let tempData = data || {};
       tempData = {
@@ -28,32 +28,41 @@ export default defineStore("postStore", {
         sort: 1,
         // 排序順序 1 新到舊 0 舊到新
         reverse: data?.reverse == 0 ? 0 : 1,
+        // 關鍵字篩選 若沒有則返回所有貼文
+        content: data?.content,
       };
 
-      // // 搜尋貼文內容
-      if (data?.content) {
-        tempData.content = data.content;
-        // 指定使用者
-      } else if (data?.userId) {
+      // 指定使用者
+      if (data?.userId) {
         tempData.userId = data.userId;
         // 指定貼文
       } else if (data?.postId) {
         tempData.postId = data.postId;
       }
 
-      status.isLoading = true;
+      if (!type) {
+        status.isLoading = true;
+      }
       await apiGetPosts(tempData)
         .then((res) => {
           this.posts = res.data.data.data;
           this.pagination = res.data.data.pagination;
-          status.isLoading = false;
+          if (type) {
+            status.toggleIconLoading("", "");
+          } else {
+            status.isLoading = false;
+          }
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "取得貼文失敗",
           });
-          status.isLoading = false;
+          if (type) {
+            status.toggleIconLoading("", "");
+          } else {
+            status.isLoading = false;
+          }
         });
     },
     // 建立貼文
@@ -66,7 +75,6 @@ export default defineStore("postStore", {
             content: "已建立貼文",
           });
           router.push("/");
-          status.isLoading = false;
         })
         .catch((err) => {
           status.pushMessage({

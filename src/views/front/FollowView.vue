@@ -2,7 +2,12 @@
   <h1 class="header">追蹤名單</h1>
 
   <ul class="mb-6">
-    <li class="card" v-for="(item, key) in follows" :key="key">
+    <li
+      class="card"
+      v-for="(item, key) in follows"
+      :key="key"
+      :class="{ disabled: iconLoading.id == item._id }"
+    >
       <div class="d-flex flex-column flex-md-row align-items-center">
         <img
           :src="item.targetUserId?.photo"
@@ -30,7 +35,16 @@
           class="d-none d-md-block link-dark me-3 me-sm-9 text-center fw-bold text-decoration-none"
           @click.prevent="delFollow(item._id)"
         >
-          <i class="bi bi-trash3 text-primary fs-4 lh-sm"></i>
+          <div
+            class="spinner-border"
+            style="width: 1.2rem; height: 1.2rem"
+            role="status"
+            v-if="iconLoading.id == item._id"
+          >
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <i class="bi bi-trash3 text-primary fs-4 lh-sm" v-else></i>
+
           <span class="d-block">取消</span>
         </a>
         <a
@@ -59,8 +73,8 @@
 <script>
 import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
 import { mapState, mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import followStore from "@/stores/followStore";
-import postStore from "@/stores/postStore";
 import userStore from "@/stores/userStore";
 
 export default {
@@ -73,20 +87,22 @@ export default {
       this.$router.push({ path: `/personalwall/${_id}` });
     },
     ...mapActions(followStore, ["getFollows", "delFollow"]),
-    ...mapActions(postStore, ["getPosts"]),
-    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
+    ...mapActions(userStore, [
+      "togglePersonalInfo",
+      "toggleLoading",
+      "toggleIconLoading",
+    ]),
+    ...mapActions(statusStore, ["toggleLoading"]),
   },
   computed: {
+    ...mapState(statusStore, ["loadingStatus", "iconLoading"]),
     ...mapState(followStore, ["follows"]),
-    ...mapState(postStore, ["posts"]),
     ...mapState(userStore, ["profile"]),
   },
   components: {
     EmptyCardComponent,
   },
   async created() {
-    await this.getProfile();
-    await this.getPosts();
     await this.getFollows({ userId: this.profile._id });
   },
 };

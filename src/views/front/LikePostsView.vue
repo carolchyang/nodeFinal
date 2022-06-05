@@ -1,8 +1,12 @@
 <template>
   <h1 class="header">我按讚的貼文</h1>
-
   <ul class="mb-6">
-    <li class="card py-4" v-for="(item, key) in likes" :key="key">
+    <li
+      class="card py-4"
+      v-for="(item, key) in likes"
+      :key="key"
+      :class="{ disabled: iconLoading.id == item.post?._id }"
+    >
       <div class="d-flex align-items-center">
         <a
           href="#"
@@ -42,9 +46,17 @@
         <a
           href="#"
           class="d-none d-md-block link-dark me-3 me-sm-9 text-center fw-bold text-decoration-none"
-          @click.prevent="delLike(item.post?._id)"
+          @click.prevent="delLike(item.post?._id, 'likePage')"
         >
-          <i class="bi bi-hand-thumbs-up text-primary fs-4 lh-sm"></i>
+          <div
+            class="spinner-border"
+            style="width: 1.2rem; height: 1.2rem"
+            role="status"
+            v-if="iconLoading.id == item.post?._id"
+          >
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <i class="bi bi-hand-thumbs-up text-primary fs-4 lh-sm" v-else></i>
           <span class="d-block">取消</span>
         </a>
         <router-link
@@ -66,6 +78,7 @@
 <script>
 import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
 import { mapState, mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
 import likeStore from "@/stores/likeStore";
 
@@ -83,18 +96,19 @@ export default {
       this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
-    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(likeStore, ["getLikes", "delLike"]),
+    ...mapActions(statusStore, ["toggleLoading"]),
   },
   computed: {
     ...mapState(likeStore, ["likes"]),
+    ...mapState(statusStore, ["loadingStatus", "iconLoading"]),
   },
   components: {
     EmptyCardComponent,
   },
-  async created() {
-    await this.getProfile();
-    await this.getLikeAll();
+  created() {
+    this.getLikeAll();
   },
 };
 </script>

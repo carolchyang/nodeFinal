@@ -35,7 +35,6 @@
   <ArticleComponent
     :data="posts"
     :profile="profile"
-    :likePostArray="likePostArray"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
     @to-personalwall="toPersonalWall"
@@ -68,6 +67,7 @@ import PaginationComponent from "@/components/PaginationComponent";
 import DelModalComponent from "@/components/DelModalComponent.vue";
 import { mapState, mapActions } from "pinia";
 import modalStore from "@/stores/modalStore";
+import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
 import postStore from "@/stores/postStore";
 import likeStore from "@/stores/likeStore";
@@ -87,10 +87,8 @@ export default {
       const data = {};
       data.page = page;
       data.reverse = this.reverse;
+      data.content = this.keyword;
 
-      if (this.keyword) {
-        data.content = this.keyword;
-      }
       this.getPosts(data);
     },
     // 刪除回覆/貼文
@@ -99,6 +97,7 @@ export default {
       if (this.modal.type == "post") {
         modalType = "delPost";
       }
+
       await this[modalType](this.modal.id);
       await this.getAll();
     },
@@ -116,28 +115,22 @@ export default {
       await this.createComment(data);
       await this.getAll();
     },
-    // 取得全部動態牆所需資料
-    async init() {
-      await this.getProfile();
-      await this.getAll();
-      await this.getLikes();
-    },
     // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
       const { _id } = data;
       this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
-    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
+    ...mapActions(statusStore, ["togglePersonalInfo"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(postStore, ["getPosts", "delPost"]),
-    ...mapActions(likeStore, ["getLikes", "clickLike", "delLike"]),
+    ...mapActions(likeStore, ["clickLike", "delLike"]),
     ...mapActions(commentStore, ["createComment", "delComment"]),
   },
   computed: {
     ...mapState(modalStore, ["modal", "modalItem"]),
     ...mapState(userStore, ["profile"]),
     ...mapState(postStore, ["posts", "pagination"]),
-    ...mapState(likeStore, ["likes", "likePostArray"]),
   },
   components: {
     ArticleComponent,
@@ -146,7 +139,7 @@ export default {
     DelModalComponent,
   },
   created() {
-    this.init();
+    this.getAll();
   },
 };
 </script>

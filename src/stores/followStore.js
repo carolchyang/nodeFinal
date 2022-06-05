@@ -25,24 +25,21 @@ export default defineStore("followStore", {
         reverse: data?.reverse == 0 ? 0 : 1,
       };
 
-      status.isLoading = true;
       await apiGetFollow(tempData)
         .then((res) => {
           this.follows = res.data.data.data;
           this.getFollowArray();
-          status.isLoading = false;
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "取得追蹤名單失敗",
           });
-          status.isLoading = false;
         });
     },
     // 新增追蹤
+    // 此 ID 為 被追蹤者 ID
     async createFollow(id) {
-      status.isLoading = true;
       await apiCreateFollow({ targetUserId: id })
         .then(() => {
           this.getFollows();
@@ -50,42 +47,43 @@ export default defineStore("followStore", {
             style: "dark",
             content: "已追蹤",
           });
-          status.isLoading = false;
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "新增追蹤失敗",
           });
-          status.isLoading = false;
         });
     },
     // 取消追蹤
+    // 此 ID 為 追蹤 ID
     async delFollow(id) {
-      status.isLoading = true;
+      status.toggleIconLoading(id, "follow");
       await apiDelFollow(id)
         .then(() => {
           this.getFollows();
+          status.toggleIconLoading("", "");
           status.pushMessage({
             style: "dark",
             content: "取消追蹤成功",
           });
-          status.isLoading = false;
         })
         .catch((err) => {
+          status.toggleIconLoading("", "");
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "取消追蹤失敗",
           });
-          status.isLoading = false;
         });
     },
-    // 取得追蹤 id、被追蹤者 id
+    // 取得追蹤 ID、被追蹤者 ID
     getFollowArray() {
       const array = [];
       this.follows.forEach((item) => {
         array.push({
+          // 此追蹤 ID
           followId: item._id,
+          // 被追蹤者 ID
           targetUserId: item.targetUserId._id,
         });
       });
