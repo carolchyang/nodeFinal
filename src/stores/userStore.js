@@ -2,6 +2,7 @@ import router from "@/router";
 import { defineStore } from "pinia";
 import {
   apiUserSignIn,
+  apiUserSignUp,
   apiGetProfile,
   apiUpdateProfile,
   apiUpdatePassword,
@@ -69,6 +70,37 @@ export default defineStore("userStore", {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "登入失敗",
+          });
+          status.toggleLoading(false);
+        });
+    },
+    // 註冊
+    signUp(form, data) {
+      status.toggleLoading(true);
+      apiUserSignUp(data)
+        .then((res) => {
+          // 設定 profile 資料
+          this.profile = res.data.data.user;
+
+          // 設定 token
+          const { token } = res.data.data;
+          setToken(token);
+
+          // 清空表格
+          form.resetForm();
+
+          status.pushMessage({
+            style: "dark",
+            content: "註冊成功",
+          });
+
+          status.toggleLoading(false);
+          router.push({ name: "DynamicWallView" });
+        })
+        .catch((err) => {
+          status.pushMessage({
+            style: "danger",
+            content: err.response?.data?.message || "註冊失敗",
           });
           status.toggleLoading(false);
         });
