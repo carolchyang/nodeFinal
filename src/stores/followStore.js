@@ -43,7 +43,6 @@ export default defineStore("followStore", {
     // 新增追蹤
     // 此 ID 為 被追蹤者 ID
     async createFollow(id) {
-      console.log(id);
       status.isLoading = true;
       await apiCreateFollow({ targetUserId: id })
         .then(() => {

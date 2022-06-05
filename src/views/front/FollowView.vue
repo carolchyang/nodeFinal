@@ -60,7 +60,6 @@
 import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
 import { mapState, mapActions } from "pinia";
 import followStore from "@/stores/followStore";
-import postStore from "@/stores/postStore";
 import userStore from "@/stores/userStore";
 
 export default {
@@ -73,21 +72,17 @@ export default {
       this.$router.push({ path: `/personalwall/${_id}` });
     },
     ...mapActions(followStore, ["getFollows", "delFollow"]),
-    ...mapActions(postStore, ["getPosts"]),
-    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
   },
   computed: {
     ...mapState(followStore, ["follows"]),
-    ...mapState(postStore, ["posts"]),
     ...mapState(userStore, ["profile"]),
   },
   components: {
     EmptyCardComponent,
   },
-  async created() {
-    await this.getProfile();
-    await this.getPosts();
-    await this.getFollows({ userId: this.profile._id });
+  created() {
+    this.getFollows({ userId: this.profile._id });
   },
 };
 </script>
