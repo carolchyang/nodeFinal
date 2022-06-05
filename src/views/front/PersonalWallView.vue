@@ -14,7 +14,7 @@
       <h2 class="text-start h5 fw-bold mx-auto ms-md-0">
         <span class="d-block">{{ personalInfo.name }} 的貼文牆</span>
       </h2>
-      <div class="d-none">
+      <div v-if="personalInfo._id !== profile._id">
         <button
           type="button"
           class="btn btn-warning py-2 px-8 border-dark fw-bold shadow"
@@ -26,7 +26,7 @@
         <button
           type="button"
           class="btn btn-secondary py-2 px-8 border-dark fw-bold shadow"
-          @click.prevent="toggleFollow(followId, 'del')"
+          @click.prevent="toggleFollow(personalInfo._id, 'del')"
           v-else
         >
           取消追蹤
@@ -71,7 +71,6 @@
   <ArticleComponent
     :data="posts"
     :profile="profile"
-    :likePostArray="likePostArray"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
     @to-personalwall="toPersonalWall"
@@ -79,7 +78,7 @@
   ></ArticleComponent>
 
   <EmptyCardComponent v-else>
-    <template #default>目前尚無動態，新增一則貼文吧！</template>
+    <template #default>目前尚無動態，趕快叫他新增貼文吧！</template>
   </EmptyCardComponent>
 
   <PaginationComponent
@@ -115,25 +114,20 @@ export default {
   data() {
     return {
       personalId: "",
-      personaInfo: {},
       keyword: "",
       reverse: 1,
-      isFollow: false,
-      followId: "",
     };
   },
   methods: {
     // 取得貼文資料
-    async getAll(page = 1) {
+    getAll(page = 1) {
       const data = {};
       data.page = page;
       data.reverse = this.reverse;
       data.userId = this.personalId;
+      data.content = this.keyword;
 
-      if (this.keyword) {
-        data.content = this.keyword;
-      }
-      await this.getPosts(data);
+      this.getPosts(data);
     },
     // 刪除回覆/貼文
     async delData() {
@@ -153,17 +147,29 @@ export default {
       await this[toggleType](id);
       await this.getAll();
     },
+    // 切換追蹤狀態
+    async toggleFollow(_id, type) {
+      let toggleType = "";
+      let id = "";
+      // 若為取消追蹤則取得 followId
+      if (type == "del") {
+        toggleType = "delFollow";
+        this.followArray.forEach((item) => {
+          if (item.targetUserId == _id) {
+            id = item.followId;
+          }
+        });
+        // 追蹤
+      } else {
+        toggleType = "createFollow";
+        id = _id;
+      }
+      this[toggleType](id);
+    },
     // 建立回覆
     async updateComments(data) {
       await this.createComment(data);
       await this.getAll();
-    },
-    // 取得個人動態牆所需資料
-    async init() {
-      await this.getProfile();
-      await this.getAll();
-      await this.getLikes();
-      await this.getFollows();
     },
     // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
@@ -171,17 +177,26 @@ export default {
       this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
-    ...mapActions(userStore, ["getProfile", "togglePersonalInfo"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(postStore, ["getPosts", "delPost"]),
-    ...mapActions(likeStore, ["getLikes", "clickLike", "delLike"]),
+    ...mapActions(likeStore, ["clickLike", "delLike"]),
     ...mapActions(commentStore, ["createComment", "delComment"]),
     ...mapActions(followStore, ["getFollows", "createFollow", "delFollow"]),
   },
   computed: {
+    // 判斷是否追蹤
+    isFollow() {
+      let val = false;
+      this.followArray.forEach((item) => {
+        if (item.targetUserId == this.personalInfo?._id) {
+          val = true;
+        }
+      });
+      return val;
+    },
     ...mapState(modalStore, ["modal", "modalItem"]),
     ...mapState(userStore, ["profile", "personalInfo"]),
     ...mapState(postStore, ["posts", "pagination"]),
-    ...mapState(likeStore, ["likes", "likePostArray"]),
     ...mapState(followStore, ["follows", "followArray"]),
   },
   components: {
@@ -193,11 +208,8 @@ export default {
   created() {
     // 取得 personalWall 用戶資料
     this.personalId = this.$route.params.id;
-    if (!this.personalInfo._id) {
-      this.$router.push("/");
-    } else {
-      this.init();
-    }
+    this.getAll();
+    this.getFollows();
   },
 };
 </script>

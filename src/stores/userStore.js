@@ -110,8 +110,9 @@ export default defineStore("userStore", {
       status.isLoading = true;
       await apiGetProfile(id)
         .then((res) => {
-          this.profile = res.data.data;
+          this.profile = res.data.data.user;
           this.updateProfileData(this.profile);
+
           status.isLoading = false;
         })
         .catch((err) => {

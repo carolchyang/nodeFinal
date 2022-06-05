@@ -41,7 +41,9 @@ export default defineStore("followStore", {
         });
     },
     // 新增追蹤
+    // 此 ID 為 被追蹤者 ID
     async createFollow(id) {
+      console.log(id);
       status.isLoading = true;
       await apiCreateFollow({ targetUserId: id })
         .then(() => {
@@ -61,6 +63,7 @@ export default defineStore("followStore", {
         });
     },
     // 取消追蹤
+    // 此 ID 為 追蹤 ID
     async delFollow(id) {
       status.isLoading = true;
       await apiDelFollow(id)
@@ -80,12 +83,14 @@ export default defineStore("followStore", {
           status.isLoading = false;
         });
     },
-    // 取得追蹤 id、被追蹤者 id
+    // 取得追蹤 ID、被追蹤者 ID
     getFollowArray() {
       const array = [];
       this.follows.forEach((item) => {
         array.push({
+          // 此追蹤 ID
           followId: item._id,
+          // 被追蹤者 ID
           targetUserId: item.targetUserId._id,
         });
       });
