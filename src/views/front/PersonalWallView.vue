@@ -146,22 +146,22 @@ export default {
     // 刪除回覆/貼文
     async delData() {
       let modalType = "delComment";
+      let page = this.pagination?.current_pages;
       if (this.modal.type == "post") {
         modalType = "delPost";
+        page = 1;
       }
       await this[modalType](this.modal.id);
-      await this.getAll();
+      await this.getAll(page);
     },
     // 切換按讚狀態
     async toggleLike({ id, type }) {
-      // this.loadingStatus = true;
       let toggleType = "clickLike";
       if (type == "cancel") {
         toggleType = "delLike";
       }
       await this[toggleType](id);
-      await this.getAll();
-      // this.loadingStatus = false;
+      await this.getAll(this.pagination?.current_pages);
     },
     // 切換追蹤狀態
     async toggleFollow(_id, type) {
@@ -187,7 +187,7 @@ export default {
     // 建立回覆
     async updateComments(data) {
       await this.createComment(data);
-      await this.getAll();
+      await this.getAll(this.pagination?.current_pages);
     },
     ...mapActions(postStore, ["getPosts", "delPost"]),
     ...mapActions(likeStore, ["clickLike", "delLike"]),
