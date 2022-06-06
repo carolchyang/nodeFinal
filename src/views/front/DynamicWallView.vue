@@ -37,7 +37,6 @@
     :profile="profile"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
-    @to-personalwall="toPersonalWall"
     v-if="posts.length"
   ></ArticleComponent>
 
@@ -67,7 +66,6 @@ import PaginationComponent from "@/components/PaginationComponent";
 import DelModalComponent from "@/components/DelModalComponent.vue";
 import { mapState, mapActions } from "pinia";
 import modalStore from "@/stores/modalStore";
-import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
 import postStore from "@/stores/postStore";
 import likeStore from "@/stores/likeStore";
@@ -115,14 +113,7 @@ export default {
       await this.createComment(data);
       await this.getAll();
     },
-    // 轉至 PersonalWall 頁面
-    toPersonalWall(data) {
-      const { _id } = data;
-      this.togglePersonalInfo(data);
-      this.$router.push({ path: `/personalwall/${_id}` });
-    },
-    ...mapActions(statusStore, ["togglePersonalInfo"]),
-    ...mapActions(userStore, ["togglePersonalInfo"]),
+
     ...mapActions(postStore, ["getPosts", "delPost"]),
     ...mapActions(likeStore, ["clickLike", "delLike"]),
     ...mapActions(commentStore, ["createComment", "delComment"]),

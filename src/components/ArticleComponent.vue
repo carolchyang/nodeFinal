@@ -109,67 +109,27 @@
           </div>
         </div>
       </div>
-      <ul v-if="item.comments?.length">
-        <li
-          class="position-relative mb-4 p-4 bg-secondary rounded-2"
-          v-for="commentItem in item.comments"
-          :key="commentItem._id"
-        >
-          <div class="mb-3">
-            <a
-              href="#"
-              class="cardImgLink d-flex align-items-center"
-              @click.prevent="
-                $emit('to-personalwall', {
-                  _id: commentItem._id,
-                  name: commentItem.user?.name,
-                  photo: commentItem.user?.photo,
-                })
-              "
-            >
-              <img
-                :src="commentItem.user?.photo"
-                class="thumbnail thumbnail-lg"
-                v-if="commentItem.user?.photo"
-              />
-              <img
-                src="../assets/images/user_default.png"
-                class="thumbnail thumbnail-lg"
-                v-else
-              />
-              <div class="fw-bold ms-3">
-                {{ commentItem.user?.name }}
-                <span class="d-block mt-1 text-light fs-7 fw-normal">
-                  {{ $getTime(commentItem.createdAt) }}
-                </span>
-              </div>
-            </a>
-            <a
-              href="#"
-              class="cardCloseBtn"
-              @click.prevent="delData(commentItem._id, 'comment')"
-              v-if="profile._id === commentItem.user?._id"
-            >
-              <i class="bi bi-x-lg"></i>
-            </a>
-          </div>
-
-          <p class="ms-12">
-            {{ commentItem.content }}
-          </p>
-        </li>
-      </ul>
+      <!-- 以組件方式排序 item.comments -->
+      <CommentComponent
+        :is="item._id"
+        :comments="item.comments"
+        @del-data="delData"
+        @to-personalwall="toPersonalWall"
+      ></CommentComponent>
     </li>
   </ul>
 </template>
 
 <script>
+import CommentComponent from "@/components/CommentComponent.vue";
 import { mapActions } from "pinia";
 import modalStore from "@/stores/modalStore";
+import userStore from "@/stores/userStore";
+
 export default {
   name: "ArticleComponent",
   props: ["data", "profile", "postId"],
-  emits: ["toggle-like", "update-comments", "to-personalwall"],
+  emits: ["toggle-like", "update-comments"],
   methods: {
     // 開啟 DelModal
     delData(id, delItem) {
@@ -191,7 +151,17 @@ export default {
       }
       target.value = "";
     },
+    // 轉至 PersonalWall 頁面
+    toPersonalWall(data) {
+      const { _id } = data;
+      this.togglePersonalInfo(data);
+      this.$router.push({ path: `/personalwall/${_id}` });
+    },
     ...mapActions(modalStore, ["toggleDelModal"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
+  },
+  components: {
+    CommentComponent,
   },
 };
 </script>

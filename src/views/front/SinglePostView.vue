@@ -6,7 +6,6 @@
     :profile="profile"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
-    @to-personalwall="toPersonalWall"
     v-if="posts.length"
   ></ArticleComponent>
 </template>
@@ -42,13 +41,6 @@ export default {
       await this.createComment(data);
       await this.getPosts({ postId: this.postId });
     },
-    // 轉至 PersonalWall 頁面
-    toPersonalWall(data) {
-      const { _id } = data;
-      this.togglePersonalInfo(data);
-      this.$router.push({ path: `/personalwall/${_id}` });
-    },
-    ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(postStore, ["getPosts"]),
     ...mapActions(likeStore, ["clickLike", "delLike"]),
     ...mapActions(commentStore, ["createComment", "delComment"]),
