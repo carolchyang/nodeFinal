@@ -45,7 +45,6 @@ export default defineStore("postStore", {
       }
       await apiGetPosts(tempData)
         .then((res) => {
-          console.log("posts");
           this.posts = res.data.data.data;
           this.pagination = res.data.data.pagination;
           if (type) {
