@@ -1,6 +1,6 @@
 <template>
   <ul class="mb-10">
-    <li class="card" v-for="(item, key) in data" :key="key">
+    <li class="card" v-for="item in data" :key="item._id">
       <div class="d-flex align-items-center mb-4">
         <a
           href="#"
@@ -54,7 +54,7 @@
           <a
             href="#"
             class="link-primary thumbsIcon"
-            v-if="item.likeCount?.length"
+            v-if="item.likeCount.includes(profile._id)"
             @click.prevent="
               $emit('toggle-like', { id: item._id, type: 'cancel' })
             "
@@ -68,7 +68,7 @@
           <a
             href="#"
             class="link-light thumbsIcon"
-            v-if="!item.likeCount?.length"
+            v-else
             @click.prevent="
               $emit('toggle-like', { id: item._id, type: 'check' })
             "
