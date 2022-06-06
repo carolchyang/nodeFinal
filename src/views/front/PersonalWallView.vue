@@ -217,10 +217,15 @@ export default {
     DelModalComponent,
   },
   created() {
-    // 取得 personalWall 用戶資料
-    this.personalId = this.$route.params.id;
-    this.getAll();
-    this.getFollows();
+    // 判定是否有此用戶資料，若無則跳轉至首頁
+    if (!this.personalInfo._id) {
+      this.$router.push("/");
+    } else {
+      // 取得 personalWall 用戶資料
+      this.personalId = this.$route.params.id;
+      this.getAll();
+      this.getFollows();
+    }
   },
 };
 </script>
