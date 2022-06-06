@@ -5,10 +5,10 @@
       v-for="commentItem in newComment"
       :key="commentItem._id"
     >
-      <div class="mb-3">
+      <div class="d-flex align-items-center mb-3">
         <a
           href="#"
-          class="cardImgLink d-flex align-items-center"
+          class="cardImgLink"
           @click.prevent="
             $emit('to-personalwall', {
               _id: commentItem._id,
@@ -27,13 +27,13 @@
             class="thumbnail thumbnail-lg"
             v-else
           />
-          <div class="fw-bold ms-3">
-            {{ commentItem.user?.name }}
-            <span class="d-block mt-1 text-light fs-7 fw-normal">
-              {{ $getTime(commentItem.createAt) }}
-            </span>
-          </div>
         </a>
+        <div class="fw-bold ms-3">
+          {{ commentItem.user?.name }}
+          <span class="d-block mt-1 text-light fs-7 fw-normal">
+            {{ $getTime(commentItem.createAt) }}
+          </span>
+        </div>
         <a
           href="#"
           class="cardCloseBtn"

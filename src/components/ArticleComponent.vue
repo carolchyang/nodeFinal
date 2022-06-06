@@ -1,12 +1,12 @@
 <template>
   <ul class="mb-10">
     <li class="card" v-for="(item, key) in data" :key="key">
-      <div class="mb-4">
+      <div class="d-flex align-items-center mb-4">
         <a
           href="#"
-          class="cardImgLink d-flex align-items-center"
+          class="cardImgLink"
           @click.prevent="
-            $emit('to-personalwall', {
+            toPersonalWall({
               _id: item.userId?._id,
               name: item.userId?.name,
               photo: item.userId?.photo,
@@ -23,13 +23,14 @@
             class="thumbnail thumbnail-xl"
             v-else
           />
-          <div class="fw-bold ms-4">
-            {{ item.userId?.name }}
-            <span class="d-block mt-1 text-light fs-7 fw-normal">
-              {{ $getTime(item.createAt) }}
-            </span>
-          </div>
         </a>
+        <div class="fw-bold ms-4">
+          {{ item.userId?.name }}
+          <span class="d-block mt-1 text-light fs-7 fw-normal">
+            {{ $getTime(item.createAt) }}
+          </span>
+        </div>
+
         <!-- 若為此登入者所發的文 && postId 沒有值 - 非單一貼文頁面 -->
         <a
           href="#"
