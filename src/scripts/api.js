@@ -9,7 +9,7 @@ export const apiUserSignUp = (data) => axios.post(`${api}/users/sign_up`, data);
 export const apiUserSignIn = (data) => axios.post(`${api}/users/sign_in`, data);
 export const apiUpdatePassword = (data) =>
   axios.post(`${api}/users/updatePassword`, data);
-export const apiGetProfile = (id) => axios.get(`${api}/users/${id}`);
+export const apiGetProfile = () => axios.get(`${api}/users/profile`);
 export const apiUpdateProfile = (data) =>
   axios.post(`${api}/users/profile`, data, {
     headers: {

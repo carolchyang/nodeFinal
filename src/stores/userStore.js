@@ -51,9 +51,6 @@ export default defineStore("userStore", {
       status.toggleLoading(true);
       apiUserSignIn(data)
         .then((res) => {
-          // 設定 profile 資料
-          this.profile = res.data.data.user;
-
           // 設定 token
           const { token } = res.data.data;
           setToken(token);
@@ -79,9 +76,6 @@ export default defineStore("userStore", {
       status.toggleLoading(true);
       apiUserSignUp(data)
         .then((res) => {
-          // 設定 profile 資料
-          this.profile = res.data.data.user;
-
           // 設定 token
           const { token } = res.data.data;
           setToken(token);
@@ -106,11 +100,11 @@ export default defineStore("userStore", {
         });
     },
     // 取得用戶資料
-    async getProfile(id) {
+    async getProfile() {
       status.isLoading = true;
-      await apiGetProfile(id)
+      await apiGetProfile()
         .then((res) => {
-          this.profile = res.data.data.user;
+          this.profile = res.data.data;
           this.updateProfileData(this.profile);
 
           status.isLoading = false;

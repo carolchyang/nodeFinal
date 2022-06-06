@@ -247,7 +247,7 @@ export default {
           photo: this.profile?.photo || "",
           msg: "",
         };
-        this.getProfile(this.profile._id);
+        this.getProfile();
       } else {
         this.$refs.passwordForm.resetForm();
       }
