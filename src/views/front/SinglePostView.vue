@@ -8,10 +8,15 @@
     @update-comments="updateComments"
     v-if="posts.length"
   ></ArticleComponent>
+
+  <EmptyCardComponent v-else>
+    <template #default>此貼文已被刪除！</template>
+  </EmptyCardComponent>
 </template>
 
 <script>
 import ArticleComponent from "@/components/ArticleComponent.vue";
+import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
 import { mapState, mapActions } from "pinia";
 import modalStore from "@/stores/modalStore";
 import userStore from "@/stores/userStore";
@@ -52,6 +57,7 @@ export default {
   },
   components: {
     ArticleComponent,
+    EmptyCardComponent,
   },
   created() {
     this.postId = this.$route.params.id;
