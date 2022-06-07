@@ -52,9 +52,12 @@
 
   <DelModalComponent @del-data="delData">
     <template #default>
-      確定要刪除此則
-      <b class="text-danger">{{ modal.title }}</b>
-      ？（刪除後無法回復）
+      <p class="d-md-inline-block mb-3 mb-md-0">
+        確定要刪除此則
+        <b class="text-danger">{{ modal.title }}</b>
+        ？
+      </p>
+      <span>（刪除後無法回復）</span>
     </template>
   </DelModalComponent>
 </template>
