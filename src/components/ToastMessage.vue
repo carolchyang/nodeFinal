@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="toast-container position-fixed mt-27 me-12 end-0"
-    v-if="messages.length"
-  >
+  <div class="toast-container" v-if="messages.length">
     <div
       class="toast show align-items-center bg-white"
       v-for="(msg, key) in messages"

@@ -1,6 +1,9 @@
 .textTruncate {
-  max-width: 25rem;
+  max-width: 9rem;
   overflow: hidden;
+  @include media-breakpoint-up(sm) {
+    max-width: 25rem;
+  }
   p {
     text-overflow: ellipsis;
     white-space: nowrap;

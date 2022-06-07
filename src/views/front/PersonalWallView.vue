@@ -11,13 +11,14 @@
       v-else
     />
     <div class="headerContent">
-      <h2 class="text-start h5 fw-bold mx-auto ms-md-0">
-        <span class="d-block">{{ personalInfo.name }} 的貼文牆</span>
+      <h2 class="text-start h5 fw-bold me-auto">
+        <span>{{ personalInfo.name }}</span>
+        <span class="d-block d-sm-block">的貼文牆</span>
       </h2>
       <div v-if="personalInfo._id !== profile._id">
         <button
           type="button"
-          class="btn btn-warning py-2 px-8 border-dark fw-bold shadow"
+          class="btn btn-warning py-2 px-6 px-sm-8 border-dark fw-bold shadow"
           @click.prevent="toggleFollow(personalInfo._id, 'create')"
           v-if="!isFollow"
         >
@@ -33,7 +34,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-secondary py-2 px-8 border-dark fw-bold shadow"
+          class="btn btn-secondary py-2 px-4 px-sm-8 border-dark fw-bold shadow"
           @click.prevent="toggleFollow(personalInfo._id, 'del')"
           v-else
         >

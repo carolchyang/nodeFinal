@@ -10,10 +10,10 @@
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-body pb-5">
+        <div class="modal-body pb-0 pb-md-5 text-center">
           <slot></slot>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer justify-content-center">
           <button
             type="button"
             class="btn btn-outline-light py-2 px-8"
