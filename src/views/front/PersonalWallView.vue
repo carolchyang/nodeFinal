@@ -18,7 +18,6 @@
         <button
           type="button"
           class="btn btn-warning py-2 px-8 border-dark fw-bold shadow"
-          :disabled="loadingStatus"
           @click.prevent="toggleFollow(personalInfo._id, 'create')"
           v-if="!isFollow"
         >
@@ -26,14 +25,15 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            v-if="loadingStatus"
+            v-if="
+              partLoading.type == 'follow' && partLoading.id == personalInfo._id
+            "
           ></span>
           追蹤
         </button>
         <button
           type="button"
           class="btn btn-secondary py-2 px-8 border-dark fw-bold shadow"
-          :disabled="loadingStatus"
           @click.prevent="toggleFollow(personalInfo._id, 'del')"
           v-else
         >
@@ -41,7 +41,9 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            v-if="loadingStatus"
+            v-if="
+              partLoading.type == 'follow' && partLoading.id == personalInfo._id
+            "
           ></span>
           取消追蹤
         </button>
@@ -54,7 +56,7 @@
       <select
         class="form-select form-select-sm"
         v-model="reverse"
-        @change="getAll()"
+        @change="getAll(1, 'loading')"
       >
         <option value="1">由新到舊</option>
         <option value="0">由舊到新</option>
@@ -74,7 +76,7 @@
           class="effectBtn btn btn-primary py-0 px-3"
           type="button"
           id="search"
-          @click.prevent="getAll()"
+          @click.prevent="getAll(1, 'loading')"
         >
           <i class="bi bi-search h3"></i>
         </button>
@@ -87,7 +89,6 @@
     :profile="profile"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
-    @to-personalwall="toPersonalWall"
     v-if="posts.length"
   ></ArticleComponent>
 
@@ -116,6 +117,7 @@ import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
 import PaginationComponent from "@/components/PaginationComponent";
 import DelModalComponent from "@/components/DelModalComponent.vue";
 import { mapState, mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import modalStore from "@/stores/modalStore";
 import userStore from "@/stores/userStore";
 import postStore from "@/stores/postStore";
@@ -130,43 +132,50 @@ export default {
       personalId: "",
       keyword: "",
       reverse: 1,
-      loadingStatus: false,
     };
   },
   methods: {
     // 取得貼文資料
-    getAll(page = 1) {
+    async getAll(page = 1, isLoading) {
+      if (isLoading) {
+        this.toggleLoading(true);
+      }
       const data = {};
       data.page = page;
       data.reverse = this.reverse;
       data.userId = this.personalId;
       data.content = this.keyword;
 
-      this.getPosts(data);
+      await this.getPosts(data);
+      this.toggleLoading(false);
     },
     // 刪除回覆/貼文
     async delData() {
+      this.togglePartLoading(this.modal.id, this.modal.type);
       let modalType = "delComment";
-      if (this.modal.type == "post") {
+      let page = this.pagination?.current_pages;
+      if (this.modal.type == "delpost") {
         modalType = "delPost";
+        page = 1;
       }
       await this[modalType](this.modal.id);
-      await this.getAll();
+      await this.getAll(page);
+      this.togglePartLoading("", "");
     },
     // 切換按讚狀態
     async toggleLike({ id, type }) {
-      // this.loadingStatus = true;
+      this.togglePartLoading(id, "like");
       let toggleType = "clickLike";
       if (type == "cancel") {
         toggleType = "delLike";
       }
       await this[toggleType](id);
-      await this.getAll();
-      // this.loadingStatus = false;
+      await this.getAll(this.pagination?.current_pages);
+      this.togglePartLoading("", "");
     },
     // 切換追蹤狀態
     async toggleFollow(_id, type) {
-      this.loadingStatus = true;
+      this.togglePartLoading(_id, "follow");
       let toggleType = "";
       let id = "";
       // 若為取消追蹤則取得 followId
@@ -183,20 +192,17 @@ export default {
         id = _id;
       }
       await this[toggleType](id);
-      this.loadingStatus = false;
+      await this.getFollows();
+      this.togglePartLoading("", "");
     },
     // 建立回覆
     async updateComments(data) {
+      this.togglePartLoading(data.postId, "comment");
       await this.createComment(data);
-      await this.getAll();
+      await this.getAll(this.pagination?.current_pages);
+      this.togglePartLoading("", "");
     },
-    // 轉至 PersonalWall 頁面
-    toPersonalWall(data) {
-      const { _id } = data;
-      this.togglePersonalInfo(data);
-      this.$router.push({ path: `/personalwall/${_id}` });
-    },
-    ...mapActions(userStore, ["togglePersonalInfo"]),
+    ...mapActions(statusStore, ["toggleLoading", "togglePartLoading"]),
     ...mapActions(postStore, ["getPosts", "delPost"]),
     ...mapActions(likeStore, ["clickLike", "delLike"]),
     ...mapActions(commentStore, ["createComment", "delComment"]),
@@ -213,7 +219,8 @@ export default {
       });
       return val;
     },
-    ...mapState(modalStore, ["modal", "modalItem"]),
+    ...mapState(modalStore, ["modal"]),
+    ...mapState(statusStore, ["partLoading"]),
     ...mapState(userStore, ["profile", "personalInfo"]),
     ...mapState(postStore, ["posts", "pagination"]),
     ...mapState(followStore, ["follows", "followArray"]),
@@ -224,11 +231,17 @@ export default {
     PaginationComponent,
     DelModalComponent,
   },
-  created() {
+  async created() {
+    // 判定是否有此用戶資料，若無則跳轉至首頁
+    if (!this.personalInfo._id) {
+      return this.$router.push("/");
+    }
     // 取得 personalWall 用戶資料
+    this.toggleLoading(true);
     this.personalId = this.$route.params.id;
-    this.getAll();
-    this.getFollows();
+    await this.getAll();
+    await this.getFollows();
+    this.toggleLoading(false);
   },
 };
 </script>

@@ -16,7 +16,7 @@ export default defineStore("postStore", {
   },
   actions: {
     // 取得貼文
-    async getPosts(data, type) {
+    async getPosts(data) {
       // 使用 tempData 處理傳入的參數，避免傳進空值造成錯誤
       let tempData = data || {};
       tempData = {
@@ -40,34 +40,20 @@ export default defineStore("postStore", {
         tempData.postId = data.postId;
       }
 
-      if (!type) {
-        status.isLoading = true;
-      }
       await apiGetPosts(tempData)
         .then((res) => {
           this.posts = res.data.data.data;
           this.pagination = res.data.data.pagination;
-          if (type) {
-            status.toggleIconLoading("", "");
-          } else {
-            status.isLoading = false;
-          }
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "取得貼文失敗",
           });
-          if (type) {
-            status.toggleIconLoading("", "");
-          } else {
-            status.isLoading = false;
-          }
         });
     },
     // 建立貼文
     async createPost(data) {
-      status.isLoading = true;
       await apiCreatePost(data)
         .then(() => {
           status.pushMessage({
@@ -81,12 +67,10 @@ export default defineStore("postStore", {
             style: "danger",
             content: err.response?.data?.message || "建立貼文失敗",
           });
-          status.isLoading = false;
         });
     },
     // 刪除貼文
     async delPost(id) {
-      status.isLoading = true;
       await apiDelPost(id)
         .then(() => {
           /**
@@ -98,7 +82,6 @@ export default defineStore("postStore", {
             style: "dark",
             content: "刪除貼文成功",
           });
-          status.isLoading = false;
         })
         .catch((err) => {
           modal.closeDelModal();
@@ -106,7 +89,6 @@ export default defineStore("postStore", {
             style: "danger",
             content: err.response?.data?.message || "刪除貼文失敗",
           });
-          status.isLoading = false;
         });
     },
   },

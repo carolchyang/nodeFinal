@@ -11,7 +11,7 @@ import {
 } from "@/scripts/api";
 import statusStore from "./statusStore";
 import modalStore from "./modalStore";
-import { setToken } from "@/scripts/methods";
+import { setToken, clearToken } from "@/scripts/methods";
 
 const status = statusStore();
 const modal = modalStore();
@@ -32,11 +32,6 @@ export default defineStore("userStore", {
         photo: "",
         gender: "",
       },
-      // 個人資料頁面 - 密碼暫存表格
-      tempPassword: {
-        password: "",
-        passwordConfirm: "",
-      },
       //個人牆頁面設置
       personalInfo: {
         name: "",
@@ -51,9 +46,6 @@ export default defineStore("userStore", {
       status.toggleLoading(true);
       apiUserSignIn(data)
         .then((res) => {
-          // 設定 profile 資料
-          this.profile = res.data.data.user;
-
           // 設定 token
           const { token } = res.data.data;
           setToken(token);
@@ -79,9 +71,6 @@ export default defineStore("userStore", {
       status.toggleLoading(true);
       apiUserSignUp(data)
         .then((res) => {
-          // 設定 profile 資料
-          this.profile = res.data.data.user;
-
           // 設定 token
           const { token } = res.data.data;
           setToken(token);
@@ -106,11 +95,11 @@ export default defineStore("userStore", {
         });
     },
     // 取得用戶資料
-    async getProfile(id) {
+    async getProfile() {
       status.isLoading = true;
-      await apiGetProfile(id)
+      await apiGetProfile()
         .then((res) => {
-          this.profile = res.data.data.user;
+          this.profile = res.data.data;
           this.updateProfileData(this.profile);
 
           status.isLoading = false;
@@ -122,6 +111,10 @@ export default defineStore("userStore", {
               err.response?.data?.message || "取得個人資料失敗，請重新登入",
           });
           status.isLoading = false;
+
+          // 若驗證個人資料失敗則強制登出
+          clearToken();
+          router.push("/signin");
         });
     },
     // 更新個人資料
@@ -150,18 +143,19 @@ export default defineStore("userStore", {
         });
     },
     // 更新密碼
-    async updatePassword(form) {
+    async updatePassword(form, data) {
       status.toggleLoading(true);
-      await apiUpdatePassword(this.tempPassword)
+      await apiUpdatePassword(data)
         .then(() => {
+          // 重置表單
+          form.resetForm();
+
           // 開啟 msgModal 提示訊息
           modal.toggleMsgModal({
             title: "更新密碼成功",
             content: "下次登入記得使用新密碼喔~",
           });
 
-          // 清空密碼表格
-          form.resetForm();
           status.toggleLoading(false);
         })
         .catch((err) => {

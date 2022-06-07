@@ -62,14 +62,6 @@
         </div>
 
         <hr class="mt-2" />
-        <a href="#" class="link-dark mb-4">
-          <i class="bi bi-facebook text-primary me-4"></i>
-          使用 Facebook 繼續
-        </a>
-        <a href="#" class="link-dark mb-4">
-          <i class="bi bi-google text-primary me-4"></i>
-          使用 Google 繼續
-        </a>
         <a href="#" class="link-dark">
           <i class="bi bi-line text-success me-4"></i>
           使用 Line 繼續

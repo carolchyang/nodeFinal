@@ -15,18 +15,15 @@ export default defineStore("commentStore", {
   actions: {
     // 取得回覆
     async getComments() {
-      status.isLoading = true;
       await apiGetComments()
         .then((res) => {
           this.comments = res.data.data;
-          status.isLoading = false;
         })
         .catch((err) => {
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "取得回覆失敗",
           });
-          status.isLoading = false;
         });
     },
     // 建立回覆

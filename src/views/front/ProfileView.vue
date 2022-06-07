@@ -207,6 +207,10 @@ export default {
         photo: this.profile?.photo || "",
         msg: "",
       },
+      tempPassword: {
+        password: "",
+        passwordConfirm: "",
+      },
     };
   },
   methods: {
@@ -214,7 +218,7 @@ export default {
     submitPassword() {
       // 取得 password 的 form 表單
       const form = this.$refs.passwordForm;
-      this.updatePassword(form);
+      this.updatePassword(form, this.tempPassword);
     },
     // 瀏覽圖片
     uploadFile(e) {
@@ -247,7 +251,7 @@ export default {
           photo: this.profile?.photo || "",
           msg: "",
         };
-        this.getProfile(this.profile._id);
+        this.getProfile();
       } else {
         this.$refs.passwordForm.resetForm();
       }
@@ -262,7 +266,7 @@ export default {
     ...mapActions(modalStore, ["toggleMsgModal"]),
   },
   computed: {
-    ...mapState(userStore, ["profile", "tempProfile", "tempPassword"]),
+    ...mapState(userStore, ["profile", "tempProfile"]),
     ...mapState(modalStore, ["modal"]),
   },
   components: {

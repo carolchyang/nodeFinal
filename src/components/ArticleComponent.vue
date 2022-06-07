@@ -1,12 +1,19 @@
 <template>
   <ul class="mb-10">
-    <li class="card" v-for="(item, key) in data" :key="key">
-      <div class="mb-4">
+    <li
+      class="card customList"
+      v-for="item in data"
+      :key="item._id"
+      :class="{
+        disabled: partLoading.type == 'delpost' && partLoading.id == item._id,
+      }"
+    >
+      <div class="d-flex align-items-center mb-4">
         <a
           href="#"
-          class="cardImgLink d-flex align-items-center"
+          class="cardImgLink"
           @click.prevent="
-            $emit('to-personalwall', {
+            toPersonalWall({
               _id: item.userId?._id,
               name: item.userId?.name,
               photo: item.userId?.photo,
@@ -23,18 +30,19 @@
             class="thumbnail thumbnail-xl"
             v-else
           />
-          <div class="fw-bold ms-4">
-            {{ item.userId?.name }}
-            <span class="d-block mt-1 text-light fs-7 fw-normal">
-              {{ $getTime(item.createAt) }}
-            </span>
-          </div>
         </a>
+        <div class="fw-bold ms-4">
+          {{ item.userId?.name }}
+          <span class="d-block mt-1 text-light fs-7 fw-normal">
+            {{ $getTime(item.createAt) }}
+          </span>
+        </div>
+
         <!-- 若為此登入者所發的文 && postId 沒有值 - 非單一貼文頁面 -->
         <a
           href="#"
           class="cardCloseBtn"
-          @click.prevent="delData(item._id, 'post')"
+          @click.prevent="delData(item._id, 'delpost')"
           v-if="profile._id === item.userId?._id && !postId"
         >
           <i class="bi bi-x-lg"></i>
@@ -53,12 +61,20 @@
           <a
             href="#"
             class="link-primary thumbsIcon"
-            v-if="item.likeCount?.length"
+            v-if="item.likeCount.includes(profile._id)"
             @click.prevent="
               $emit('toggle-like', { id: item._id, type: 'cancel' })
             "
           >
-            <i class="bi bi-hand-thumbs-up fs-4 me-2"></i>
+            <div
+              class="spinner-border text-primary me-2"
+              style="width: 1.2rem; height: 1.2rem"
+              role="status"
+              v-if="partLoading.type == 'like' && partLoading.id == item._id"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="bi bi-hand-thumbs-up fs-4 me-2" v-else></i>
             <span class="me-2">
               {{ item.likeCount?.length }}
             </span>
@@ -67,12 +83,20 @@
           <a
             href="#"
             class="link-light thumbsIcon"
-            v-if="!item.likeCount?.length"
+            v-if="!item.likeCount.includes(profile._id)"
             @click.prevent="
               $emit('toggle-like', { id: item._id, type: 'check' })
             "
           >
-            <i class="bi bi-hand-thumbs-up fs-4 me-2"></i>
+            <div
+              class="spinner-border me-2"
+              style="width: 1.2rem; height: 1.2rem"
+              role="status"
+              v-if="partLoading.type == 'like' && partLoading.id == item._id"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="bi bi-hand-thumbs-up fs-4 me-2" v-else></i>
             <span v-if="item.likeCount?.length">
               {{ item.likeCount?.length }}
             </span>
@@ -95,6 +119,9 @@
               class="effectBtn btn btn-primary py-2 px-5 px-sm-10"
               type="button"
               id="sendmessage"
+              :disabled="
+                partLoading.type == 'comment' && partLoading.id == item._id
+              "
               @click.prevent="addComment($event, item._id)"
             >
               留言
@@ -105,71 +132,35 @@
               placeholder="留言..."
               aria-label="sendmessage"
               aria-describedby="sendmessage"
+              :disabled="
+                partLoading.type == 'comment' && partLoading.id == item._id
+              "
             />
           </div>
         </div>
       </div>
-      <ul v-if="item.comments?.length">
-        <li
-          class="position-relative mb-4 p-4 bg-secondary rounded-2"
-          v-for="commentItem in item.comments"
-          :key="commentItem._id"
-        >
-          <div class="mb-3">
-            <a
-              href="#"
-              class="cardImgLink d-flex align-items-center"
-              @click.prevent="
-                $emit('to-personalwall', {
-                  _id: commentItem._id,
-                  name: commentItem.user?.name,
-                  photo: commentItem.user?.photo,
-                })
-              "
-            >
-              <img
-                :src="commentItem.user?.photo"
-                class="thumbnail thumbnail-lg"
-                v-if="commentItem.user?.photo"
-              />
-              <img
-                src="../assets/images/user_default.png"
-                class="thumbnail thumbnail-lg"
-                v-else
-              />
-              <div class="fw-bold ms-3">
-                {{ commentItem.user?.name }}
-                <span class="d-block mt-1 text-light fs-7 fw-normal">
-                  {{ $getTime(commentItem.createdAt) }}
-                </span>
-              </div>
-            </a>
-            <a
-              href="#"
-              class="cardCloseBtn"
-              @click.prevent="delData(commentItem._id, 'comment')"
-              v-if="profile._id === commentItem.user?._id"
-            >
-              <i class="bi bi-x-lg"></i>
-            </a>
-          </div>
-
-          <p class="ms-12">
-            {{ commentItem.content }}
-          </p>
-        </li>
-      </ul>
+      <!-- 以組件方式排序 item.comments -->
+      <CommentComponent
+        :is="item._id"
+        :comments="item.comments"
+        @del-data="delData"
+        @to-personalwall="toPersonalWall"
+      ></CommentComponent>
     </li>
   </ul>
 </template>
 
 <script>
-import { mapActions } from "pinia";
+import CommentComponent from "@/components/CommentComponent.vue";
+import { mapState, mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import modalStore from "@/stores/modalStore";
+import userStore from "@/stores/userStore";
+
 export default {
   name: "ArticleComponent",
   props: ["data", "profile", "postId"],
-  emits: ["toggle-like", "update-comments", "to-personalwall"],
+  emits: ["toggle-like", "update-comments"],
   methods: {
     // 開啟 DelModal
     delData(id, delItem) {
@@ -191,7 +182,20 @@ export default {
       }
       target.value = "";
     },
+    // 轉至 PersonalWall 頁面
+    toPersonalWall(data) {
+      const { _id } = data;
+      this.togglePersonalInfo(data);
+      this.$router.push({ path: `/personalwall/${_id}` });
+    },
     ...mapActions(modalStore, ["toggleDelModal"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
+  },
+  computed: {
+    ...mapState(statusStore, ["partLoading"]),
+  },
+  components: {
+    CommentComponent,
   },
 };
 </script>

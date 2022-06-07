@@ -4,7 +4,7 @@
       <select
         class="form-select form-select-sm"
         v-model="reverse"
-        @change="getAll()"
+        @change="getAll(1, 'loading')"
       >
         <option value="1">由新到舊</option>
         <option value="0">由舊到新</option>
@@ -24,7 +24,7 @@
           class="effectBtn btn btn-primary py-0 px-3"
           type="button"
           id="search"
-          @click.prevent="getAll()"
+          @click.prevent="getAll(1, 'loading')"
         >
           <i class="bi bi-search h3"></i>
         </button>
@@ -37,7 +37,6 @@
     :profile="profile"
     @toggle-like="toggleLike"
     @update-comments="updateComments"
-    @to-personalwall="toPersonalWall"
     v-if="posts.length"
   ></ArticleComponent>
 
@@ -66,8 +65,8 @@ import EmptyCardComponent from "@/components/EmptyCardComponent.vue";
 import PaginationComponent from "@/components/PaginationComponent";
 import DelModalComponent from "@/components/DelModalComponent.vue";
 import { mapState, mapActions } from "pinia";
-import modalStore from "@/stores/modalStore";
 import statusStore from "@/stores/statusStore";
+import modalStore from "@/stores/modalStore";
 import userStore from "@/stores/userStore";
 import postStore from "@/stores/postStore";
 import likeStore from "@/stores/likeStore";
@@ -83,52 +82,56 @@ export default {
   },
   methods: {
     // 取得貼文資訊
-    getAll(page = 1) {
+    async getAll(page = 1, isLoading) {
+      if (isLoading) {
+        this.toggleLoading(true);
+      }
       const data = {};
       data.page = page;
       data.reverse = this.reverse;
       data.content = this.keyword;
 
-      this.getPosts(data);
+      await this.getPosts(data);
+      this.toggleLoading(false);
     },
     // 刪除回覆/貼文
     async delData() {
+      this.togglePartLoading(this.modal.id, this.modal.type);
       let modalType = "delComment";
-      if (this.modal.type == "post") {
+      let page = this.pagination?.current_pages;
+      if (this.modal.type == "delpost") {
         modalType = "delPost";
+        page = 1;
       }
-
       await this[modalType](this.modal.id);
-      await this.getAll();
+      await this.getAll(page);
+      this.togglePartLoading("", "");
     },
     // 切換按讚狀態
     async toggleLike({ id, type }) {
+      this.togglePartLoading(id, "like");
       let toggleType = "clickLike";
       if (type == "cancel") {
         toggleType = "delLike";
       }
       await this[toggleType](id);
-      await this.getAll();
+      await this.getAll(this.pagination?.current_pages);
+      this.togglePartLoading("", "");
     },
     // 建立回覆
     async updateComments(data) {
+      this.togglePartLoading(data.postId, "comment");
       await this.createComment(data);
-      await this.getAll();
+      await this.getAll(this.pagination?.current_pages);
+      this.togglePartLoading("", "");
     },
-    // 轉至 PersonalWall 頁面
-    toPersonalWall(data) {
-      const { _id } = data;
-      this.togglePersonalInfo(data);
-      this.$router.push({ path: `/personalwall/${_id}` });
-    },
-    ...mapActions(statusStore, ["togglePersonalInfo"]),
-    ...mapActions(userStore, ["togglePersonalInfo"]),
+    ...mapActions(statusStore, ["toggleLoading", "togglePartLoading"]),
     ...mapActions(postStore, ["getPosts", "delPost"]),
     ...mapActions(likeStore, ["clickLike", "delLike"]),
     ...mapActions(commentStore, ["createComment", "delComment"]),
   },
   computed: {
-    ...mapState(modalStore, ["modal", "modalItem"]),
+    ...mapState(modalStore, ["modal"]),
     ...mapState(userStore, ["profile"]),
     ...mapState(postStore, ["posts", "pagination"]),
   },
@@ -139,7 +142,7 @@ export default {
     DelModalComponent,
   },
   created() {
-    this.getAll();
+    this.getAll(1, "loading");
   },
 };
 </script>
