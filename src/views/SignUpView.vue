@@ -1,5 +1,5 @@
 <template>
-  <section class="d-flex justify-content-center align-items-center vh-100">
+  <section class="d-flex justify-content-center align-items-center vh-100 mx-3">
     <div class="signin">
       <img src="../assets/images/signin.png" class="d-none d-xl-block me-10" />
       <VForm
