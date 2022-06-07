@@ -3,10 +3,10 @@
 
   <ul class="mb-6">
     <li
-      class="card"
+      class="card customList"
       v-for="(item, key) in follows"
       :key="key"
-      :class="{ disabled: iconLoading.id == item._id }"
+      :class="{ disabled: partLoading.id == item._id }"
     >
       <div class="d-flex flex-column flex-md-row align-items-center">
         <img
@@ -20,7 +20,7 @@
           v-else
         />
         <div class="me-3 mb-2 mb-md-0">
-          <div class="link-dark fw-bold">
+          <div class="fw-bold">
             {{ item.targetUserId?.name }}
           </div>
           <span class="text-light fs-6">
@@ -33,13 +33,13 @@
         <a
           href="#"
           class="d-none d-md-block link-dark me-3 me-sm-9 text-center fw-bold text-decoration-none"
-          @click.prevent="delFollow(item._id)"
+          @click.prevent="delFollowItem(item._id)"
         >
           <div
             class="spinner-border"
             style="width: 1.2rem; height: 1.2rem"
             role="status"
-            v-if="iconLoading.id == item._id"
+            v-if="partLoading.id == item._id"
           >
             <span class="visually-hidden">Loading...</span>
           </div>
@@ -80,6 +80,12 @@ import userStore from "@/stores/userStore";
 export default {
   name: "FollowView",
   methods: {
+    async delFollowItem(id) {
+      this.togglePartLoading(id, "follow");
+      await this.delFollow(id);
+      await this.getFollows();
+      this.togglePartLoading("", "");
+    },
     // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
       const { _id } = data;
@@ -87,15 +93,11 @@ export default {
       this.$router.push({ path: `/personalwall/${_id}` });
     },
     ...mapActions(followStore, ["getFollows", "delFollow"]),
-    ...mapActions(userStore, [
-      "togglePersonalInfo",
-      "toggleLoading",
-      "toggleIconLoading",
-    ]),
-    ...mapActions(statusStore, ["toggleLoading"]),
+    ...mapActions(userStore, ["togglePersonalInfo"]),
+    ...mapActions(statusStore, ["toggleLoading", "togglePartLoading"]),
   },
   computed: {
-    ...mapState(statusStore, ["loadingStatus", "iconLoading"]),
+    ...mapState(statusStore, ["partLoading"]),
     ...mapState(followStore, ["follows"]),
     ...mapState(userStore, ["profile"]),
   },
@@ -103,7 +105,9 @@ export default {
     EmptyCardComponent,
   },
   async created() {
+    this.toggleLoading(true);
     await this.getFollows({ userId: this.profile._id });
+    this.toggleLoading(false);
   },
 };
 </script>

@@ -2,10 +2,10 @@
   <h1 class="header">我按讚的貼文</h1>
   <ul class="mb-6">
     <li
-      class="card py-4"
+      class="card customList py-4"
       v-for="(item, key) in likes"
       :key="key"
-      :class="{ disabled: iconLoading.id == item.post?._id }"
+      :class="{ disabled: partLoading.id == item.post?._id }"
     >
       <div class="d-flex align-items-center">
         <a
@@ -46,13 +46,13 @@
         <a
           href="#"
           class="d-none d-md-block link-dark me-3 me-sm-9 text-center fw-bold text-decoration-none"
-          @click.prevent="delLike(item.post?._id, 'likePage')"
+          @click.prevent="delLikePost(item.post?._id)"
         >
           <div
             class="spinner-border"
             style="width: 1.2rem; height: 1.2rem"
             role="status"
-            v-if="iconLoading.id == item.post?._id"
+            v-if="partLoading.id == item.post?._id"
           >
             <span class="visually-hidden">Loading...</span>
           </div>
@@ -86,9 +86,16 @@ export default {
   name: "PersonalWallView",
   methods: {
     // 取得按讚貼文
-    getLikeAll(page = 1) {
+    async getLikeAll(page = 1) {
       const data = { page };
-      this.getLikes(data);
+      await this.getLikes(data);
+    },
+    // 取消按讚
+    async delLikePost(id) {
+      this.togglePartLoading(id, "like");
+      await this.delLike(id);
+      await this.getLikeAll();
+      this.togglePartLoading("", "");
     },
     // 轉至 PersonalWall 頁面
     toPersonalWall(data) {
@@ -96,19 +103,22 @@ export default {
       this.togglePersonalInfo(data);
       this.$router.push({ path: `/personalwall/${_id}` });
     },
+    ...mapActions(statusStore, ["toggleLoading", "togglePartLoading"]),
     ...mapActions(userStore, ["togglePersonalInfo"]),
     ...mapActions(likeStore, ["getLikes", "delLike"]),
     ...mapActions(statusStore, ["toggleLoading"]),
   },
   computed: {
     ...mapState(likeStore, ["likes"]),
-    ...mapState(statusStore, ["loadingStatus", "iconLoading"]),
+    ...mapState(statusStore, ["partLoading"]),
   },
   components: {
     EmptyCardComponent,
   },
-  created() {
-    this.getLikeAll();
+  async created() {
+    this.toggleLoading(true);
+    await this.getLikeAll();
+    this.toggleLoading(false);
   },
 };
 </script>

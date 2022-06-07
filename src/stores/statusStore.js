@@ -3,8 +3,10 @@ import { defineStore } from "pinia";
 export default defineStore("statusStore", {
   state: () => ({
     messages: [],
+    // 全部 loading
     isLoading: false,
-    iconLoading: {
+    // 局部 loading
+    partLoading: {
       id: "",
       type: "",
     },
@@ -30,9 +32,9 @@ export default defineStore("statusStore", {
     toggleLoading(status) {
       this.isLoading = status;
     },
-    // 切換 loading 狀態
-    toggleIconLoading(id, type) {
-      this.iconLoading = {
+    // 切換 partLoading 狀態
+    togglePartLoading(id, type) {
+      this.partLoading = {
         id,
         type,
       };

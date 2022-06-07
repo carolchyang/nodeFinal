@@ -1,6 +1,13 @@
 <template>
   <ul class="mb-10">
-    <li class="card" v-for="item in data" :key="item._id">
+    <li
+      class="card customList"
+      v-for="item in data"
+      :key="item._id"
+      :class="{
+        disabled: partLoading.type == 'delpost' && partLoading.id == item._id,
+      }"
+    >
       <div class="d-flex align-items-center mb-4">
         <a
           href="#"
@@ -35,7 +42,7 @@
         <a
           href="#"
           class="cardCloseBtn"
-          @click.prevent="delData(item._id, 'post')"
+          @click.prevent="delData(item._id, 'delpost')"
           v-if="profile._id === item.userId?._id && !postId"
         >
           <i class="bi bi-x-lg"></i>
@@ -59,7 +66,15 @@
               $emit('toggle-like', { id: item._id, type: 'cancel' })
             "
           >
-            <i class="bi bi-hand-thumbs-up fs-4 me-2"></i>
+            <div
+              class="spinner-border text-primary me-2"
+              style="width: 1.2rem; height: 1.2rem"
+              role="status"
+              v-if="partLoading.type == 'like' && partLoading.id == item._id"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="bi bi-hand-thumbs-up fs-4 me-2" v-else></i>
             <span class="me-2">
               {{ item.likeCount?.length }}
             </span>
@@ -68,12 +83,20 @@
           <a
             href="#"
             class="link-light thumbsIcon"
-            v-else
+            v-if="!item.likeCount.includes(profile._id)"
             @click.prevent="
               $emit('toggle-like', { id: item._id, type: 'check' })
             "
           >
-            <i class="bi bi-hand-thumbs-up fs-4 me-2"></i>
+            <div
+              class="spinner-border me-2"
+              style="width: 1.2rem; height: 1.2rem"
+              role="status"
+              v-if="partLoading.type == 'like' && partLoading.id == item._id"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="bi bi-hand-thumbs-up fs-4 me-2" v-else></i>
             <span v-if="item.likeCount?.length">
               {{ item.likeCount?.length }}
             </span>
@@ -96,6 +119,9 @@
               class="effectBtn btn btn-primary py-2 px-5 px-sm-10"
               type="button"
               id="sendmessage"
+              :disabled="
+                partLoading.type == 'comment' && partLoading.id == item._id
+              "
               @click.prevent="addComment($event, item._id)"
             >
               留言
@@ -106,6 +132,9 @@
               placeholder="留言..."
               aria-label="sendmessage"
               aria-describedby="sendmessage"
+              :disabled="
+                partLoading.type == 'comment' && partLoading.id == item._id
+              "
             />
           </div>
         </div>
@@ -123,7 +152,8 @@
 
 <script>
 import CommentComponent from "@/components/CommentComponent.vue";
-import { mapActions } from "pinia";
+import { mapState, mapActions } from "pinia";
+import statusStore from "@/stores/statusStore";
 import modalStore from "@/stores/modalStore";
 import userStore from "@/stores/userStore";
 
@@ -160,6 +190,9 @@ export default {
     },
     ...mapActions(modalStore, ["toggleDelModal"]),
     ...mapActions(userStore, ["togglePersonalInfo"]),
+  },
+  computed: {
+    ...mapState(statusStore, ["partLoading"]),
   },
   components: {
     CommentComponent,

@@ -49,7 +49,7 @@ export default {
   methods: {
     // 換頁功能
     changePage(page = 1) {
-      this.$emit("get-all", page);
+      this.$emit("get-all", page, "loading");
     },
   },
 };

@@ -42,7 +42,6 @@ export default defineStore("followStore", {
     async createFollow(id) {
       await apiCreateFollow({ targetUserId: id })
         .then(() => {
-          this.getFollows();
           status.pushMessage({
             style: "dark",
             content: "已追蹤",
@@ -58,18 +57,14 @@ export default defineStore("followStore", {
     // 取消追蹤
     // 此 ID 為 追蹤 ID
     async delFollow(id) {
-      status.toggleIconLoading(id, "follow");
       await apiDelFollow(id)
         .then(() => {
-          this.getFollows();
-          status.toggleIconLoading("", "");
           status.pushMessage({
             style: "dark",
             content: "取消追蹤成功",
           });
         })
         .catch((err) => {
-          status.toggleIconLoading("", "");
           status.pushMessage({
             style: "danger",
             content: err.response?.data?.message || "取消追蹤失敗",

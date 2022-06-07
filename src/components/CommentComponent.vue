@@ -1,9 +1,13 @@
 <template>
   <ul v-if="newComment.length">
     <li
-      class="position-relative mb-4 p-4 bg-secondary rounded-2"
+      class="customList position-relative mb-4 p-4 bg-secondary rounded-2"
       v-for="commentItem in newComment"
       :key="commentItem._id"
+      :class="{
+        disabled:
+          partLoading.type == 'delcomment' && partLoading.id == commentItem._id,
+      }"
     >
       <div class="d-flex align-items-center mb-3">
         <a
@@ -37,7 +41,7 @@
         <a
           href="#"
           class="cardCloseBtn"
-          @click.prevent="$emit('del-data', commentItem._id, 'comment')"
+          @click.prevent="$emit('del-data', commentItem._id, 'delcomment')"
           v-if="profile._id === commentItem.user?._id"
         >
           <i class="bi bi-x-lg"></i>
@@ -53,6 +57,7 @@
 
 <script>
 import { mapState } from "pinia";
+import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
 
 export default {
@@ -67,6 +72,7 @@ export default {
       });
       return newComment;
     },
+    ...mapState(statusStore, ["partLoading"]),
     ...mapState(userStore, ["profile"]),
   },
 };
