@@ -11,7 +11,7 @@ import {
 } from "@/scripts/api";
 import statusStore from "./statusStore";
 import modalStore from "./modalStore";
-import { setToken } from "@/scripts/methods";
+import { setToken, clearToken } from "@/scripts/methods";
 
 const status = statusStore();
 const modal = modalStore();
@@ -111,6 +111,10 @@ export default defineStore("userStore", {
               err.response?.data?.message || "取得個人資料失敗，請重新登入",
           });
           status.isLoading = false;
+
+          // 若驗證個人資料失敗則強制登出
+          clearToken();
+          router.push("/signin");
         });
     },
     // 更新個人資料
