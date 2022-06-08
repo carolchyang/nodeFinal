@@ -49,7 +49,7 @@
         </a>
       </div>
       <div class="mb-5">
-        <p class="mb-4">
+        <p class="mb-4 text-break">
           {{ item.content }}
         </p>
         <div

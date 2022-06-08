@@ -48,7 +48,7 @@
         </a>
       </div>
 
-      <p class="ms-12">
+      <p class="ms-12 text-break">
         {{ commentItem.content }}
       </p>
     </li>
