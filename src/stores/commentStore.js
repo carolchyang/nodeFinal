@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
-import { apiGetComments, apiCreateComment, apiDelComment } from "@/scripts/api";
+import {
+  apiGetComments,
+  apiCreateComment,
+  apiDelComment,
+  socket,
+} from "@/scripts/api";
 import statusStore from "./statusStore";
 import modalStore from "./modalStore";
 
@@ -29,11 +34,12 @@ export default defineStore("commentStore", {
     // 建立回覆
     async createComment(data) {
       await apiCreateComment(data)
-        .then(() => {
+        .then((res) => {
           status.pushMessage({
             style: "dark",
             content: "已建立回覆",
           });
+          socket.emit("createComment", res.data.data);
         })
         .catch((err) => {
           status.pushMessage({
@@ -51,6 +57,8 @@ export default defineStore("commentStore", {
             style: "dark",
             content: "刪除回覆成功",
           });
+          // TODO 等 api 修改回傳值 postId, commentId
+          // socket.emit("deleteComment", res.data.data);
         })
         .catch((err) => {
           modal.closeDelModal();
