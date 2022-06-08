@@ -39,7 +39,7 @@
           <p class="text-light fs-6">
             <span class="d-none d-mb-inline-block"> 發文時間： </span>
             <span>
-              {{ $getTime(item.post?.createdAt) }}
+              {{ $getTime(item.post?.createAt) }}
             </span>
           </p>
         </div>

@@ -1,6 +1,7 @@
 import emitter from "@/scripts/emitter";
 import { Modal } from "bootstrap";
 import moment from "moment";
+moment.locale("zh-tw");
 
 // Toast
 export const pushMessage = (msg) => {
@@ -18,7 +19,7 @@ export const getTime = (time) => {
 
 // 取得距離時間
 export const getDiffTime = (time) => {
-  const newTime = moment(time).fromNow();
+  const newTime = moment(time).fromNow("LLLL");
   return newTime;
 };
 
