@@ -49,7 +49,7 @@
         </a>
       </div>
       <div class="mb-5">
-        <p class="mb-4 text-break">
+        <p class="mb-4 text-break pre-line">
           {{ item.content }}
         </p>
         <div
@@ -200,3 +200,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.pre-line {
+  white-space: pre-line;
+}
+</style>
