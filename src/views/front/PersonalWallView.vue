@@ -125,6 +125,7 @@ import postStore from "@/stores/postStore";
 import likeStore from "@/stores/likeStore";
 import commentStore from "@/stores/commentStore";
 import followStore from "@/stores/followStore";
+import { socket } from "@/scripts/api";
 
 export default {
   name: "DynamicWallView",
@@ -220,6 +221,9 @@ export default {
       });
       return val;
     },
+    postIds() {
+      return this.posts.map((post) => post.id);
+    },
     ...mapState(modalStore, ["modal"]),
     ...mapState(statusStore, ["partLoading"]),
     ...mapState(userStore, ["profile", "personalInfo"]),
@@ -243,6 +247,46 @@ export default {
     await this.getAll();
     await this.getFollows();
     this.toggleLoading(false);
+
+    socket.on("connect", () => {
+      console.log("socket.connected :>> ", socket.connected);
+      socket.emit("register", this.postIds);
+    });
+
+    socket.on("addComment", (comment) => {
+      const post = this.posts.find((post) => post._id === comment.postId);
+      post.comments.unshift(comment);
+    });
+
+    socket.on("removeComment", ({ postId, commentId }) => {
+      if (!this.postIds.includes(postId)) return;
+
+      const post = this.posts.find((post) => post._id === postId);
+      const idx = post.comments.findIndex(
+        (comment) => comment._id === commentId
+      );
+      if (idx > -1) post.comments.splice(idx, 1);
+    });
+
+    socket.on("updateLikeCount", ({ isLike, userId, postId }) => {
+      if (!this.postIds.includes(postId)) return;
+
+      const idx = this.posts.findIndex((post) => post._id === postId);
+      const likeCount = this.posts[idx].likeCount;
+
+      if (isLike) {
+        likeCount.push(userId);
+      } else {
+        likeCount.splice(idx, 1);
+      }
+    });
+
+    socket.on("disconnect", () => {
+      console.log("socket.connected :>> ", socket.connected);
+    });
+  },
+  unmounted() {
+    socket.disconnect();
   },
 };
 </script>

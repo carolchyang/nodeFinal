@@ -54,7 +54,6 @@ export default defineStore("commentStore", {
     async delComment(id) {
       await apiDelComment(id)
         .then(() => {
-          console.log("apiDelComment :>> ");
           modal.closeDelModal();
           status.pushMessage({
             style: "dark",
