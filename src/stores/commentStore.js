@@ -7,9 +7,11 @@ import {
 } from "@/scripts/api";
 import statusStore from "./statusStore";
 import modalStore from "./modalStore";
+import postStore from "./postStore";
 
 const status = statusStore();
 const modal = modalStore();
+const userPostStore = postStore();
 
 export default defineStore("commentStore", {
   state: () => {
@@ -52,13 +54,17 @@ export default defineStore("commentStore", {
     async delComment(id) {
       await apiDelComment(id)
         .then(() => {
+          console.log("apiDelComment :>> ");
           modal.closeDelModal();
           status.pushMessage({
             style: "dark",
             content: "刪除回覆成功",
           });
-          // TODO 等 api 修改回傳值 postId, commentId
-          // socket.emit("deleteComment", { postId, commentId: id });
+          socket.emit("deleteComment", {
+            postId: userPostStore.currentDeletePostId,
+            commentId: id,
+          });
+          userPostStore.updateCurrentDeletePostId("");
         })
         .catch((err) => {
           modal.closeDelModal();

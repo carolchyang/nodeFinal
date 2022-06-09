@@ -164,10 +164,13 @@ export default {
     });
 
     socket.on("removeComment", ({ postId, commentId }) => {
-      console.log("removeComment :>> ", { postId, commentId });
+      if (!this.postIds.includes(postId)) return;
+
       const post = this.posts.find((post) => post._id === postId);
-      const idx = post.comments.findex((comment) => comment._id === commentId);
-      post.comments.splice(idx, 1);
+      const idx = post.comments.findIndex(
+        (comment) => comment._id === commentId
+      );
+      if (idx > -1) post.comments.splice(idx, 1);
     });
 
     socket.on("updateLikeCount", ({ isLike, userId, postId }) => {
