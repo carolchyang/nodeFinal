@@ -89,7 +89,6 @@ export default {
     async getLikeAll(page = 1) {
       const data = { page };
       await this.getLikes(data);
-      console.log(this.likes);
     },
     // 取消按讚
     async delLikePost(id) {
