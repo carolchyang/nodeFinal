@@ -13,23 +13,23 @@
           class="me-6 me-md-4 link-dark text-center fw-bold"
           @click.prevent="
             toPersonalWall({
-              _id: item.user?._id,
-              name: item.user?.name,
-              photo: item.user?.photo,
+              _id: item.post?.userId?._id,
+              name: item.post?.userId?.name,
+              photo: item.post?.userId?.photo,
             })
           "
         >
           <img
-            :src="item.user?.photo"
+            :src="item.post?.userId?.photo"
             class="thumbnail thumbnail-xl d-none d-md-block mx-auto mb-1 border-0"
-            v-if="item.user?.photo"
+            v-if="item.post?.userId?.photo"
           />
           <img
             src="../../assets/images/user_default.png"
             class="thumbnail thumbnail-xl d-none d-md-block mx-auto mb-1 border-0"
             v-else
           />
-          {{ item.user?.name }}
+          {{ item.post?.userId?.name }}
         </a>
 
         <div class="me-auto textTruncate">
@@ -89,6 +89,7 @@ export default {
     async getLikeAll(page = 1) {
       const data = { page };
       await this.getLikes(data);
+      console.log(this.likes);
     },
     // 取消按讚
     async delLikePost(id) {
