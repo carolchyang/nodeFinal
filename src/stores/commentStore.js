@@ -58,7 +58,7 @@ export default defineStore("commentStore", {
             content: "刪除回覆成功",
           });
           // TODO 等 api 修改回傳值 postId, commentId
-          // socket.emit("deleteComment", res.data.data);
+          // socket.emit("deleteComment", { postId, commentId: id });
         })
         .catch((err) => {
           modal.closeDelModal();

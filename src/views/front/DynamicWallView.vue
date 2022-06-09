@@ -170,10 +170,17 @@ export default {
       post.comments.splice(idx, 1);
     });
 
-    socket.on("updateLikeCount", ({ postId, likeCount }) => {
-      console.log("updateLikeCount :>> ", { postId, likeCount });
-      const post = this.posts.find((post) => post._id === postId);
-      post.likeCount = likeCount;
+    socket.on("updateLikeCount", ({ isLike, userId, postId }) => {
+      if (!this.postIds.includes(postId)) return;
+
+      const idx = this.posts.findIndex((post) => post._id === postId);
+      const likeCount = this.posts[idx].likeCount;
+
+      if (isLike) {
+        likeCount.push(userId);
+      } else {
+        likeCount.splice(idx, 1);
+      }
     });
 
     socket.on("disconnect", () => {
