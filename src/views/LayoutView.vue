@@ -22,12 +22,14 @@ import { mapActions } from "pinia";
 import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
 import { getToken, clearToken } from "@/scripts/methods";
+import { socket } from "@/scripts/api";
 
 export default {
   name: "LayoutView",
   data() {
     return {
       checkSuccess: false,
+      preRouteName: "",
     };
   },
   methods: {
@@ -62,6 +64,15 @@ export default {
   },
   created() {
     this.checkSignIn();
+
+    socket.on("connect", () => {
+      console.log(`${this.$route.name} socket connected`);
+      this.preRouteName = this.$route.name;
+    });
+
+    socket.on("disconnect", () => {
+      console.log(`${this.preRouteName} socket disconnect`);
+    });
   },
   components: {
     NavbarComponent,
