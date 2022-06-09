@@ -84,6 +84,11 @@ export default {
       reverse: 1,
     };
   },
+  watch: {
+    postIds() {
+      socket.emit("register", this.postIds);
+    },
+  },
   methods: {
     // 取得貼文資訊
     async getAll(page = 1, isLoading) {
@@ -153,10 +158,7 @@ export default {
   created() {
     this.getAll(1, "loading");
 
-    socket.on("connect", () => {
-      console.log("socket.connected :>> ", socket.connected);
-      socket.emit("register", this.postIds);
-    });
+    socket.connect();
 
     socket.on("addComment", (comment) => {
       const post = this.posts.find((post) => post._id === comment.postId);
@@ -184,10 +186,6 @@ export default {
       } else {
         likeCount.splice(idx, 1);
       }
-    });
-
-    socket.on("disconnect", () => {
-      console.log("socket.connected :>> ", socket.connected);
     });
   },
   unmounted() {
