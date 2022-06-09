@@ -41,7 +41,7 @@
         <a
           href="#"
           class="cardCloseBtn"
-          @click.prevent="$emit('del-data', commentItem._id, 'delcomment')"
+          @click.prevent="deleteComment(commentItem)"
           v-if="profile._id === commentItem.user?._id"
         >
           <i class="bi bi-x-lg"></i>
@@ -56,13 +56,14 @@
 </template>
 
 <script>
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
+import postStore from "@/stores/postStore";
 
 export default {
   name: "CommentComponent",
-  props: ["comments"],
+  props: ["postId", "comments"],
   emits: ["del-data", "to-personalwall"],
   computed: {
     newComment() {
@@ -74,6 +75,13 @@ export default {
     },
     ...mapState(statusStore, ["partLoading"]),
     ...mapState(userStore, ["profile"]),
+  },
+  methods: {
+    ...mapActions(postStore, ["updateCurrentDeletePostId"]),
+    deleteComment(comment) {
+      this.updateCurrentDeletePostId(this.postId);
+      this.$emit("del-data", comment._id, "delcomment");
+    },
   },
 };
 </script>

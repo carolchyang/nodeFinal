@@ -142,6 +142,7 @@
       <!-- 以組件方式排序 item.comments -->
       <CommentComponent
         :is="item._id"
+        :postId="item._id"
         :comments="item.comments"
         @del-data="delData"
         @to-personalwall="toPersonalWall"

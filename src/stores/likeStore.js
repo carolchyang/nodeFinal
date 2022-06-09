@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
-import { apiGetLikePosts, apiClickLike, apiDelLike } from "@/scripts/api";
+import {
+  apiGetLikePosts,
+  apiClickLike,
+  apiDelLike,
+  socket,
+} from "@/scripts/api";
 import statusStore from "./statusStore";
 import userStore from "./userStore";
 
@@ -42,10 +47,15 @@ export default defineStore("likeStore", {
     // 按讚
     async clickLike(id) {
       await apiClickLike(id)
-        .then(() => {
+        .then((res) => {
           status.pushMessage({
             style: "dark",
             content: "已按讚",
+          });
+          socket.emit("changeLikeCount", {
+            isLike: true,
+            userId: res.data.data.user,
+            postId: res.data.data.post,
           });
         })
         .catch((err) => {
@@ -58,10 +68,16 @@ export default defineStore("likeStore", {
     // 取消按讚
     async delLike(id) {
       await apiDelLike(id)
-        .then(() => {
+        .then((res) => {
           status.pushMessage({
             style: "dark",
             content: "取消按讚成功",
+          });
+
+          socket.emit("changeLikeCount", {
+            isLike: false,
+            userId: res.data.data.user,
+            postId: res.data.data.post,
           });
         })
         .catch((err) => {

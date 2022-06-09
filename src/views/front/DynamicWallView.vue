@@ -74,6 +74,7 @@ import userStore from "@/stores/userStore";
 import postStore from "@/stores/postStore";
 import likeStore from "@/stores/likeStore";
 import commentStore from "@/stores/commentStore";
+import { socket } from "@/scripts/api";
 
 export default {
   name: "DynamicWallView",
@@ -96,6 +97,7 @@ export default {
 
       await this.getPosts(data);
       this.toggleLoading(false);
+      socket.emit("register", this.postIds);
     },
     // 刪除回覆/貼文
     async delData() {
@@ -109,6 +111,7 @@ export default {
       await this[modalType](this.modal.id);
       await this.getAll(page);
       this.togglePartLoading("", "");
+      socket.emit("register", this.postIds);
     },
     // 切換按讚狀態
     async toggleLike({ id, type }) {
@@ -137,6 +140,9 @@ export default {
     ...mapState(modalStore, ["modal"]),
     ...mapState(userStore, ["profile"]),
     ...mapState(postStore, ["posts", "pagination"]),
+    postIds() {
+      return this.posts.map((post) => post.id);
+    },
   },
   components: {
     ArticleComponent,
@@ -146,6 +152,46 @@ export default {
   },
   created() {
     this.getAll(1, "loading");
+
+    socket.on("connect", () => {
+      console.log("socket.connected :>> ", socket.connected);
+      socket.emit("register", this.postIds);
+    });
+
+    socket.on("addComment", (comment) => {
+      const post = this.posts.find((post) => post._id === comment.postId);
+      post.comments.unshift(comment);
+    });
+
+    socket.on("removeComment", ({ postId, commentId }) => {
+      if (!this.postIds.includes(postId)) return;
+
+      const post = this.posts.find((post) => post._id === postId);
+      const idx = post.comments.findIndex(
+        (comment) => comment._id === commentId
+      );
+      if (idx > -1) post.comments.splice(idx, 1);
+    });
+
+    socket.on("updateLikeCount", ({ isLike, userId, postId }) => {
+      if (!this.postIds.includes(postId)) return;
+
+      const idx = this.posts.findIndex((post) => post._id === postId);
+      const likeCount = this.posts[idx].likeCount;
+
+      if (isLike) {
+        likeCount.push(userId);
+      } else {
+        likeCount.splice(idx, 1);
+      }
+    });
+
+    socket.on("disconnect", () => {
+      console.log("socket.connected :>> ", socket.connected);
+    });
+  },
+  unmounted() {
+    socket.disconnect();
   },
 };
 </script>

@@ -1,6 +1,9 @@
 import axios from "axios";
+import { io } from "socket.io-client";
 
 const api = process.env.VUE_APP_API;
+
+export const socket = io(api, { transports: ["websocket"] });
 
 // Users
 export const apiUserSignUp = (data) => axios.post(`${api}/users/sign_up`, data);

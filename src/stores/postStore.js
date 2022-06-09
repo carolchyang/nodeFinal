@@ -12,9 +12,13 @@ export default defineStore("postStore", {
     return {
       posts: [],
       pagination: {},
+      currentDeletePostId: "",
     };
   },
   actions: {
+    updateCurrentDeletePostId(id) {
+      this.currentDeletePostId = id;
+    },
     // 取得貼文
     async getPosts(data) {
       // 使用 tempData 處理傳入的參數，避免傳進空值造成錯誤
