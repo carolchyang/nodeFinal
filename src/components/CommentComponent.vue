@@ -77,9 +77,9 @@ export default {
     ...mapState(userStore, ["profile"]),
   },
   methods: {
-    ...mapActions(postStore, ["updateCurrentDeletePostId"]),
+    ...mapActions(postStore, ["updateCurrentPostId"]),
     deleteComment(comment) {
-      this.updateCurrentDeletePostId(this.postId);
+      this.updateCurrentPostId(this.postId);
       this.$emit("del-data", comment._id, "delcomment");
     },
   },

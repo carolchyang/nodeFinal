@@ -12,12 +12,12 @@ export default defineStore("postStore", {
     return {
       posts: [],
       pagination: {},
-      currentDeletePostId: "",
+      currentPostId: "",
     };
   },
   actions: {
-    updateCurrentDeletePostId(id) {
-      this.currentDeletePostId = id;
+    updateCurrentPostId(id) {
+      this.currentPostId = id;
     },
     // 取得貼文
     async getPosts(data) {

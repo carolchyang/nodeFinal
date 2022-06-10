@@ -8,10 +8,12 @@ import {
 import statusStore from "./statusStore";
 import modalStore from "./modalStore";
 import postStore from "./postStore";
+import userStore from "./userStore";
 
 const status = statusStore();
 const modal = modalStore();
-const userPostStore = postStore();
+const usePostStore = postStore();
+const useUserStore = userStore();
 
 export default defineStore("commentStore", {
   state: () => {
@@ -41,6 +43,12 @@ export default defineStore("commentStore", {
             style: "dark",
             content: "已建立回覆",
           });
+          /**
+           * res 的回傳值只有 userId,
+           * 故，在此將登入者的相關資料塞入，
+           * 以符合 comment component 之綁定
+           */
+          res.data.data.user = useUserStore.profile;
           socket.emit("createComment", res.data.data);
         })
         .catch((err) => {
@@ -60,10 +68,10 @@ export default defineStore("commentStore", {
             content: "刪除回覆成功",
           });
           socket.emit("deleteComment", {
-            postId: userPostStore.currentDeletePostId,
+            postId: usePostStore.currentPostId,
             commentId: id,
           });
-          userPostStore.updateCurrentDeletePostId("");
+          usePostStore.updateCurrentPostId("");
         })
         .catch((err) => {
           modal.closeDelModal();

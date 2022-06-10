@@ -81,9 +81,15 @@ import { mapState, mapActions } from "pinia";
 import statusStore from "@/stores/statusStore";
 import userStore from "@/stores/userStore";
 import likeStore from "@/stores/likeStore";
+import { socket } from "@/scripts/api";
 
 export default {
-  name: "PersonalWallView",
+  name: "LikePostsView",
+  watch: {
+    postIds() {
+      socket.emit("register", this.postIds);
+    },
+  },
   methods: {
     // 取得按讚貼文
     async getLikeAll(page = 1) {
@@ -111,6 +117,9 @@ export default {
   computed: {
     ...mapState(likeStore, ["likes"]),
     ...mapState(statusStore, ["partLoading"]),
+    postIds() {
+      return this.likes.map((like) => like.post._id);
+    },
   },
   components: {
     EmptyCardComponent,
@@ -119,6 +128,11 @@ export default {
     this.toggleLoading(true);
     await this.getLikeAll();
     this.toggleLoading(false);
+
+    socket.connect();
+  },
+  unmounted() {
+    socket.disconnect();
   },
 };
 </script>
