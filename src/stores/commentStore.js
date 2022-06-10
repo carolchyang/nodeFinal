@@ -68,10 +68,10 @@ export default defineStore("commentStore", {
             content: "刪除回覆成功",
           });
           socket.emit("deleteComment", {
-            postId: usePostStore.currentDeletePostId,
+            postId: usePostStore.currentPostId,
             commentId: id,
           });
-          usePostStore.updateCurrentDeletePostId("");
+          usePostStore.updateCurrentPostId("");
         })
         .catch((err) => {
           modal.closeDelModal();
