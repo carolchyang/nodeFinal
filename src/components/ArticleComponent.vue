@@ -52,11 +52,9 @@
         <p class="mb-4 text-break">
           {{ item.content }}
         </p>
-        <div
-          class="bgCover mb-4"
-          :style="{ backgroundImage: 'url(' + item.imageId + ')' }"
-          v-if="item.imageId"
-        ></div>
+        <div v-if="item.imgId !== ''">
+          <img :src="item.imageId" />
+        </div>
         <div class="mb-4">
           <a
             href="#"
